@@ -1,0 +1,120 @@
+.side-filter-container{
+    position: fixed;
+    left:-350px;
+    width: 350px;
+    max-width: 350px;
+    height:calc(100vh - 70px);
+    background: rgba(29,28,36,0.1);
+    backdrop-filter: blur(30px);
+    top: 70px;
+    z-index: 10;
+    transition: all .3s ease ;
+    border-right: 10px solid #151416; 
+}
+
+.show-filter{
+    display:none;
+}
+
+.sidebar-toggle{
+    position: absolute;
+    top: 20px;
+    left: calc(100%);
+    background: #151416;
+    padding: 20px 15px 20px 25px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.sidebar-toggle:hover{
+    cursor:pointer;
+}
+
+#show-filter:checked ~ .side-filter-container{
+    left: 0% !important;
+}
+
+.filter-list{
+    padding: 20px 0;
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    transition: all 0.3s ease;
+}
+
+.filter-list::-webkit-scrollbar{
+    display: none;
+}
+.filter-list li{
+    list-style: none;
+    line-height: 40px;
+    margin: 10px 20px;
+}
+
+.filter-list li a,
+.filter-list li label{
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 9px 17px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    text-decoration: none !important;
+    text-transform: capitalize;
+
+    display: block;
+    width: 100%;
+    line-height: 30px;
+}
+
+.filter-list li a:hover,
+.filter-list li label:hover{
+    background: linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%) !important;
+    text-decoration: none !important;
+    cursor:pointer;
+}
+
+.filter-list ul,
+.filter-list ul ul{
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    background: none;
+    max-height: 0px;
+    overflow: hidden;
+    transition: all .3s ease;
+}
+
+.side-filter-container input[type="checkbox"]{
+  display: none;
+}
+
+.filter-list #dist:checked ~ ul,
+.filter-list #cat:checked ~ ul,
+.filter-list #cost:checked ~ ul,
+.filter-list #cond:checked ~ ul{
+    max-height: 100vh;
+}
+
+.filter-list #dist:checked + label,
+.filter-list #cat:checked + label,
+.filter-list #cost:checked + label,
+.filter-list #cond:checked + label{
+    background-color: var(--red-accent-color);
+}
+
+@media (max-width: 400px){
+    .side-filter-container{
+        max-width: 300px;
+        left: -300px;
+    }
+}
+
+@media (max-width: 350px){
+    .side-filter-container{
+        max-width: 275px;
+        left: -275px;
+    }
+}

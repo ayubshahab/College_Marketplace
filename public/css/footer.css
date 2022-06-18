@@ -1,0 +1,137 @@
+footer{
+  background-color: var(--background-color);
+}
+
+.footer-container{ 
+  width: 100%;
+  height: auto;
+  /* position: absolute; */
+  /* bottom: 0; */
+  /* background-color: maroon; */
+  /* background:linear-gradient(to right, #00093c, #2d0b00); */
+  /* background-color: var(--dark-color); */
+  background-color: #151416;
+  color: #fff;
+  padding: 50px 0 30px;
+  border-top-left-radius: 125px;
+  font-size: 13px;
+  line-height: 20px !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.row{
+  width: 85%;
+  margin: auto !important;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+} 
+
+.col{
+  flex-basis: 25%;
+  padding: 10px;
+}
+
+.col:nth-child(2), .col:nth-child(3){
+  flex-basis: 15%;
+}
+.footer-logo{
+  width: 80px;
+  height: 35px;
+  margin-bottom: 20px !important;
+}
+
+.col h3{
+  width: fit-content;
+  margin-bottom: 20px !important;
+  position: relative;
+  font-size: 17px !important;
+  color: #76768D;
+}
+
+
+.email-id{
+  width: fit-content;
+  border-bottom: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.footer-links {
+  list-style: none !important;
+  margin-bottom: 6px !important;
+}
+
+.footer-links a{
+  text-decoration: none !important;
+  color: #fff !important;
+}
+
+hr{
+  width: 90%;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  margin: 20px auto !important;
+}
+
+.copyright{
+  text-align: center;
+  padding: 0 10px;
+  width:fit-content;
+}
+
+.underline{
+  width: 100%;
+  height: 5px;
+  background-color: #767676;
+  border-radius: 3px;
+  position: absolute;
+  top: 25px;
+  left: 0;
+  overflow: hidden;
+}
+
+.underline span{
+  width: 15px;
+  height: 100%;
+  background: #fff;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  animation: moving 4s linear infinite;
+}
+
+.social-icons{
+  margin: 10px !important;
+}
+
+.social-icons a{
+  width: 40px !important;
+}
+@keyframes moving{
+  0%{
+    left: -20px;
+  }
+  100%{
+    left: 100%;
+  }
+}
+
+@media(max-width: 700px){
+  .footer-container{
+    bottom: unset;  
+  } 
+
+  .col{
+    flex-basis: 100%;
+  }
+
+  .col:nth-child(2), .col:nth-child(3){
+    flex-basis: 100%;
+  }
+}

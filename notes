@@ -1,0 +1,112 @@
+// // return a solid response
+// Route::get('/hello', function () {
+//     return response('<h1>Hello World</h1>', 200)
+//         -> header('Content-Type', 'text/plain')
+//         -> header('foo', 'bar');
+// });
+
+// // get url parameters
+// Route::get('/hello/{id}', function ($id) {
+//         return response('POST ' . $id);
+// }) -> where('id', '[0-9]+'); //limiting what can be passed inthe url
+
+
+<!-- this is called dependency injection -->
+// // parsing a request
+// // useful for this like hello?city=woodbridge&street=cherrydale
+// Route::get('/hello', function (Request $request) {
+//     // dd($request);
+//     return($request -> city . ' ' . $request -> street );
+
+// });
+
+
+<!-- useful commands -->
+<!-- //command to make controller -->
+php artisan make:controller ListingController
+php artisan make:contoller UserController
+
+<!-- //command to make factory -->
+php artisan make:factory ListingFactory 
+
+<!-- //command to just seed with existing tables -->
+php artisan db:seed
+
+<!-- //command to make a model to be converted to schemas -->
+php artisan make:model Listing
+
+<!-- //command to make migrations  -> create table and add to the schemas -->
+php artisan make:migration create_users_table
+
+<!-- //command to migrate table schema -->
+php artisan migrate
+
+<!-- //command to migrate/refresh existing tables and add dummy data -->
+php artisan migrate:refresh --seed 
+
+
+<!-- common resource routes -->
+<!-- index - show all listings -->
+<!-- show - show a single listing -->
+<!-- create - show form to create new listing -->
+<!-- store - store new listing -->
+<!-- edit - show form to edit listing -->
+<!-- update - update listing -->
+<!-- destroy - delete listing -->
+
+
+file uploaded generate a path and save to folder
+            // foreach ($request->file('image_uploads') as $file) 
+            //     // $name=$file->getClientOriginalName();
+            //     // $file->move('logo', $name);  
+            //     $name = $file->store('logos','public');
+            //     $data[] = $name; 
+
+// if i am the owner of the listing-> i wanna see messages that have been sent to me first and i can repy to them
+        $userQuery = DB::table('messages');
+        // first see messages that are regarding the current listing id and have been sent to the listing owner
+        $userQuery->orWhere('for_listing', 'like', $listing->id)
+                    ->leftJoin('users', 'messages.from', '=', 'users.id')
+                    ->select('messages.*','users.*')
+                    ->where('messages.to', $listing->user_id);
+        // dd($userQuery->get());
+        $userQuery = $userQuery->distinct()->select(['first_name','last_name', 'avatar','email', 'users.id'])
+        
+        ->get();
+
+SELECT *
+FROM users
+INNER JOIN listings On users.id = listings.user_id 
+INNER JOIN messages on messages.to = users.id
+INNER JOIN users as users2 on messages.from = users2.id 
+WHERE listings.id = 22
+ORDER BY is_read;
+
+
+select users.id, users.first_name, users.last_name, users.avatar, users.email 
+            from users 
+            Inner JOIN messages 
+                ON users.id = messages.from and messages.to = 11 or messages.from = 11 
+                where users.id != 11 and for_listing = 21
+                group by users.id, users.first_name, users.last_name, users.avatar, users.email;
+
+
+@if($listing->status =='Available')
+                                    <div class="stat-container">
+                                        <div class="stat green">
+                                        </div>
+                                        <h4>{{$listing->status}}</h4>
+                                    </div>
+                                @elseif($listing->status=='Pending')
+                                    <div class="stat-container">
+                                        <div class="stat yellow">
+                                        </div>
+                                        <h4>{{$listing->status}}</h4>
+                                    </div>
+                                @else
+                                    <div class="stat-container">
+                                        <div class="stat">
+                                        </div>
+                                        <h4>{{$listing->status}}</h4>
+                                    </div>
+                                @endif 

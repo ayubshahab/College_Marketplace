@@ -1,0 +1,233 @@
+:root{
+    --accent-color: gray;
+    --background-color: #EAEDED;
+    /* --dark-color: #212121; */
+}
+
+/* 1 */
+.login-page{
+    /* background-color: var(--darkGray); */
+    /* background-color: #142850; */
+    background-color: var(--background-color);
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    /* height: -o-calc(100vh - 95px); 
+    min-height: 600px;
+    height: -webkit-calc(100vh - 95px); 
+    height: -moz-calc(100vh - 95px);  */
+}
+
+/* 2 */
+.login-parent-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+    /* background-color: black; */
+    background-color: var(--background-color);
+    padding: 2% 5%;
+    /* position: relative; */
+    justify-content: center;
+    align-items: center;
+}
+
+/* 3 */
+.login-inner-container{
+    width: 80%;
+    height: 90%;
+    /* background-image: linear-gradient( 
+    140deg, rgba(49, 39, 53, 0.5), rgba(49, 40, 56, 0.25)); */
+    /* background-color: var(--dark-color); */
+    /* border-radius: 25px; */
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: 25px 25px 25px 25px;
+    -webkit-box-shadow:  0px 0px 26px 11px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0px 0px 26px 11px rgba(0, 0, 0, 0.5);
+}
+
+.login-inner-left, .login-inner-right{
+    width: 50%;
+    height: 100%;
+}
+
+
+/* container contining login and signup divs */
+.login-toggle-container{
+    width: 100%;
+    height: 10%;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    color: white;
+    font-size: 30px;
+}
+
+.login-div, .sign-up-div{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign-up-div{
+    background-color: rgba(255, 255, 255, .25);
+}
+
+.login-div:hover, .sign-up-div:hover{
+    cursor: pointer;
+}
+
+/* the actual area with the two forms */
+.sign-in-and-up-toggle-container{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-sizing: border-box;
+    background-color: var(--dark-color);
+    /* background: linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%); */
+    background:rgba(123,121,132,0.2);
+}
+
+.login-form, .sign-up-form{
+    /* background-color: brown; */
+    width: 100%;
+    margin-bottom: 5%;
+    /* background-color: gray; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.login-form{
+    /* background-color: var(--accent-color); */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form h1, .sign-up-form h1{
+    font-size: 35px;
+}
+
+/* the login form */
+
+.login-form input[type=email], .login-form input[type=password],
+.login-form input[type=text],.sign-up-form input[type=email], .sign-up-form input[type=password],
+.sign-up-form input[type=text]{
+    width: 90%;
+    border: 0;
+    font-size: 20px;
+    text-align: center;
+    padding: 10px 5px !important;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    /* color: var(--dark-color); */
+    color: #92EBC4;
+    background-color: var(--background-color);
+}
+
+
+.sign-in-and-up-toggle-container input[type=submit]{
+
+    margin-top: 10px;
+    /* background: #323c4e; */
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    padding: 9px 17px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    background: linear-gradient(180deg, #F76F62 0%, #E84848 100%);
+    box-shadow: 0px 4px 24px rgb(244 99 67 / 32%);
+
+    /* display: inline-block;
+    border: none;
+    padding: 0.35em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 8px;
+    text-decoration: none;
+    background: linear-gradient(180deg, #F76F62 0%, #E84848 100%);
+    box-shadow: 0px 4px 24px rgb(244 99 67 / 32%);
+    font-weight: 300;
+    color: #ffffff;
+    text-align: center; */
+}
+
+.login-form input[type=submit]:active, 
+.sign-up-form input[type=submit]:active 
+{
+    padding: 10px 40px;
+}
+.cont-2{
+    display: none;
+}
+
+
+/*David Testing Icons Stuff*/
+.vertical-socials{
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    /* background-color: red; */
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.vertical-socials i{
+    font-size: 50px;
+    color: white;
+    opacity: .7;
+}
+
+
+.vertical-socials i:hover{
+    cursor: pointer;
+    opacity: 1;
+}
+
+.login-inner-right{
+    background-color: var(--accent-color);
+    background-color: darkslategray;
+    background-image: url(https://cdn.rbiva.com/wp-content/uploads/2020/06/RBI_Featured-Image_ConstuctionProject_UVARotunda.jpg);
+    background-position: bottom;
+    background-size: cover;  
+    background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 1000px) {
+    .login-inner-left{
+        width: 100%;
+        height: 100%;
+    }
+    .login-inner-right{
+        width: 0%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .login-form input[type=email], .login-form input[type=password],
+    .sign-up-form input[type=email], .sign-up-form input[type=password],
+    .sign-up-form input[type=text]{
+        /* background-color: blue; */
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .login-parent-container{
+        /* background-color: red; */
+        padding: 2% 1%;
+    }
+}

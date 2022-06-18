@@ -1,0 +1,321 @@
+.yard-sale-wrapper, .sublease-wrapper{
+    /* min-height: 400px; */
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    overflow-x: clip;
+}
+
+/* .yard-sale-wrapper::after{
+  content: '';
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(50% 50% at 50% 50%, #FFAEAE 0%, rgba(255,221,221,0) 100%);
+    opacity: 0.3;
+  position: absolute;
+  z-index: 100;
+  left: calc(50% - 200px);
+  top:calc(50%);
+  z-index: 1;
+} */
+.yard-sale-info, .sublease-info{
+    width: 40%;
+    height: auto;
+    padding: 1em 3em;
+    /* background-color: blue; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.yard-sale-info h1{
+    /* background-color:  var(--dark-color); */
+    border-radius: 5px;
+    font-weight: 600 !important;
+    padding: 10px 5px;
+    /* color:white; */
+    color: #EDEFF8;
+    /* color:#C9C9DC; */
+    
+}
+
+.yard-sale-info h1 span{
+  color:#db6657;
+}
+
+.yard-sale-info h3{
+  color: #C9C9DC;
+}
+.yard-sale-cont, .sublease-cont{
+    /* position: absolute; */
+    width: 60%;
+    height: fit-content;
+    /* right: -100%; */
+    background-color: var(--dark-color);
+    border-radius: 25px 0 0 25px;
+    -webkit-box-shadow:  0px 0px 26px 11px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0px 0px 26px 11px rgba(0, 0, 0, 0.5);
+    padding: 20px 2em;  
+    box-sizing: border-box;
+    position: relative;
+    background: linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%);
+    z-index: 2;
+}
+
+.yard-sale-cont h1{
+  /* color: white; */
+  padding: 5px;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+.yard-sales-buttons{
+  /* background-color: brown; */
+  padding: 10px;
+  height: fit-content;
+  width: 100%;
+  margin: 10px 0;
+}
+.button1{
+
+    display: inline-block;
+    border: none;
+    padding: .5em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 8px;
+    text-decoration: none;
+    background: linear-gradient(180deg, #F76F62 0%, #E84848 100%);
+    box-shadow: 0px 4px 24px rgb(244 99 67 / 32%);
+    font-weight: 300;
+    color: #ffffff;
+    text-align: center;
+}
+
+.bouncy{
+    animation: bouncy 5s infinite linear;
+    position: relative;
+}
+
+
+.sublease-cont{
+    border-radius: 0 25px 25px 0;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+  width: 100%;
+  /* background-color: blue; */
+  height: fit-content;
+  /* display: flex; */
+  flex-direction: row;
+}
+
+.yard-header-img{
+  width: 70% !important;
+  height: 350px;
+  background-color: green;
+  position: relative;
+}
+
+.numbertext {
+  color: #f2f2f2;
+  /* font-size: 12px; */
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  left: 10px;
+}
+
+.no-yard-sales{
+    position: absolute;
+    /* background-color: rgba(0,0,0, .5); */
+    color: white;
+    padding: 20px;
+    width: 60%;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    border-radius: 5px;
+    transform: translate(-50%, -50%);
+    background: rgba(49,47,59,0.5);
+      box-shadow: 0px 12px 32px rgba(17,16,21,0.75);
+    backdrop-filter: blur(44px);
+    border-radius: 8px;
+}
+
+
+.yard-header-img img{
+  object-fit: cover;
+  width: 100%;
+  height: 350px;
+  /* background-position: center; */
+  /* height: auto; */
+}
+
+.stackable-images{
+  width: 30% !important;
+  height: 350px;
+  background-color: maroon;
+  display: flex;
+  flex-direction: column;
+}
+
+.stackable-images img{
+  height: 50%;
+  /* width: 100%; */
+  object-fit: cover;
+  overflow: hidden;
+  /* border: 1px solid black; */
+  /* background-color: red; */
+}
+/* Next & previous buttons */
+.prevB,
+.nextB {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.prevB{
+  left: 1em;
+}
+/* Position the "next button" to the right */
+.nextB {
+  right: 1em;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prevB:hover,
+.nextB:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--dark-color);
+
+}
+
+@media(max-width: 1000px){
+
+  /* align text before scroll wheel */
+  .yard-sale-wrapper{
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* texdt formatting */
+  .yard-sale-info{
+    width: 100%;
+    padding: 1em 1em;
+  }
+
+  .yard-sale-info h1{
+    font-size: 1.3em;
+  }
+
+  /* contains the slides */
+  .yard-sale-cont{
+    width: 100%;
+    height: fit-content;
+    border-radius: 0;
+  }
+
+  .yard-sale-cont h1{
+    font-size: 15px;
+  }
+
+  .yard-sale-cont h4{
+    font-size: 13px;
+  }
+  .mySlides{
+    width: 100%;
+    background-color: yellow;
+  }
+}
+
+
+@media(max-width: 700px){
+  .yard-header-img{
+    height: 300px;
+  }
+
+  .yard-header-img img{
+    height: 300px;
+  }
+  .stackable-images{
+    height: 300px;
+  }
+}
+
+@media(max-width: 600px){
+  .mySlides{
+    flex-direction: column;
+  }
+  .yard-header-img{
+    width: 100% !important;
+    height: 250px;
+  }
+
+  .yard-header-img img{
+    height: 250px;
+  }
+
+  .stackable-images{
+    height: 100px;
+    width: 100% !important;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .stackable-images img{
+    height: 100%;
+    width: 50% !important;
+    /* background-color: yellow; */
+  }
+  .yard-sales-buttons{
+    padding: 10px 0;
+  }
+}
+@media (max-width: 500px) {
+  .yard-header-img{
+    width: 100% !important;
+    height: 200px;
+  }
+
+  .yard-header-img img{
+    height: 200px;
+  }
+
+}
+/* @media(max-width: 500px){
+  .yard-sale-cont{
+    width: 100%;
+    min-height: 250px;
+    height: fit-content;
+    border-radius: 0;
+  }
+
+  .mySlides{
+    height: 250px;
+  }
+
+  .yard-header-img{
+    width: 70% !important;
+  }
+
+  .stackable-images{
+    width: 30% !important;
+  }
+} */

@@ -1,0 +1,21 @@
+.selection-grid{
+    width: 100%;
+    height: auto;
+    padding: 30px 5px;
+    box-sizing: border-box;
+    background-color: var(--dark-color);
+}
+
+.selection-grid .selection-row{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    height: 400px;
+    padding: 2em 2em;
+}
+
+.selection-col{
+    width: 24%;
+    height: 100%;
+    background-color: green;
+}
