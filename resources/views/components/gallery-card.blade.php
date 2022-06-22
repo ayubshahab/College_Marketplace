@@ -34,7 +34,10 @@
             </a>
             <h4 class="card_text">${{$listing->price}} | {{$listing->city}}, {{$listing->state}}</h4>
             <div class="listing-tags">
-                <x-listing-tags :listingTags="$listing->tags"/>
+                @php
+                    $tags = explode(", ", $listing->tags);
+                @endphp
+                <x-listing-tags :tags="$tags"/>
             </div>
         </div> 
     </div>

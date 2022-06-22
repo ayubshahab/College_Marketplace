@@ -101,7 +101,10 @@
                         </div>
 
                         <div class = "tags-container show-top">
-                            <x-listing-tags :listingTags="$listing->tags"/>
+                            @php
+                                $tags = explode(", ", $listing->tags);
+                            @endphp
+                            <x-listing-tags :tags="$tags"/>
                         </div>
 
                         <div class="product-buttons">

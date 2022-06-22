@@ -152,7 +152,7 @@ a:hover, label:hover{
 .content .links ul ul{
   position: absolute;
   top: 0;
-  right: calc(-100% - 26px);
+  right: calc(-100% - 20px);
 }
 .content .links ul li{
   position: relative;

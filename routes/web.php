@@ -8,6 +8,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\YardSaleController;
+use App\Http\Controllers\RentablesController;
+use App\Http\Controllers\SubleaseController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,9 +30,6 @@ Route::get('/', [ListingController::class, 'index']);
 // search results
 Route::get('/shop/listings', [ListingController::class, 'search']);
 
-//  /shop/listings
-//  /shop/sublease
-//  /shop/rent
 
 //tag results
 // create a single listing -> show the form
@@ -49,34 +49,35 @@ Route::delete('/listings/{listing}',[ListingController::class, 'destroy'])->midd
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
 
 
+// Routes for rentable items
+Route::get('/rentables/create', [RentablesController::class, 'create'])->middleware('auth');
+Route::post('/rentables', [RentablesController::class, 'store'])->middleware('auth');
+Route::get('/rentables/{rentable}', [RentablesController::class, 'show']);
+
+
+//Routes for Sublease items
+Route::get('/subleases/create', [SubleaseController::class, 'create'])->middleware('auth');
+Route::post('/subleases', [SubleaseController::class, 'store'])->middleware('auth');
+Route::get('/subleases/{sublease}', [SubleaseController::class, 'show']);
+
+
 //messaging system related routes
 Route::post('/sendmessage', [MessageController::class, 'postMessage'])->middleware('auth');
 Route::get('/messages', [MessageController::class, 'getMessages'])->middleware('auth');
 
 
-
 //yard sales related routes
-//create a yard sale post
 Route::get('/yardsales/create', [YardSaleController::class, 'create'])->middleware('auth');
-//post request to store create form inputs
 Route::post('/yardsales', [YardSaleController::class, 'store'])->middleware('auth');
 Route::get('/yardsales/{yardsale}',[YardSaleController::class,'show']);
-//need to add more routes to update yard sales and for messaging
-
 
 
 //user related routes
 Route::get('/users/loginRegister', [UserController::class, 'create'])->name('login')->middleware('guest');
-
 Route::post('/users', [UserController::class, 'store'])->middleware('guest');
-
 Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth');;
-
 Route::post('/users/authenticate',[UserController::class, 'authenticate']);
-
 Route::get('/users/manage', [UserController::class, 'manage'])->middleware('auth');
-
 Route::get('/users/removefavorite/{listing}', [UserController::class, 'removeFavorite'])->middleware('auth');
-
 Route::get('/users/addfavorite/{listing}', [UserController::class, 'addFavorite'])->middleware('auth');
 

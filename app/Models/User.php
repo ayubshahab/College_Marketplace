@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Listing;
+use App\Models\Sublease;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -56,6 +57,14 @@ class User extends Authenticatable
 
     public function listings(){
        return $this->hasMany(Listing::class, 'user_id');
+    }
+
+    public function rentables(){
+       return $this->hasMany(Rentable::class, 'user_id');
+    }
+
+    public function subleases(){
+       return $this->hasMany(Sublease::class, 'user_id');
     }
 
 }

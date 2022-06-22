@@ -91,6 +91,45 @@
     border: 3px solid gray;
 }
 
+.cr {
+  width: 200px;
+  padding: 5px;
+  z-index: 20;
+  position: absolute;
+  text-align: center;
+  color: var(--green-accent-color);
+  /* background-color: #151416; */
+  /* background: linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%); */
+  /* background: var(--red-accent-color); */
+  /* color:white; */
+}
+
+.rentable{
+    background-color: var(--red-accent-color);
+    color:white;
+}
+
+.listing{
+    background-color:darkolivegreen;
+    color:white;
+}
+
+.sublease{
+    background-color:cornflowerblue;
+    color:white;
+}
+
+.cr-top    { top: 25px; }
+.cr-bottom { bottom: 25px; }
+.cr-left   { left: -50px; }
+.cr-right  { right: -60px; }
+
+.cr-top.cr-right,
+.cr-bottom.cr-left {
+  transform: rotate(45deg);
+}
+
+
 .slide-img{
     height: 200px;
     display: flex;
@@ -139,6 +178,7 @@
     z-index: 10 !important;
     padding: 5px;
      border-radius: 12px;
+     position: relative !important;
 }
 
 .single-post-cont:hover{

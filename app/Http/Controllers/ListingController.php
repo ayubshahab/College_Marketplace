@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Listing;
 use App\Models\User;
+use App\Models\Listing;
+use App\Models\Rentable;
+use App\Models\Sublease;
 use App\Models\YardSale;
+use App\Libraries\HashMap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -52,28 +55,42 @@ class ListingController extends Controller
 
             // for the listings, which should only be recently added -> make it within 24hrs -> set a limit for how many total listings to show and paginate or set a minimum to show -> if not possible-> select the most recent
             'listings'=>Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16),
-            // 'listings' =>Listing::latest()->simplePaginate(16),
-            'yardSales' => YardSale::latest()->take(6)->get(),
             'listingsNear' => Listing::latest()->take(10)->get(),
-            'listingsRent' => Listing::latest()->take(10)->get()
+            'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
+            'subleases'=>Sublease::latest()->where('status', 'like', 'Available')->take(10)->get()
         ]);
     }
 
     public function search(Request $request){
-        // dd($request->all());
-        if(request('search') ?? false){
+        $map = new HashMap("String", "Array");
+        $input = $request->except('_token');
+        foreach ( $input as $key => $value) {
+            if($key == "page"){
+                continue;
+            }
+            $value = explode(",", $value);
+            $map -> put($key, $value);
+        }
+
+        if($request->fullUrl() != $request ->url() && 
+        ((request('distance') ?? false) 
+        || (request('negotiableFree') ?? false) 
+        || (request('search') ?? false) 
+        || (request('category') ?? false) 
+        || (request('tag') ?? false) 
+        || (request('condition') ?? false))){
+            // dd($request->all());
+            // dd($map ->keySet()); //get all the keys of the key value pairs
+            if(request('search') ?? false){
+                return view('listings.search', [
+                    'listings' => Listing::latest() ->filter(request($map ->keySet()))-> simplePaginate(16)
+                ]); 
+            } 
+        }else{
             return view('listings.search', [
-                'listings' => Listing::latest() ->filter(request(['tag', 'search']))-> simplePaginate(16),
-                // double colon is used for static methods
-                //search for all listings that have that specific tag
-                //returns the results in the recently added order
-                
-                'tagWord' => request('tag'),
-                'searchWord' => request('search'),
-                'currentUrl' => $request->fullUrl()
-            ]); 
-        } 
-        abort('404', "Incorrect Search Attempt");
+                'listings' => Listing::latest()->simplePaginate(20)
+            ]);
+        }
     }
 
     // show a single listing
@@ -164,7 +181,6 @@ class ListingController extends Controller
             'country'=>'required',
             'postcode'=>'required'
         ]);
-
         $formFields['user_id']=auth()->id();
         if($request->hasFile('image_uploads'))
         {
@@ -176,6 +192,7 @@ class ListingController extends Controller
         }
         $formFields['category']=implode(", " ,$formFields['category']);
 
+        // dd($formFields);
         $newListing=Listing::create($formFields);
         return redirect('/listings/'.$newListing->id)->with('message', 'Listing Created Successfully!');
 

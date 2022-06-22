@@ -43,26 +43,58 @@
     // }
 
     use App\Libraries\HashMap;
-    $map = new HashMap("String", "String");
+    $map = new HashMap("String", "Array");
     $base = "http://college_marketplace.test/shop/listings";
 
     function deconstructUrl($input, $map){
         $data = $input;
         foreach ( $data as $key => $value) {
+            $value = explode(",", $value);
            $map -> put($key, $value);
         }
     }
 
     deconstructUrl(Request::except('_token'), $map);
 
+    function urlBuilder($futureMap, $base){
+        $base = $base . "?";
+        $futureMap->forEach(
+            function($key, $value) use(&$base, &$futureMap) {
+                if($key=="page"){
+                    $futureMap->remove($key);
+                }else{
+                    $base = $base . $key . "=" . implode(",",$value) . "&";
+                }
+            }
+        );
+
+        // Remove last character since key value pairs will end in &.
+        // With no key value pairs the last character is a ? so that would need to be removed anyways.
+        return substr($base, 0, -1);
+    }
+
     function toggleParam($key, $value, $map){
-        deconstructUrl(Request::except('_token'), $map);
-        if($map->containsValue($value)){ 
-            // already contains value, need to toggle it now
-            return "already contains";
+        $nextMap = clone $map;
+        if($nextMap->contains($key)) {
+            $storedAtKey = $nextMap->get($key);
+            if(in_array($value, $storedAtKey)) {
+                // basically deleting key-> value pair if present
+                if (($index = array_search($value, $storedAtKey)) !== NULL) {
+                    unset($storedAtKey[$index]);
+                    $nextMap->put($key, $storedAtKey);
+                }
+                if(count($storedAtKey) == 0) {
+                    $nextMap->remove($key);
+                }
+            } else {
+                // if adding a new value to a key value pair
+                array_push($storedAtKey, $value);
+                $nextMap->put($key, $storedAtKey);
+            }
+        } else {
+            $nextMap->put($key, array($value));
         }
-        $map->put($key, $value);
-        // deconstructUrl(Request::except('_token'), $map);
+        return $nextMap;
     }
 
     // whats in your map is currenlty whats in your url query,
@@ -88,20 +120,35 @@
         <input type="checkbox" id="show-filter" class="show-filter">
         
         <div class = "side-filter-container">
-            <label for="show-filter"><i class="fas fa-bars sidebar-toggle"></i></label> 
+            <label for="show-filter">
+                {{-- <i class="fas fa-bars sidebar-toggle"></i> --}}
+                <i class="fa-solid fa-filter sidebar-toggle"></i>
+            </label> 
             
             <ul class="filter-list">
-                <li><a href="">View All</a></li>
+                <li><a href="/shop/listings">View All</a></li>
                 {{-- Category Dropdown --}}
                 <li>
                     <input type="checkbox" id="cat">
                     <label for="cat" style="position: relative;">Categories <span class="down-arrow"></span> </label>
-                    <ul>
-                        <li><a href="{{toggleParam('category', 'furniture', $map)}}">Furniture</a></li>
-                        <li><a href="{{toggleParam('category', 'clothes', $map)}}">Clothes</a></li>
-                        <li><a href="{{toggleParam('category', 'electronics', $map)}}">Electronics</a></li>
-                        <li><a href="{{toggleParam('category', 'kitchen', $map)}}">Kitchen</a></li>
-                        <li><a href="{{toggleParam('category', 'school accessories', $map)}}">School Accessories</a></li>
+                    <ul> 
+                        <li><a href="{{urlBuilder(toggleParam('category', 'furniture', $map), $base)}}">Furniture</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('category', 'clothes', $map), $base)}}">Clothes</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('category', 'electronics', $map), $base)}}">Electronics</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('category', 'kitchen', $map), $base)}}">Kitchen</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('category', 'school accessories', $map), $base)}}">School Accessories</a></li>
+                    </ul>
+                </li>
+
+                {{-- condition dropdown --}}
+                <li>
+                    <input type="checkbox" id="cond">
+                    <label for="cond" style="position: relative;">Condition <span class="down-arrow"></span> </label>
+                    <ul> 
+                        <li><a href="{{urlBuilder(toggleParam('condition', 'new', $map), $base)}}">New</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('condition', 'good', $map), $base)}}">Good</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('condition', 'slightly used', $map), $base)}}">Slightly Used</a></li>
+                        <li><a href="{{urlBuilder(toggleParam('condition', 'used normal wear', $map), $base)}}">Used Normal Wear</a></li>
                     </ul>
                 </li>
                 
@@ -111,9 +158,9 @@
                     <label for="cost" style="position: relative;">Price <span class="down-arrow"></span> </label>
 
                     <ul>
-                    <li><a href="#">Negotiable</a></li>
-                    <li><a href="">Fixed</a></li>
-                    <li><a href="#">Free</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('negotiableFree', 'negotiable', $map), $base)}}">Negotiable</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('negotiableFree', 'fixed', $map), $base)}}">Fixed</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('negotiableFree', 'free', $map), $base)}}">Free</a></li>
                     </ul>
                 </li>
 
@@ -123,29 +170,30 @@
                     <label for="dist" style="position: relative;">Distance <span class="down-arrow"></span> </label>
 
                     <ul>
-                    <li><a href="#">0 - 0.5 Mi</a></li>
-                    <li><a href="">0.5 - 1 Mi</a></li>
-                    <li><a href="#">1 - 1.5 Mi</a></li>
-                    <li><a href="#">1.5 - 2 Mi</a></li>
-                    <li><a href="#"> > 2 Mi</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('distance', '0 - 0.5 Mi', $map), $base)}}">0 - 0.5 Mi</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('distance', '0.5 - 1 Mi', $map), $base)}}">0.5 - 1 Mi</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('distance', '1 - 1.5 Mi', $map), $base)}}">1 - 1.5 Mi</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('distance', '1.5 - 2 Mi', $map), $base)}}">1.5 - 2 Mi</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('distance', '> 2 Mi', $map), $base)}}"> > 2 Mi</a></li>
                     </ul>
                 </li>
 
             </ul>
         </div>
-        <div style = "padding-left: 50px">
+        {{-- <div style = "padding-left: 50px">
             @php
-                $map->forEach(function($key, $value) {
-                    echo "<h5 style= 'color:black;'>" . $key . " = " . $value. "</h5>";
+                $nextMap->forEach(function($key, $value) {
+
+                    echo "<h5 style= 'color:black;'>" . $key . " = " . implode(" ",$value). "</h5>";
                     // echo "hello";
                 });
             @endphp
         </div>
-        
+         --}}
 
-        {{-- need to create an event listener for the above filters where the results is a list of listings that are paginated and then passed into the card gallery--}}
+        {{-- need to create an event listener for the above filters where the results is a list of listings that are paginated and then passed into the card gallery --}}
         <div class = "listings-parent-container" style="min-height: 100vh;">
-            @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results for: '.$searchWord . $tagWord])
+            @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings)])
         </div>
     </div>
 </x-layout> 

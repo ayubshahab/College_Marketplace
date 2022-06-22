@@ -26,7 +26,18 @@ class Listing extends Model
         'postcode'
     ];
     public function scopeFilter($query, array $filters){
-        // dd($filters['tag']);
+        // dd($filters); -> have the keys
+
+        //$query is all the listings -> in latest order
+        
+        //search: go through all the search words in the search request
+        //tag: filter will always be one
+        //condition: multiple conditions possible
+        //category: mulitple categorys possible
+        //negotiableFree: multiple possible
+        //distance: multiple possible
+        
+        
         if($filters['tag'] ?? false){
             $query->where('tags', 'like', '%'. request()->tag . '%');
         }
@@ -43,12 +54,6 @@ class Listing extends Model
                 ->orWhere('category', 'like', '%'. $word .'%')
                 ->orWhere('tags', 'like', '%'. $word . '%');
             }
-            // dd($query);
-            // $query->where('tags', 'like', '%'. request()->search . '%')
-            //     ->orWhere('item_name', 'like', '%'. request()->search . '%')
-            //     ->orWhere('description', 'like', '%'. request()->search . '%')
-            //     ->orWhere('category', 'like', '%'.request()->search.'%')
-            //     ->orWhere('tags', 'like', '%'. request()->search . '%');
         }
     }
 
