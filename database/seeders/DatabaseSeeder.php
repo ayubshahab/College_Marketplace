@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Listing;
 use App\Models\Message;
+use App\Models\Rentable;
+use App\Models\Sublease;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -19,7 +21,9 @@ class DatabaseSeeder extends Seeder
     {
         // will create 10 random users and insert them into the db
         User::factory(10)->create();
-        Listing::factory(20)->create();
+        Listing::factory(50)->create();
+        Rentable::factory(30)->create();
+        Sublease::factory(8)->create();
         // Message::factory(10000)->create();
 
         // $user = User::factory()->create(

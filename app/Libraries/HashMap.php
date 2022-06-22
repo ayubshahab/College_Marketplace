@@ -21,7 +21,7 @@ use function strtolower;
 
 final class HashMap {
 
-	private const SUPPORTED_KEY_TYPES = ["str", "string", "int", "integer", "float"];
+	private const SUPPORTED_KEY_TYPES = ["str", "string", "int", "integer", "float", "array"];
 	
 	/** @var string $expectedKey */
 	protected $expectedKey;

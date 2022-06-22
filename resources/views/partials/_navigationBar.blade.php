@@ -25,25 +25,24 @@
                     <input type="checkbox" id="show-features">
                     <label for="show-features" style="position: relative;">Buy <span class="down-arrow"></span> </label>
                     <ul>
-                    <li><a href="#">Free Listings</a></li>
-                    <li><a href="">Rent Items</a></li>
+                    <li><a href="/shop/listings?negotiableFree=free">Free Listings</a></li>
                     <li>
                         <a class="desktop-link">By Category</a>
                         <input type="checkbox" id="show-items">
 
                         <label for="show-items" style="position:relative;">By Category<span class="down-arrow"></span></label>
                         <ul>
-                        <li><a href="#">Furniture</a></li>
-                        <li><a href="#">Kitchen</a></li>
-                        <li><a href="#">Electronics</a></li>
-                        <li><a href="#">Clothes</a></li>
-                        <li><a href="#">School Accessories</a></li>
+                        <li><a href="/shop/listings?category=furniture">Furniture</a></li>
+                        <li><a href="/shop/listings?category=kitchen">Kitchen</a></li>
+                        <li><a href="/shop/listings?category=electronics">Electronics</a></li>
+                        <li><a href="/shop/listings?category=clothes">Clothes</a></li>
+                        <li><a href="/shop/listings?category=school%20accessories">School Accessories</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Listings < 1 mile</a></li>
-                    <li><a href="#">Yard Sales</a></li>
+                    <li><a href="/shop/listings?distance=0%20-%200.5%20Mi">Listings < .5 Mile</a></li>
+                    <li><a href="">Rent Items</a></li>
                     <li><a href="#">Find Subleases</a></li>
-                    <li><a href="#">All Listings</a></li>
+                    <li><a href="/shop/listings">All Listings</a></li>
                     </ul>
                 </li>
 
@@ -57,25 +56,11 @@
                     <ul>
                     <li><a href="/listings/create">Post Single Item</a></li>
                     {{-- <li><a href="/yardsales/create">Host a Yard Sale</a></li> --}}
-                    <li><a href="#">Post Item for Rent</a></li>
-                    <li><a href="#">Post a Sublease</a></li>
-                    {{-- <li>
-                        <a href="#" class="desktop-link">More Items</a>
-                        <input type="checkbox" id="show-items">
-                        <label for="show-items">More Items</label>
-                        <ul>
-                        <li><a href="#">Sub Menu 1</a></li>
-                        <li><a href="#">Sub Menu 2</a></li>
-                        <li><a href="#">Sub Menu 3</a></li>
-                        </ul>
-                    </li> --}}
+                    <li><a href="/rentables/create">Post Item for Rent</a></li>
+                    <li><a href="/subleases/create">Post a Lease</a></li>
                     </ul>
                 </li>
 
-                {{-- rent button --}}
-                {{-- <li><a href="#">Rent</a></li> --}}
-            
-                {{-- login button --}}
                 @auth
                     <li>
                         <a class="desktop-link">{{auth()->user()->first_name}}</a>

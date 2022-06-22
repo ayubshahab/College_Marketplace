@@ -84,7 +84,7 @@
     background: none;
     max-height: 0px;
     overflow: hidden;
-    transition: all .3s ease;
+    transition: all .5s ease;
 }
 
 .side-filter-container input[type="checkbox"]{
