@@ -13,7 +13,7 @@
         <ul class="cards">
             @unless(count($listings) == 0)
                 @foreach($listings as $listing)
-                    <x-gallery-card :listing="$listing"/>
+                    <x-gallery-card :listing="$listing" :displayTags="$displayTags"/>
                 @endforeach
             @else
                 <p>NO Listings Found!</p>
@@ -22,7 +22,10 @@
         </ul>
         {{-- for pagination --}}
         <div class="pagination-container">
-            {{$listings->appends(request()->query())->links()}}
+            @if($listings instanceof \Illuminate\Pagination\Paginator ||
+            $listings instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                {{$listings->appends(request()->query())->links()}}
+            @endif
         </div>
     </div>
 </section>

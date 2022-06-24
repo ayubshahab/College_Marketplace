@@ -32,6 +32,8 @@ return new class extends Migration
             $table->string('watchlist')->nullable(); //will store keywords
             //will store favorites (their listing ids)
             $table->string('favorites')->nullable(); 
+            $table->string('rentableFavorites')->nullable();
+            $table->string('leaseFavorites')->nullable();
             // user phone number
             $table->string('number')->nullable();
             // listing location

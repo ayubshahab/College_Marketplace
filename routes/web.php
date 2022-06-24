@@ -78,6 +78,7 @@ Route::post('/users', [UserController::class, 'store'])->middleware('guest');
 Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth');;
 Route::post('/users/authenticate',[UserController::class, 'authenticate']);
 Route::get('/users/manage', [UserController::class, 'manage'])->middleware('auth');
-Route::get('/users/removefavorite/{listing}', [UserController::class, 'removeFavorite'])->middleware('auth');
-Route::get('/users/addfavorite/{listing}', [UserController::class, 'addFavorite'])->middleware('auth');
+Route::get('/users/removefavorite', [UserController::class, 'removeFavorite'])->middleware('auth');
+Route::get('/users/addfavorite', [UserController::class, 'addFavorite'])->middleware('auth');
+Route::post('/users/additionalInfo', [UserController::class, 'updateInfo'])->middleware('auth');
 

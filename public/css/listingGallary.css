@@ -8,30 +8,6 @@
   box-sizing: border-box;
 }
 
-/* html {
-  background-color: #ecf9ff;
-}
-
-body {
-  color: #272727;
-  font-family: 'Quicksand', serif;
-  font-style: normal;
-  font-weight: 400;
-  letter-spacing: 0;
-} */
-
-/* h1 {
-    font-size: 24px;
-    font-weight: 400;
-    text-align: center;
-} */
-
-/* img {
-  height: 100%;
-  max-width: 100%;
-  vertical-align: middle;
-} */
-
 .btn {
   color: #ffffff;
   padding: 0.8rem;
@@ -90,6 +66,42 @@ body {
   margin-bottom: 5px;
 }
 
+.ribbon-listing{
+  background-color: darkolivegreen;
+}
+
+.ribbon-rental{
+  background-color: var(--red-accent-color);
+}
+
+.ribbon-lease{
+  background-color: cornflowerblue;
+}
+
+.ribbon{
+  position: absolute;
+  width: fit-content;
+  padding: 5px 20px;
+  right: 0;
+  top: 20px;
+}
+
+.ribbon:before, .ribbon:after{
+  content:"";
+  position: absolute;
+}
+
+.ribbon:before {
+  width: 7px;
+  height: 110%;
+  top: 0;
+  right: -3.5px;
+  z-index: -1;
+  padding: 0 0 7px;
+  background-color: inherit;
+  border-radius: 5px 0 0 5px;
+}
+
 .card_image .status{
     width: 15px;
     height: 15px;
@@ -133,24 +145,17 @@ body {
 .listing-tags{
   opacity: .6;
 }
+
 .card_title {
-  /* color: #ffffff; */
   font-size: 1rem;
   font-weight: 400 !important;
-  /* letter-spacing: 1px; */
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   margin-bottom: 5px;
-  /* color: #92EBC4; */
   color:var(--red-accent-color);
-  /* font-size: 20px;
+  font-size: 18px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 50px; */
-  font-size: 18px;
-  /* width: 100% !important; */
-  /* white-space: nowrap; */
-    overflow: hidden;
-    text-overflow: ellipsis;
 
 }
 
