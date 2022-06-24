@@ -1,47 +1,4 @@
 <?php
-    // Assumes base ends with '/'
-    // function urlFactory($base, $kvs) {
-    //     $url = $base;
-    //     foreach (array_values($kvs) as $kv) {
-    //         $value = $kvs[$kv[0]];
-    //         $key = $kv[1];
-    //         if (types($value) == array) {
-    //             // TODO: Exercise to the writer
-    //         }
-    //         else {
-    //             $url += $key . "=" . $value . "&";
-    //         }
-    //     }
-    //     $url = substr($url, 0, -1);
-
-    //     return $url
-    // }
-
-    // function toggleParam($kvs, $key, $value, $isSelected) {
-
-    //     // if the value is within the key value pairs key
-    //     if (!$isSelected) {
-    //         if (array_key_exists($key, $kvs) {
-    //             if (type($kvs[$keys]) == array) {
-    //                 array_push($kv[$key], $value);
-    //             }
-    //             else {
-    //                 $prev = $kv[$key];
-    //                 $unset($kv[$key])
-    //                 $kvs[$key] = array($prev, $value);
-    //             }
-    //         }
-    //         else {
-    //             $kvs[$key] = $value
-    //         }
-    //     }
-    //     else {
-    //         unset($kv[$key])
-    //     }
-
-    //     return $kvs;
-    // }
-
     use App\Libraries\HashMap;
     $map = new HashMap("String", "Array");
     $base = "http://college_marketplace.test/shop/listings";
@@ -193,7 +150,7 @@
 
         {{-- need to create an event listener for the above filters where the results is a list of listings that are paginated and then passed into the card gallery --}}
         <div class = "listings-parent-container" style="min-height: 100vh;">
-            @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings)])
+            @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings), 'displayTags' => true])
         </div>
     </div>
 </x-layout> 

@@ -99,15 +99,15 @@
                         </div>
 
                         <div class="product-buttons">
-                            {{-- <ul>
+                            <ul>
                                 <li>
-                                    @if($currentUser != null and $currentUser->favorites != null and in_array($listing->id, explode(", " , $currentUser->favorites)))
-                                        <a href="/users/removefavorite/{{$listing->id}}"><i class="fa-solid fa-heart saved"></i></a>
+                                    @if($currentUser != null and $currentUser->rentableFavorites != null and in_array($rentable->id, explode(", " , $currentUser->rentableFavorites)))
+                                        <a href="/users/removefavorite?type=rentable&id={{$rentable->id}}"><i class="fa-solid fa-heart saved"></i></a>
                                     @else
-                                        <a href="/users/addfavorite/{{$listing->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
-                                    @endif                                
+                                        <a href="/users/addfavorite?type=rentable&id={{$rentable->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
+                                    @endif
                                 </li>
-                                @if($currentUser != null and $listing->user_id == $currentUser->id)
+                                {{-- @if($currentUser != null and $listing->user_id == $currentUser->id)
                                     <li>
                                         <form method="POST" action="/listings/{{$listing->id}}/update">
                                             @csrf
@@ -128,8 +128,8 @@
                                             <button><i class="fa fa-trash" ></i></button>
                                         </form>
                                     </li>
-                                @endif
-                            </ul> --}}
+                                @endif --}}
+                            </ul>
                         </div>
                     </div>
                 </div>

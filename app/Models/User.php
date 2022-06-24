@@ -67,4 +67,45 @@ class User extends Authenticatable
        return $this->hasMany(Sublease::class, 'user_id');
     }
 
+    public function allLiked(){
+        $allListings = null;
+        if($this->favorites != null){
+            $temp = explode(", ",$this->favorites);
+            foreach($temp as $tp){
+                if($allListings!=null){
+                    $allListings = $allListings->merge(Listing::latest()->where('id', 'like', $tp)->get());
+                } else {
+                    $allListings = Listing::latest()->where('id', 'like', $tp)->get();   
+                }
+            }
+        }
+        
+        $allRentables = null;
+        if($this->rentableFavorites != null){
+            $temp = explode(", ", $this->rentableFavorites);
+            foreach($temp as $tp){
+                // dd($tp);
+                // dd(Rentable::latest()->where('id', 'like', $tp)->get());
+                if($allRentables!=null){
+                    $allRentables = $allRentables->merge(Rentable::latest()->where('id', 'like', $tp)->get());
+                } else {
+                    $allRentables = Rentable::latest()->where('id', 'like', $tp)->get();   
+                }
+            }
+        }
+
+        $allLeases = null;
+        if($this ->leaseFavorites != null){
+            $temp = explode(", ", $this->leaseFavorites);
+            foreach($temp as $tp){
+                if($allLeases != null){
+                    $allLeases = $allLeases->merge(Sublease::latest()->where('id','like',$tp)->get());
+                }else{
+                    $allLeases = Sublease::latest()->where('id','like',$tp)->get();
+                }
+            }
+        }
+        return collect($allListings)->merge($allRentables)->merge($allLeases);
+    }
+
 }
