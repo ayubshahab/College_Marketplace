@@ -20,12 +20,14 @@ class MessageFactory extends Factory
             $from = rand(1,10);
             $to = rand(1,10);
             $listing_id = rand(1,20);
+            $rental_id = rand(1,20);
             $is_read = rand(0,1);
         }while($from === $to);
         return [
             'from' => $from,
             'to' => $to,
             'for_listing' => $listing_id,
+            'for_rentals' => $rental_id,
             'message' => $this->faker->sentence(),
             'is_read' => $is_read
         ];

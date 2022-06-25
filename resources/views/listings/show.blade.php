@@ -238,7 +238,7 @@
         var listing_id = "{{$listing->id}}"
         var listingOwner = "{{$listing->user_id}}";
         var userLoggedIn = "{{$currentUser ? $currentUser->id : -1}}";
-        var receiverSelected = null;
+        var receiverSelected = null; //the person whose chat we have open
         $(document).ready(function(){
             $.ajaxSetup({
                 headers: {
@@ -257,6 +257,7 @@
             // if I am not the listing owner, show me messages that have been sent to me instantly
             // if I am the listing owner -> get selected user and update their information or display a pending symbol
             channel.bind('my-event', function(data) {
+                console.log(data);
                 if (userLoggedIn == data.from) {
                     // if I am not the listing owner and I am sending a message
                     if(userLoggedIn != listingOwner){
@@ -419,15 +420,16 @@
                         // console.log("bottom branch");
                         datastr = "receiver_id=" + listingOwner + "&message=" + msg + "&for_listing=" + listing_id;
                     }
-
+                    console.log(datastr);
                     if(e.keyCode == 13 && msg != '' && listingOwner != ''){
                         $(this).val(''); // while pressed enter text box will be empty
-                        // var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                         $.ajax({
                             url: "/sendmessage", 
                             type: 'POST',
                             data: datastr,
-                            // dataType: 'JSON',
+                            dataType: 'JSON',
+                            _token: CSRF_TOKEN,
                             cache: false,
                             success: function (data) {
                                 console.log(data);
