@@ -16,6 +16,7 @@
         "postcss": "^8.1.14"
     },
     "dependencies": {
-        "aos": "^3.0.0-beta.6"
+        "aos": "^3.0.0-beta.6",
+        "flickity": "^3.0.0"
     }
 }

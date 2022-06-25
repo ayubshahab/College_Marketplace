@@ -172,17 +172,22 @@ li{
 .tags-list-item{
     display: inline-block;
     padding: 0 5px;
-    background-color: var(--background-color);
+    /* background-color: var(--red-accent-color); */
+    /* backdrop-filter: blur(10px); */
+    background-color: rgb(17 16 21 / 25%);
     color: white;
     margin: 2.5px !important;
     border-radius: 5px;
-    padding: 5px 10px;
-    border: 1px solid black;
+    padding: 2px 6px;
+    /* border: 1px solid black; */
     width: fit-content;
     height: fit-content !important;
     text-align: center;
 }
 
+.tags-list-item:hover{
+    background-color: var(--red-accent-color);
+}
 .tags-list-item a{
     text-decoration: none;
     /* color: white; */

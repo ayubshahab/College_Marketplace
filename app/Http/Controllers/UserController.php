@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Listing;
+use App\Models\WatchItem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -39,10 +40,8 @@ class UserController extends Controller
     public function logout(Request $request){
         // dd('invoked');
         auth()->logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/')->with('message', 'You have been logged out');
     }
 
@@ -56,20 +55,34 @@ class UserController extends Controller
 
         if(auth()->attempt($formFields)){
             $request->session()->regenerate();
-
             return redirect('/')->with('message', 'You are now logged in!');
             // return back()->with('message', 'You are now logged in!');
         }
-
         return back()->withErrors(['email'=>'Invalid Credentials'])->onlyInput('email');
     }
 
     public function manage(){
-        // dd( auth()->user()->allLiked());
         return view('users.manage' , 
         // myListings needs to include listings, rentables, & sublease items
-        ['myListings'=> auth()->user()->listings()->get(),
-        'likedList' => auth()->user()->allLiked()]);
+        ['myListings'=> auth()->user()->allPosts(),
+        'likedList' => auth()->user()->allLiked(),
+        'watchList' => WatchItem::latest()->where('user_id', 'like', auth()->user()->id)->get(),
+        // would need to create a function to go through key words and find matches for each item in the watch list
+        //would retun a json of key value pairs
+        'matches'=>Listing::latest()->take(10)->get()]);
+    }
+
+    public function createWatchItem(Request $request){
+        // dd($request->all());
+        $formFields = $request->validate([
+            'user_id' => 'required',
+            'watchitem_title' => 'required',
+            'type' => 'required',
+            'match_rate' => 'required',
+            'key_tags' => 'required',
+        ]);
+        $newWatchItem = WatchItem::create($formFields);
+        return back()->with('message', 'Watch Item Created!');
     }
 
     public function addFavorite(Request $request){

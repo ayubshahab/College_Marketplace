@@ -49,12 +49,17 @@ class ListingController extends Controller
         // ]);
         // }
 
+        $latest = Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16);
+        if(count($latest) == 0){
+            $latest = Listing::latest()->take(16)->get();
+        }
+
         return view('listings.index', [
             // 'listings' => Listing::all() //return all listings
             // 'listings' =>Listing::latest()->get()
 
             // for the listings, which should only be recently added -> make it within 24hrs -> set a limit for how many total listings to show and paginate or set a minimum to show -> if not possible-> select the most recent
-            'listings'=>Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16),
+            'listings'=> $latest,
             'listingsNear' => Listing::latest()->take(10)->get(),
             'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
             'subleases'=>Sublease::latest()->where('status', 'like', 'Available')->take(10)->get()

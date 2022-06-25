@@ -75,9 +75,10 @@ Route::get('/yardsales/{yardsale}',[YardSaleController::class,'show']);
 //user related routes
 Route::get('/users/loginRegister', [UserController::class, 'create'])->name('login')->middleware('guest');
 Route::post('/users', [UserController::class, 'store'])->middleware('guest');
-Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth');;
+Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth');
 Route::post('/users/authenticate',[UserController::class, 'authenticate']);
 Route::get('/users/manage', [UserController::class, 'manage'])->middleware('auth');
+Route::post('/users/manage/createWatchItem', [UserController::class, 'createWatchItem'])->middleware('auth');
 Route::get('/users/removefavorite', [UserController::class, 'removeFavorite'])->middleware('auth');
 Route::get('/users/addfavorite', [UserController::class, 'addFavorite'])->middleware('auth');
 Route::post('/users/additionalInfo', [UserController::class, 'updateInfo'])->middleware('auth');

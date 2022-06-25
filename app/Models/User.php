@@ -67,6 +67,13 @@ class User extends Authenticatable
        return $this->hasMany(Sublease::class, 'user_id');
     }
 
+    public function allPosts(){
+        $allListings = $this->hasMany(Listing::class, 'user_id')->get();
+        $allRentals = $this->hasMany(Rentable::class, 'user_id')->get();
+        $allLeases = $this->hasMany(Sublease::class, 'user_id')->get();
+        // dd($allListings->get());
+        return collect($allListings)->merge($allRentals)->merge($allLeases);
+    }
     public function allLiked(){
         $allListings = null;
         if($this->favorites != null){
