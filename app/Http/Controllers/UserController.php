@@ -65,44 +65,73 @@ class UserController extends Controller
     }
 
     public function manage(){
-        // this shows an error for no reason, code works
-        // dd(auth()->user()->listings()->get());
-        return view('users.manage' , ['myListings'=> auth()->user()->listings()->simplePaginate(8)]);
+        // dd( auth()->user()->allLiked());
+        return view('users.manage' , 
+        // myListings needs to include listings, rentables, & sublease items
+        ['myListings'=> auth()->user()->listings()->get(),
+        'likedList' => auth()->user()->allLiked()]);
     }
 
-    public function addFavorite(Listing $listing){
-        // dd($listing->id);
+    public function addFavorite(Request $request){
+        // dd($request->all());
         $currentUser = User::find(auth()->id());
         $favorites = null;
-        if($currentUser->favorites != null){
-            $favorites = explode(", ", $currentUser->favorites);
-            if(!in_array($listing->id, $favorites)){
-                array_push($favorites, $listing->id);
+        if($request->type == "listing"){ //if favorite type is listing
+            if($currentUser->favorites != null){
+                $favorites = explode(", ", $currentUser->favorites);
+                if(!in_array($request->id, $favorites)){
+                    array_push($favorites, $request->id);
+                }
+            }else{
+                $favorites = array($request->id);
             }
-        }else{
-            $favorites = array($listing->id);
+            $currentUser->favorites = implode(', ', $favorites);
+        }elseif($request->type == 'rentable'){ //if favorite type is rentable
+            if($currentUser->rentableFavorites != null){
+                $favorites = explode(", ", $currentUser->rentableFavorites);
+                if(!in_array($request->id, $favorites)){
+                    array_push($favorites, $request->id);
+                }
+            }else{
+                $favorites = array($request->id);
+            }
+            $currentUser->rentableFavorites = implode(', ', $favorites);
+        }else{ //if favorite type is lease
+
         }
-        $currentUser->favorites = implode(', ', $favorites);
-        $currentUser->save();
         // array_push($listing->id, $favorites);
-        return back()->with('message', "Listing Added to Favorites!");
+        $currentUser->save();
+        return back()->with('message', "Added to Favorites!");
     }
 
-    public function removeFavorite(Listing $listing){
+    public function removeFavorite(Request $request){
         $currentUser = User::find(auth()->id());
         $favorites = null;
-        if($currentUser->favorites != null){
-            $favorites = explode(", ", $currentUser->favorites);
-            if(in_array($listing->id, $favorites)){
-                
-                if (($key = array_search($listing->id, $favorites)) !== false) {
-                    unset($favorites[$key]);
+        if($request->type=="listing"){
+            if($currentUser->favorites != null){
+                $favorites = explode(", ", $currentUser->favorites);
+                if(in_array($request->id, $favorites)){
+                    
+                    if (($key = array_search($request->id, $favorites)) !== false) {
+                        unset($favorites[$key]);
+                    }
                 }
             }
+            $currentUser->favorites = implode(', ', $favorites);
+        }elseif($request->type == "rentable"){
+            if($currentUser->rentableFavorites != null){
+                $favorites = explode(", ", $currentUser->rentableFavorites);
+                if(in_array($request->id, $favorites)){
+                    if (($key = array_search($request->id, $favorites)) !== false) {
+                        unset($favorites[$key]);
+                    }
+                }
+            }
+            $currentUser->rentableFavorites = implode(', ', $favorites);
+        }else{
+
         }
-        $currentUser->favorites = implode(', ', $favorites);
         $currentUser->save();
-        // array_push($listing->id, $favorites);
-        return back()->with('message', "Listing Removed from Favorites!");
+        return back()->with('message', "Removed from Favorites!");
     }
 }

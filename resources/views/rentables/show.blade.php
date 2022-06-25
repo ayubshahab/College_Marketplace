@@ -107,6 +107,7 @@
                                         <a href="/users/addfavorite?type=rentable&id={{$rentable->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
                                     @endif
                                 </li>
+                                
                                 {{-- @if($currentUser != null and $rentable->user_id == $currentUser->id)
                                     <li>
                                         <form method="POST" action="/listings/{{$rentable->id}}/update">

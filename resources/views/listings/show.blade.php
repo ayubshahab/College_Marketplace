@@ -111,9 +111,9 @@
                             <ul>
                                 <li>
                                     @if($currentUser != null and $currentUser->favorites != null and in_array($listing->id, explode(", " , $currentUser->favorites)))
-                                        <a href="/users/removefavorite/{{$listing->id}}"><i class="fa-solid fa-heart saved"></i></a>
+                                        <a href="/users/removefavorite?type=listing&id={{$listing->id}}"><i class="fa-solid fa-heart saved"></i></a>
                                     @else
-                                        <a href="/users/addfavorite/{{$listing->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
+                                        <a href="/users/addfavorite?type=listing&id={{$listing->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
                                     @endif                                
                                 </li>
                                 @if($currentUser != null and $listing->user_id == $currentUser->id)
@@ -164,9 +164,6 @@
                                             @endif
 
                                             
-                                            {{-- <span class="pending">1</span> --}}
-
-
                                             <div class="media-left">
                                                 <img src="{{ $user->avatar }}" alt="" class="media-object">
                                             </div>
