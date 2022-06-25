@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('from');
             $table->bigInteger('to');
-            $table->unsignedBigInteger('for_listing');
+            $table->unsignedBigInteger('for_listing')->nullable();
             $table->foreign('for_listing')->references('id')->on('listings')->onDelete('cascade');
+            $table->unsignedBigInteger('for_rentals')->nullable();
             $table->text('message');
             $table->tinyInteger('is_read');
             $table->timestamps();

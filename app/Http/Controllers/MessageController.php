@@ -18,6 +18,7 @@ class MessageController extends Controller
         $from = $request->from;
         $to = $request->to;
         $listing_id = $request->listing_id;
+        $rental_id = $request->rental_id;
 
         // Make read all unread message
         Message::where(['from' => $from, 'to' => $to])->update(['is_read' => 1]);
@@ -41,11 +42,13 @@ class MessageController extends Controller
         $to = $request->receiver_id;
         $message = $request->message;
         $listing_id = $request->for_listing;
+        $rental_id = $request->for_rentals;
 
         $data = new Message();
         $data->from = $from;
         $data->to = $to;
         $data->for_listing= $listing_id;
+        $data->for_rentals=$rental_id;
         $data->message = $message;
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
@@ -62,7 +65,9 @@ class MessageController extends Controller
             $options
         );
         
-        $data = ['from' => $from, 'to' => $to, 'for_listing' =>$listing_id]; // sending from and to user id when pressed enter
+        
+
+        $data = ['from' => $from, 'to' => $to, 'for_listing' =>$listing_id, 'for_rentals' => $rental_id]; // sending from and to user id when pressed enter
         $pusher->trigger('my-channel', 'my-event', $data);
 
         $response = array(
