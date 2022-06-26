@@ -5,18 +5,17 @@
     <div class="container">
         <div class="subcontainer">
             <div class="slider-wrapper">
+                <div id="{{$carouselControls}}">
+                    <button class = "{{$carouselP}}">
+                        <i   class="fa-solid fa-angle-left"></i>
+                    </button>
+                    <button class = "{{$carouselN}}">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
                 <div class="controller">
                     <div> 
                         <h2>{{$message}}: @php echo count($subleases) @endphp</h2>
-                        {{-- <h1>@php echo count($listings) @endphp</h1> --}}
-                    </div>
-                    <div id="{{$carouselControls}}">
-                        <button class = "{{$carouselP}}">
-                            <i   class="fa-solid fa-angle-left"></i>
-                        </button>
-                        <button class = "{{$carouselN}}">
-                            <i class="fa-solid fa-angle-right"></i>
-                        </button>
                     </div>
                 </div>
                 <br>

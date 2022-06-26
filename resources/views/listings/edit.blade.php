@@ -12,12 +12,12 @@
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
                     <div id="svg_wrap"></div>
-                    <h1 style="padding: 5px 15px;">Edit My Listing: {{$listing->item_name}}</h1>
+                    <h1 style="padding: 5px 15px;">Update My Listing</h1>
                     <form class="listingForm" method = "POST" action="/listings/{{$listing->id}}" id="listingForm"
                     enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
+                        <input type="hidden" name="user_id"  value="{{ old('user_id', '3') }}"
                         >
 
                         {{-- card #1 --}}

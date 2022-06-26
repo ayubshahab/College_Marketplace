@@ -78,4 +78,67 @@ class RentablesController extends Controller
             'currentUser'=> Auth::guest() ? null : User::find(auth()->user()->id)
         ]);
     }
+
+    public function destroy(Rentable $rentable){
+        $rentable->delete();
+        return redirect('/')->with('message', "Rentable Item Deleted Successfully!");
+    }
+
+    public function updateStatus(Request $request, Rentable $rentable){
+        // dd($request->all());
+        if($rentable->user_id != auth()->id()){
+            abort('404', 'Unauthorized Access');
+            return redirect('/')->with('message', 'Please only edit listings you own');
+        }
+        $data = Rentable::find($rentable->id);
+        $data->status = $request->status;
+        $data->save();
+        return back()->with('message', "Rentable Item Updated Successfully");
+    }
+
+    public function edit(Rentable $rentable){
+        if($rentable->user_id != auth()->id()){
+            abort('404', 'Unauthorized Access');
+            return redirect('/')->with('message', 'Please only edit listings you own');
+        }
+        return view('rentables.edit', ['rentable' =>$rentable]);
+    }
+
+    public function update(Request $request, Rentable $rentable){
+        // dd($request->all());
+        if($rentable->user_id != auth()->id()){
+            abort('404', 'Unauthorized Access');
+            return redirect('/')->with('message', 'Please only edit listings you own');
+        }
+        $formFields = $request->validate([
+            'user_id'=>'required',
+            'rental_title'=>'required',
+            'rental_duration' => 'required',
+            'rental_charging'=>'required',
+            'condition'=>'required',
+            'category'=>'required',
+            'tags'=>'required',
+            'description'=>'required',
+            'street'=>'required',
+            'city'=>'required',
+            'state'=>'required',
+            'country'=>'required',
+            'postcode'=>'required'
+        ]);
+
+        $formFields['user_id']=auth()->id();
+        
+        if($request->hasFile('image_uploads'))
+        {
+            foreach ($request->file('image_uploads') as $file) {
+                $name = $file->store('listings','public');
+                $data[] = $name; 
+            }
+            $formFields['image_uploads']=json_encode($data);
+        }
+        $formFields['category']=implode(", " ,$formFields['category']);
+        // dd($rentable);
+        $rentable->update($formFields);
+        return redirect('/rentables/'.$rentable->id)->with('message', 'Listing Updated Successfully!');
+    }
 }

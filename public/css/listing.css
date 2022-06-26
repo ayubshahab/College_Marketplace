@@ -329,10 +329,13 @@
 .product-buttons ul li form select option{
     background-color: var(--background-color);
     color:var(--red-accent-color);
+    cursor:pointer;
 }
 
 
-.product-buttons ul li form button:hover{
+.product-buttons ul li form button:hover,
+.product-buttons ul li form select:hover,
+.product-buttons ul li form select option:hover{
     cursor: pointer;
 }
 

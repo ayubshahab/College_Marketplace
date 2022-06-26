@@ -5,12 +5,7 @@
     <div class="container">
         <div class="subcontainer">
             <div class="slider-wrapper">
-                <div class="controller">
-                    <div> 
-                        <h2>{{$message}}: @php echo count($listings) @endphp</h2>
-                        {{-- <h1>@php echo count($listings) @endphp</h1> --}}
-                    </div>
-                    <div id="{{$carouselControls}}">
+                <div id="{{$carouselControls}}">
                         <button class = "{{$carouselP}}">
                             <i   class="fa-solid fa-angle-left"></i>
                         </button>
@@ -18,15 +13,18 @@
                             <i class="fa-solid fa-angle-right"></i>
                         </button>
                     </div>
+                <div class="controller">
+                    <div> 
+                        <h2>{{$message}}: @php echo count($listings) @endphp</h2>
+                    </div>
                 </div>
                 <br>
                 <div class="my-slider {{$carouselClass}}">
-
-                    {{-- need to loop in here  --}}
-                    
                     @unless(count($listings) == 0)
                         @foreach($listings as $listing)
+                        <div>
                             <x-carousel-card :listing="$listing"/>
+                        </div>
                         @endforeach
 
                         @else

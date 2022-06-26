@@ -12,18 +12,18 @@
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
                     <div id="svg_wrap"></div>
-                    <h1>Post A Rental!</h1>
-                    <form class="listingForm" method = "POST" action="/rentables" id="listingForm"
+                    <h1>Update My Rental</h1>
+                    <form class="listingForm" method = "POST" action="/rentables/{{$rentable->id}}" id="listingForm"
                     enctype="multipart/form-data">
                         @csrf
-                        
-                        <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
+                        @method('PUT')
+                        <input type="hidden" name="user_id"  value="{{ old('user_id', '3') }}"
                         >
 
                         {{-- card #1 --}}
                         <section class = "listingCard">
                             <p class="create-listing-header">Rental Details</p>
-                            <input type="text" name = "rental_title" placeholder="Rental Title"  value="{{ old('rental_title', null) }}" />
+                            <input type="text" name = "rental_title" placeholder="Rental Title"  value="{{ $rentable->rental_title }}" />
                             @error('rental_title')
                                 <p>{{$message}}</p>
                             @enderror
@@ -34,41 +34,20 @@
                             </p>
                             <div class="condition-box">
                                 <select name="rental_duration" id="rentalDuration">
-                                    <option value="Hourly" {{ (old("rental_duration") == 'Hourly' ? "selected":"") }}>Hourly</option>
+                                    <option value="Hourly" {{ $rentable->rental_duration == 'Hourly' ? "selected":""}}>Hourly</option>
                                     
-                                    <option value="Daily" {{ (old("rental_duration") == 'Daily' ? "selected":"") }}>Daily</option>
+                                    <option value="Daily" {{  $rentable->rental_duration == 'Daily' ? "selected":""}}>Daily</option>
 
-                                    <option value="Weekly" {{ (old("rental_duration") == 'Free' ? "selected":"") }}>Weekly</option>
+                                    <option value="Weekly" {{  $rentable->rental_duration == 'Weekly' ? "selected":""}}>Weekly</option>
 
-                                    <option value="Monthly" {{ (old("rental_duration") == 'Monthly' ? "selected":"") }}>Monthly</option>
+                                    <option value="Monthly" {{ $rentable->rental_duration == 'Monthly' ? "selected":""}}>Monthly</option>
                                 </select>
                                 @error('rental_duration')
                                     <p>{{$message}}</p>
                                 @enderror
-                                {{-- <ul class="ks-cboxtags">
-                                    <li>
-                                        
-                                        <label for="checkboxOne">
-                                            
-                                            <input type="hidden" id="checkboxOne" name = "negotiable" id ="check" value="0">
-                                            <input type="checkbox" id="checkboxOne" name = "negotiable" id ="check" class = "negotiable" value="{{ old('negotiable', 1) }}">    
-                                        Price Negotiable/ OBO</label>
-                                        @error('negotiable')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                    <li>
-                                        <input type="hidden" id="checkboxEleven" name = "free" id ="check" value="0">
-                                        <input type="checkbox" id="checkboxEleven" name = "free" id ="check" value="{{ old('free', "1") }}">
-                                        <label for="checkboxEleven">Free</label>
-                                        @error('free')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                </ul> --}}
                             </div>
 
-                            <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="{{ old('rental_charging', null) }}"/>
+                            <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental Price per Hour "  value="{{ $rentable->rental_charging }}"/>
                             @error('rental_charging')
                                 <p>{{$message}}</p>
                             @enderror
@@ -76,10 +55,13 @@
                             <p class="create-listing-header">Condition</p>
                             <div class ="conditionBox">
                                 <select name="condition" id="">
-                                    <option value="New" {{ (old("condition") == 'New' ? "selected":"") }}>New</option>
-                                    <option value="Good" {{ (old("condition") == 'Good' ? "selected":"") }}>Good</option>
-                                    <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
-                                    <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
+                                    <option value="New" {{ $rentable->condition == 'New' ? "selected":""}}>New</option>
+
+                                    <option value="Good" 
+                                    {{ $rentable->condition == 'Good' ? "selected":""}}
+                                    >Good</option>
+                                    <option value="Slightly Used" {{ $rentable->condition == 'Slightly Used' ? "selected":""}}>Slightly Used </option>
+                                    <option value="Used Normal Wear" {{ $rentable->condition == 'Used Normal Wear' ? "selected":""}}>Used Normal Wear </option>
                                 </select>
                                 @error('condition')
                                     <p>{{$message}}</p>
@@ -88,75 +70,92 @@
 
                             <p class="create-listing-header">Categories</p>
                             <div class ="conditionBox">
+                                 @php
+                                    $categories = explode(", ", $rentable->category);
+                                    while(count($categories)<5)
+                                        array_push($categories, '')
+                                    
+                                @endphp
                                 <ul class="ks-cboxtags">
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxSix" value="Furniture" 
-                                        {{ old('category.0') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}>
+                                        {{ $categories[0] == 'Furniture' ? 'checked' : '' }}
+                                        {{ $categories[1] == 'Furniture' ? 'checked' : '' }}
+                                        {{ $categories[2] == 'Furniture' ? 'checked' : '' }}
+                                        {{ $categories[3] == 'Furniture' ? 'checked' : '' }}
+                                        {{ $categories[4] == 'Furniture' ? 'checked' : '' }}>
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxSeven" value="Clothes"
-                                        {{ old('category.0') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}>
+                                        {{ $categories[0]  == 'Clothes' ? 'checked' : '' }}
+                                        {{ $categories[1]  == 'Clothes' ? 'checked' : '' }}
+                                        {{ $categories[2]  == 'Clothes' ? 'checked' : '' }}
+                                        {{ $categories[3]  == 'Clothes' ? 'checked' : '' }}
+                                        {{ $categories[4]  == 'Clothes' ? 'checked' : '' }}>
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxEight" value="Electronics" 
-                                        {{ old('category.0') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}>
+                                        {{ $categories[0]  == 'Electronics' ? 'checked' : '' }}
+                                        {{ $categories[1] == 'Electronics' ? 'checked' : '' }}
+                                        {{ $categories[2]  == 'Electronics' ? 'checked' : '' }}
+                                        {{ $categories[3]  == 'Electronics' ? 'checked' : '' }}
+                                        {{ $categories[4] == 'Electronics' ? 'checked' : '' }}>
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxNine" value="Kitchen"
-                                        {{ old('category.0') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}>
+                                        {{ $categories[0]  == 'Kitchen' ? 'checked' : '' }}
+                                        {{ $categories[1]  == 'Kitchen' ? 'checked' : '' }}
+                                        {{ $categories[2]  == 'Kitchen' ? 'checked' : '' }}
+                                        {{ $categories[3]  == 'Kitchen' ? 'checked' : '' }}
+                                        {{ $categories[4]  == 'Kitchen' ? 'checked' : '' }}>
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxTen" value="School Accessories"
-                                        {{ old('category.0') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}>
+                                        {{ $categories[0]  == 'School Accessories' ? 'checked' : '' }}
+                                        {{ $categories[1]  == 'School Accessories' ? 'checked' : '' }}
+                                        {{ $categories[2]  == 'School Accessories' ? 'checked' : '' }}
+                                        {{ $categories[3]  == 'School Accessories' ? 'checked' : '' }}
+                                        {{ $categories[4] == 'School Accessories' ? 'checked' : '' }}>
                                         <label for="checkboxTen">School Accessories</label>
                                     </li>
                                 </ul>
                                 @error('category')
                                     <p>{{$message}}</p>
                                 @enderror
-                            </div>        
+                            </div>      
                         </section>
 
                         {{-- card #2 --}}
                         <section class = "listingCard">
                             <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
-                            <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
+                            <input name = "tags" type="text" placeholder="Tags" value="{{ $rentable->tags}}"/>
                             @error('tags')
                                 <p>{{$message}}</p>
                             @enderror
-                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ old('description', null) }}</textarea>
+                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ $rentable->description }}</textarea>
                             @error('description')
                                 <p>{{$message}}</p>
                             @enderror
                             <p class="create-listing-header">Attach Images</p>
                             <input class="imgUpload" type="file" id="image_uploads" name="image_uploads[]" accept=".jpg, .jpeg, .png" multiple >
                             <div class="preview">
-                                <h6>Please select up to 5</h6>
+                                {{-- <h6>No files selected</h6> --}}
+                                <ul class = "user-img-list">
+                                    @if(is_array(json_decode($rentable->image_uploads)))
+                                        @foreach(json_decode($rentable->image_uploads) as $link)
+                                            <li>
+                                                 <img src={{$rentable->image_uploads ? asset('storage/'.$link) : asset('/images/rotunda.jpg')}} alt = "User Uploads">
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <h6>No files uploaded</h6>
+                                    @endif
+                                </ul>
                             </div>
                             @error('image_uploads')
                                 <p>{{$message}}</p>
@@ -166,23 +165,23 @@
                         {{-- card #3 --}}
                         <section class = "listingCard">
                             <p class="create-listing-header">Address:</p>
-                            <input type="text" name="street" placeholder="Street, nbr"  value="{{ old('street', null) }}"/>
+                            <input type="text" name="street" placeholder="Street, nbr"  value="{{ $rentable->street}}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "city" placeholder="City"  value="{{ old('city', null) }}"/>
+                            <input type="text" name = "city" placeholder="City"  value="{{$rentable->city }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "state" placeholder="State"  value="{{ old('state', null) }}"/>
+                            <input type="text" name = "state" placeholder="State"  value="{{ $rentable->state}}"/>
                             @error('state')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "country" placeholder="Country"  value="{{ old('country', null) }}" />
+                            <input type="text" name = "country" placeholder="Country"  value="{{$rentable->country }}" />
                             @error('country')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "postcode"placeholder="Postcode"  value="{{ old('postcode', null) }}" />
+                            <input type="text" name = "postcode" placeholder="Postcode"  value="{{$rentable->postcode }}" />
                             @error('postcode')
                                 <p>{{$message}}</p>
                             @enderror

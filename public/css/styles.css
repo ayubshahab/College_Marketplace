@@ -101,9 +101,10 @@ li{
     /* background-color: white; */
     /* background-color: var(--light-color); */
     box-sizing: border-box;
-    padding: 1em 2em;
+    /* padding: 1em 2em; */
     /* background-color:green; */
     /* background-color: var(--gray-color); */
+    padding:0 50px;
 }
 
 .listings-container{
