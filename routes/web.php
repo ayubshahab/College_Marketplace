@@ -52,8 +52,11 @@ Route::get('/listings/{listing}', [ListingController::class, 'show']);
 // Routes for rentable items
 Route::get('/rentables/create', [RentablesController::class, 'create'])->middleware('auth');
 Route::post('/rentables', [RentablesController::class, 'store'])->middleware('auth');
+Route::put('/rentables/{rentable}/update', [RentablesController::class, 'updateStatus']);
+Route::get('/rentables/{rentable}/edit', [RentablesController::class, 'edit'])->middleware('auth');
+Route::put('/rentables/{rentable}',[RentablesController::class, 'update'])->middleware('auth');;
 Route::get('/rentables/{rentable}', [RentablesController::class, 'show']);
-
+Route::delete('/rentables/{rentable}',[RentablesController::class, 'destroy'])->middleware('auth');
 
 //Routes for Sublease items
 Route::get('/subleases/create', [SubleaseController::class, 'create'])->middleware('auth');

@@ -108,28 +108,27 @@
                                     @endif
                                 </li>
                                 
-                                {{-- @if($currentUser != null and $rentable->user_id == $currentUser->id)
+                                @if($currentUser != null and $rentable->user_id == $currentUser->id)
                                     <li>
-                                        <form method="POST" action="/listings/{{$rentable->id}}/update">
+                                        <form method="POST" action="/rentables/{{$rentable->id}}/update">
                                             @csrf
                                             @method('PUT')
                                             <select name="status" id="status" style = " font-size: 17px; text-align:center;" onchange="this.form.submit()">
                                                 <option style = "text-align:center;">Status</option>
                                                 <option style = "text-align:center;" value="Available">Available</option>
-                                                <option style = "text-align:center;" value="Pending">Pending</option>
-                                                <option style = "text-align:center;" value="Sold">Sold</option>  
+                                                <option style = "text-align:center;" value="Rented">Rented</option>
                                             </select>
                                         </form>
                                     </li>
-                                    <li><a href="/listings/{{$rentable->id}}/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+                                    <li><a href="/rentables/{{$rentable->id}}/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
                                     <li>
-                                        <form method="POST" action="/listings/{{$rentable->id}}">
+                                        <form method="POST" action="/rentables/{{$rentable->id}}">
                                             @csrf
                                             @method('DELETE')
                                             <button><i class="fa fa-trash" ></i></button>
                                         </form>
                                     </li>
-                                @endif --}}
+                                @endif
                             </ul>
                         </div>
                     </div>

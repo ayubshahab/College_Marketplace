@@ -37,6 +37,7 @@
 .cards_item {
   display: flex;
   padding: 1rem;
+  width: 100%;
 }
 
 .card {
@@ -62,8 +63,14 @@
 
 .card_image{
   width: 100%;
+  max-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   position: relative;
   margin-bottom: 5px;
+  border-radius: 12px 12px 0 0;
 }
 
 .ribbon-listing{
@@ -122,10 +129,6 @@
 
 .card_image img{
   width: 100%;
-  max-height: 400px;
-  /* border-radius: 12px 12px 0 0; */
-   border-radius: 12px 12px 0 0;
-  border: 1px solid #2c2a35;
 }
 .card_content {
     /* padding: .5rem 1rem; */
