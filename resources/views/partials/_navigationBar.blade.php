@@ -79,7 +79,7 @@
                         {{-- <a href="/listings/manage">{{auth()->user()->first_name}}</a> --}}
                     </li>
                 @else   
-                    <li><a href="/users/loginRegister">Login</a></li>
+                    <li><a href="/login">Login</a></li>
                 @endauth
             </ul>
         </div>

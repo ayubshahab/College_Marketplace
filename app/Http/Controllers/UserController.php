@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     //show page to create (register/login) user
     public function create(){
-        return view('users.loginSignup');
+        return Socialite::driver('google')->redirect();
     }
 
     public function store(Request $request){
