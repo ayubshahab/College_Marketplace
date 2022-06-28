@@ -11,11 +11,11 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     //show page to create (register/login) user
-    public function create(){
-        return view('users.loginSignup');
-    }
+    /*public function create(){
+        return Socialite::driver('google')->redirect();
+    }*/
 
-    public function store(Request $request){
+    /*public function store(Request $request){
         $formFields = $request->validate([
             'first_name'=> ['required', 'min:3'],
             'last_name'=>['required', 'min:3'],
@@ -35,19 +35,10 @@ class UserController extends Controller
         $user = User::create($formFields);
         auth()->login($user);
         return redirect('/')->with('message', "User Created & Logged In");
-    }
-
-    public function logout(Request $request){
-        // dd('invoked');
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/')->with('message', 'You have been logged out');
-    }
-
+    }*/
 
     // same as login
-    public function authenticate(Request $request){
+    /*public function authenticate(Request $request){
         $formFields = $request->validate([
             'password'=>'required',
             'email'=>['required', 'email']
@@ -59,7 +50,7 @@ class UserController extends Controller
             // return back()->with('message', 'You are now logged in!');
         }
         return back()->withErrors(['email'=>'Invalid Credentials'])->onlyInput('email');
-    }
+    }*/
 
     public function manage(){
         return view('users.manage' , 
