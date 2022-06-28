@@ -20,6 +20,10 @@ class GoogleController extends Controller
         try {
             $user = Socialite::driver('google')->stateless()->user();
 
+            if(explode("@", $user->email)[1] !== 'virginia.edu'){
+                return redirect('/')->with("message","Please login with your UVA email");
+            }
+
             // Check Users Email If Already There
             $is_user = User::where('email', $user->getEmail())->first();
             if(!$is_user){
@@ -42,10 +46,18 @@ class GoogleController extends Controller
             }
             Auth::loginUsingId($saveUser->id);
 
-            return redirect('/')->with("User logged In");
+            return redirect('/')->with("message","User logged In");
         } catch (\Throwable $th) {
-            throw $th;
+            return redirect('/login');
         }
+    }
+
+    public function logout(Request $request){
+        // dd('invoked');
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/')->with('message', 'You have been logged out');
     }
 }
 

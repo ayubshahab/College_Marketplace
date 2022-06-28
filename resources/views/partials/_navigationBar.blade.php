@@ -70,7 +70,7 @@
                             <li><a href="/users/manage">Manage Listings</a></li>
                             <li>
                                 <a id="logout-button" onclick="document.getElementById('logout-form').submit();">Logout</a>
-                                <form method="POST" id="logout-form" action="/users/logout">
+                                <form method="POST" id="logout-form" action="/logout">
                                     @csrf
                                     {{-- <input type='submit' value="Logout"> --}}
                                 </form>

@@ -76,7 +76,6 @@ Route::get('/yardsales/{yardsale}',[YardSaleController::class,'show']);
 //user related routes
 //Route::get('/users/loginRegister', [UserController::class, 'create'])->name('login')->middleware('guest');
 //Route::post('/users', [UserController::class, 'store'])->middleware('guest');
-Route::post('/users/logout', [UserController::class, 'logout'])->middleware('auth');
 //Route::post('/users/authenticate',[UserController::class, 'authenticate']);
 Route::get('/users/manage', [UserController::class, 'manage'])->middleware('auth');
 Route::post('/users/manage/createWatchItem', [UserController::class, 'createWatchItem'])->middleware('auth');
@@ -88,3 +87,4 @@ Route::post('/users/additionalInfo', [UserController::class, 'updateInfo'])->mid
 // Google URL
 Route::get('/login', [GoogleController::class, 'loginWithGoogle'])->name('login')->middleware('guest');
 Route::any('/callback', [GoogleController::class, 'callbackFromGoogle'])->name('callback');
+Route::post('/logout', [GoogleController::class, 'logout'])->middleware('auth');
