@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('last_name');
             // user's username
             $table->string('username')->nullable();
+            //google_id
+            $table->string('google_id');
             // user password
             $table->string('password');
             // user email
