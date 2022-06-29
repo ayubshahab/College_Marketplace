@@ -15,7 +15,7 @@
     width: 250px;
     min-width: 250px;
     max-width: 250px;
-    background: rgba(29,28,36,0.1);
+    background: rgba(29,28,36,0.7);
     backdrop-filter: blur(30px);
     transition: all .3s ease;
     border-right: 10px solid var(--red-accent-color);
@@ -90,7 +90,7 @@
     width: calc(100% - 250px);
     height: fit-content;
     min-height: 100vh;
-    background: rgba(29,28,36,0.6);
+    background: rgba(29,28,36,0.5);
     /* backdrop-filter: blur(5px); */
     z-index: 1;
     padding: 20px;
@@ -131,13 +131,38 @@
     margin: 0 25px 0 25px;
     border-radius: 100%;
     border: 5px solid var(--red-accent-color);
-    overflow: hidden;
+    /* overflow: hidden; */
     opacity: .8;
+    position: relative;
 }
 
-.profile-picture img{
+.top-row .profile-picture img{
     width: 100%;
     height: 100%;
+    border-radius: 100%;
+}
+
+.profile-picture .account-delete{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: brown;
+    bottom:-5px;
+    right:-5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    background-color: var(--background-color);
+}
+
+.account-delete i{
+    font-size: 30px;
+    color:var(--red-accent-color);
+}
+
+.account-delete i:hover{
+    cursor:pointer;
 }
 
 .top-row .profile-theme{
@@ -246,9 +271,9 @@
 .addressForm h3{
     color:var(--red-accent-color);
 }
-.addressForm input:not(:last-child),
-.modal-content input,
-.watchlist-form select{
+.addressForm input[type='text']:not(:last-child),
+.modal-content input[type='text'],
+.watchlist-form select, .watchlist-form input[type='submit']{
     width: 100%;
     margin: 5px 0px;
     display: inline-block;
@@ -265,16 +290,18 @@
     color:var(--red-accent-color);
 }
 
-.addressForm input:hover,
-.modal-content input:hover,
-.watchlist-form select:hover{
+.addressForm input[type='text']:hover,
+.modal-content input[type='text']:hover,
+.watchlist-form select[type='text']:hover,
+.watchlist-form input[type='submit']:hover{
     cursor:pointer;
 }
 
 
-.addressForm input:focus,
-.modal-content input:focus,
-.watchlist-form select:focus{
+.addressForm input[type='text']:focus,
+.modal-content input[type='text']:focus,
+.watchlist-form select[type='text']:focus,
+.watchlist-form input[type='submit']:focus{
     outline: none;
 }
 
@@ -287,6 +314,33 @@
 }
 .post-count h5{
     text-align: center;
+}
+
+.addressForm input[type='submit'],
+.button1{
+    display: inline-block;
+    padding: 0.5em 1.2em;
+    margin: 5px 0 0 0 ;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    text-decoration: none;
+    background: linear-gradient(180deg, #F76F62 0%, #E84848 100%);
+    box-shadow: 0px 4px 24px rgb(244 99 67 / 32%);
+    font-weight: 300;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.2s;
+    border: none;
+}
+
+.addressForm input[type='submit']:hover,
+.button1:hover{
+    cursor: pointer;
+}
+
+.addressForm p{
+    font-size: 13px;
+    color:red;
 }
 
 .myPosts-main, .favorites-main,.watchList-main{
@@ -347,10 +401,6 @@
 
 .watchitem-container{
     height: fit-content;
-    /* padding: 10px; */
-    /* border-radius: 12px; */
-    /* background-color: var(--red-accent-color) */
-    /* background:linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%); */
 }
 
 .watchitem{
@@ -472,8 +522,20 @@
 .modal-content p{
     margin:10px 30px 10px 0;
     width: 100%;
+    color:var(--red-accent-color);
 }
 
+.modal-content .clearfix{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.button1:not(:last-child){
+    margin-right: 20px;
+}
 /* The Close Button */
 .close {
   color: #aaa;

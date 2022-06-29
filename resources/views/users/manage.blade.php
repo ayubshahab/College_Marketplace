@@ -28,6 +28,9 @@
                     <div class='top-row'>
                         <div class='profile-picture'>
                             <img src={{asset('/images/profile-picture.jpg')}} alt="">
+                            <div class="account-delete">
+                                <i class="fa fa-trash" aria-hidden="true" id="delete-modal-trigger"></i>
+                            </div>
                         </div>
                         <div class="profile-theme">
                         </div>
@@ -77,37 +80,54 @@
                                 <form class="addressForm" action="/users/additionalInfo" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <h3 class="">Address</h3>
-                                    <input type="text" name="street" placeholder="Street, nbr"  value="{{ old('street', null) }}"/>
+                                    <input type="text" name="street" placeholder="Street, nbr"  value="{{ auth()->user()->street }}" required/>
                                     @error('street')
                                         <p>{{$message}}</p>
                                     @enderror
 
-                                    <input type="text" name = "city" placeholder="City"  value="{{ old('city', null) }}"/>
+                                    <input type="text" name = "city" placeholder="City"  value="{{ auth()->user()->city }}" required/>
                                     @error('city')
                                         <p>{{$message}}</p>
                                     @enderror
 
-                                    <input type="text" name = "state" placeholder="State"  value="{{ old('state', null) }}"/>
+                                    <input type="text" name = "state" placeholder="State"  value="{{ auth()->user()->state}}" required/>
                                     @error('state')
                                         <p>{{$message}}</p>
                                     @enderror
 
-                                    <input type="text" name = "country" placeholder="Country"  value="{{ old('country', null) }}" />
+                                    <input type="text" name = "country" placeholder="Country"  value="{{ auth()->user()->country }}" required/>
                                     @error('country')
                                         <p>{{$message}}</p>
                                     @enderror
 
-                                    <input type="text" name = "postcode"placeholder="Postcode"  value="{{ old('postcode', null) }}" />
+                                    <input type="text" name = "postcode"placeholder="Postcode"  value="{{ auth()->user()->postcode }}" required />
                                     @error('postcode')
                                         <p>{{$message}}</p>
                                     @enderror
 
-                                    <input type="text" name = "phoneNumber"placeholder="Phone Number"  value="{{ old('phoneNumber', null) }}" />
+                                    <input type="text" id="number" name="number" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required
+                                    value="{{auth()->user()->number}}" />
                                     @error('phoneNumber')
                                         <p>{{$message}}</p>
                                     @enderror
                                     
                                     <input type="submit">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal" id="delete-modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h1>Delete Account</h1>
+                            <p>Are you sure you want to delete your account?</p>
+
+                            <div class="clearfix">
+                                <input type="button" class="button1" class="cancelbtn" id="cancelbtn" value="Cancel" />
+                                <form action="/users/delete/{{auth()->user()->id}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="submit" class="deletebtn button1" value="Delete"/>
                                 </form>
                             </div>
                         </div>
@@ -219,10 +239,26 @@
             }
         }
 
-        // modal popup 
+        //delete modal
+        var deleteModal = document.getElementById("delete-modal");
+        var deleteButton = document.getElementById("delete-modal-trigger");
+        var deleteSpan = document.getElementsByClassName("close")[0];
+        var cancelBtn = document.getElementById('cancelbtn');
+        deleteButton.onclick = function() {
+            deleteModal.style.display = "grid";
+        }
+        deleteSpan.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        cancelBtn.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+
+
+        // create watch item modal popup 
         var modal = document.getElementById("myModal");
         var btn = document.getElementById("modal-trigger");
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementsByClassName("close")[1];
         btn.onclick = function() {
             modal.style.display = "grid";
         }
@@ -230,16 +266,19 @@
             modal.style.display = "none";
         }
         window.onclick = function(event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
+            }
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
 
-        // preventing form submit on enter
+
+        // preventing form submit on enter when entering watch list item tags
         document.getElementById("watchlist-form").onkeypress = function(e) {
             var key = e.charCode || e.keyCode || 0;     
             if (key == 13) {
-                // alert("No Enter!");
                 e.preventDefault();
             }
         } 

@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('watch_items', function (Blueprint $table) {
+        Schema::create('news_letters', function (Blueprint $table) {
             $table->id('id')->unique();
-            $table->unsignedBigInteger('user_id'); 
+            $table->unsignedBigInteger('user_id')->nullable(); 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('watchitem_title');
-            $table->string('type');
-            $table->string('match_rate');
-            $table->string('key_tags');
-            $table->string('matches-found')->nullable();
+            $table->string('email');
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('watch_items');
+        Schema::dropIfExists('news_letters');
     }
 };

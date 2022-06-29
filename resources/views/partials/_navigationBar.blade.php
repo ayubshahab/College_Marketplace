@@ -67,7 +67,7 @@
                         <input type="checkbox" id="show-user-links">
                         <label for="show-user-links">{{auth()->user()->first_name}}</label>
                         <ul>
-                            <li><a href="/users/manage">Manage Listings</a></li>
+                            <li><a href="/users/manage" onclick="displayLoadingPage()">Manage Listings</a></li>
                             <li>
                                 <a id="logout-button" onclick="document.getElementById('logout-form').submit();">Logout</a>
                                 <form method="POST" id="logout-form" action="/users/logout">

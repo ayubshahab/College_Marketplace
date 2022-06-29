@@ -147,4 +147,32 @@ class UserController extends Controller
         $currentUser->save();
         return back()->with('message', "Removed from Favorites!");
     }
+
+    public function updateInfo(Request $request){
+        $formFields = $request->validate([
+            'street'=>'required',
+            'city'=>'required',
+            'state'=>'required',
+            'country'=> 'required',
+            'postcode'=>'required',
+            'number'=>'required'
+        ]);
+
+        $currentUser = User::find(auth()->user())->first();
+        if($currentUser != null){
+            $currentUser->street = $request->street;
+            $currentUser->city = $request->city; 
+            $currentUser->state = $request->state; 
+            $currentUser->country = $request->country; 
+            $currentUser->postcode = $request->postcode; 
+            $currentUser->number = $request->number;
+        }
+        $currentUser->save();
+        return back()->with('message', 'User Address & Number Updated');
+    }
+
+    public function destroy(User $user){
+        $user->delete();
+        return redirect('/')->with('message', "User Account Deleted Successfully!");
+    }
 }

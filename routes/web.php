@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Models\Listing;
 use Illuminate\Http\Request;
 
@@ -85,4 +86,10 @@ Route::post('/users/manage/createWatchItem', [UserController::class, 'createWatc
 Route::get('/users/removefavorite', [UserController::class, 'removeFavorite'])->middleware('auth');
 Route::get('/users/addfavorite', [UserController::class, 'addFavorite'])->middleware('auth');
 Route::post('/users/additionalInfo', [UserController::class, 'updateInfo'])->middleware('auth');
+Route::delete('/users/delete/{user}', [UserController::class, 'destroy'])->middleware('auth');
 
+// supplementary routes
+Route::get('/features', [Controller::class, 'features']);
+Route::get('/about', [Controller::class, 'about']);
+Route::get('/services', [Controller::class, 'services']);
+Route::post('/newsletter', [Controller::class, 'enrollEmail']);
