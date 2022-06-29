@@ -22,9 +22,10 @@ class UserFactory extends Factory
         return [
             'first_name' => $first_name,
             'last_name' => $last_name,
+            'google_id' => $this->faker->city(),
             'username' => null,
             'password' => '$2y$10$cmktUJeB21VwcrKQowuPG.H0.XlTK/vVb32D/.FE3of4drXHedP7.', // password
-            'email' => $first_name . "." . $last_name . "@example.com",
+            'email' => $first_name . "." . $last_name . "@virginia.edu",
             'avatar' => 'https://via.placeholder.com/150',
             'number' => $this->faker->phoneNumber(),
             'street' => $this->faker->streetAddress(),
