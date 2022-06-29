@@ -93,6 +93,7 @@ Route::get('/features', [Controller::class, 'features']);
 Route::get('/about', [Controller::class, 'about']);
 Route::get('/services', [Controller::class, 'services']);
 Route::post('/newsletter', [Controller::class, 'enrollEmail']);
+
 //Google routes
 // Google URL
 Route::get('/login', [GoogleController::class, 'loginWithGoogle'])->name('login')->middleware('guest');
