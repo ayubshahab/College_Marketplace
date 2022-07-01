@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Models\Listing;
 use Illuminate\Http\Request;
 
@@ -23,30 +24,23 @@ use App\Http\Controllers\GoogleController;
 |
 */
 
+// main routes
+Route::get('/', [Controller::class, 'index']);
+Route::get('/shop/all', [Controller::class, 'search']);
 
+// supplementary routes
+Route::get('/features', [Controller::class, 'features']);
+Route::get('/about', [Controller::class, 'about']);
+Route::get('/services', [Controller::class, 'services']);
+Route::post('/newsletter', [Controller::class, 'enrollEmail']);
 
-// listings related routes
-// get all Listings
-Route::get('/', [ListingController::class, 'index']);
-// search results
-Route::get('/shop/listings', [ListingController::class, 'search']);
-
-
-//tag results
-// create a single listing -> show the form
+// Routes for listing items
 Route::get('/listings/create', [ListingController::class, 'create'])->middleware('auth');
-// store listing data
 Route::post('/listings', [ListingController::class, 'store'])->middleware('auth');
-
-// change status of listing based on availability
 Route::put('/listings/{listing}/update', [ListingController::class, 'updateStatus']);
-// edit a single listing-> show the form to edit
-Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])->middleware('auth');;
-//update listing
-Route::put('/listings/{listing}',[ListingController::class, 'update'])->middleware('auth');;
-// delete a listing
+Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])->middleware('auth');
+Route::put('/listings/{listing}',[ListingController::class, 'update'])->middleware('auth');
 Route::delete('/listings/{listing}',[ListingController::class, 'destroy'])->middleware('auth');
-// show a single listing
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
 
 
@@ -85,6 +79,7 @@ Route::post('/users/manage/createWatchItem', [UserController::class, 'createWatc
 Route::get('/users/removefavorite', [UserController::class, 'removeFavorite'])->middleware('auth');
 Route::get('/users/addfavorite', [UserController::class, 'addFavorite'])->middleware('auth');
 Route::post('/users/additionalInfo', [UserController::class, 'updateInfo'])->middleware('auth');
+Route::delete('/users/delete/{user}', [UserController::class, 'destroy'])->middleware('auth');
 
 //Google routes
 // Google URL

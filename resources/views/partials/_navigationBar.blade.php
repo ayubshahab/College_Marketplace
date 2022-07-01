@@ -25,24 +25,24 @@
                     <input type="checkbox" id="show-features">
                     <label for="show-features" style="position: relative;">Buy <span class="down-arrow"></span> </label>
                     <ul>
-                    <li><a href="/shop/listings?negotiableFree=free">Free Listings</a></li>
+                    <li><a href="/shop/all?negotiableFree=free">Free Listings</a></li>
                     <li>
                         <a class="desktop-link">By Category</a>
                         <input type="checkbox" id="show-items">
 
                         <label for="show-items" style="position:relative;">By Category<span class="down-arrow"></span></label>
                         <ul>
-                        <li><a href="/shop/listings?category=furniture">Furniture</a></li>
-                        <li><a href="/shop/listings?category=kitchen">Kitchen</a></li>
-                        <li><a href="/shop/listings?category=electronics">Electronics</a></li>
-                        <li><a href="/shop/listings?category=clothes">Clothes</a></li>
-                        <li><a href="/shop/listings?category=school%20accessories">School Accessories</a></li>
+                        <li><a href="/shop/all?category=furniture">Furniture</a></li>
+                        <li><a href="/shop/all?category=kitchen">Kitchen</a></li>
+                        <li><a href="/shop/all?category=electronics">Electronics</a></li>
+                        <li><a href="/shop/all?category=clothes">Clothes</a></li>
+                        <li><a href="/shop/all?category=school%20accessories">School Accessories</a></li>
                         </ul>
                     </li>
-                    <li><a href="/shop/listings?distance=0%20-%200.5%20Mi">Listings < .5 Mile</a></li>
-                    <li><a href="">Rent Items</a></li>
-                    <li><a href="#">Find Subleases</a></li>
-                    <li><a href="/shop/listings">All Listings</a></li>
+                    <li><a href="/shop/all?distance=0%20-%200.5%20Mi">Listings < .5 Mile</a></li>
+                    <li><a href="/shop/all?type=rentable">Rent Items</a></li>
+                    <li><a href="/shop/all?type=lease">Find Subleases</a></li>
+                    <li><a href="/shop/all">All Listings</a></li>
                     </ul>
                 </li>
 
@@ -67,7 +67,7 @@
                         <input type="checkbox" id="show-user-links">
                         <label for="show-user-links">{{auth()->user()->first_name}}</label>
                         <ul>
-                            <li><a href="/users/manage">Manage Listings</a></li>
+                            <li><a href="/users/manage" onclick="displayLoadingPage()">Manage Listings</a></li>
                             <li>
                                 <a id="logout-button" onclick="document.getElementById('logout-form').submit();">Logout</a>
                                 <form method="POST" id="logout-form" action="/logout">
@@ -86,7 +86,7 @@
 
         {{-- this is the search forum --}}
         <label for="show-search" class="search-icon"><i class="fas fa-search"></i></label>
-        <form action="/shop/listings/" class="search-box">
+        <form action="/shop/all/" class="search-box">
             <input type="text" name = "search" placeholder="Type Something to Search..." required>
             <button type="submit" class="go-icon"><i class="fas fa-long-arrow-alt-right"></i></button>
         </form>

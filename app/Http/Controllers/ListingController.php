@@ -17,87 +17,6 @@ use Illuminate\Support\Facades\Redirect;
 class ListingController extends Controller
 {
  
-     //show all listings
-    public function index(){
-        // dd(request());
-
-        //no nested search functionality
-        // only searches for one tag and one search at a time
-        //can't search for two tags yet
-
-        //if the search tag is present return a different view
-        // if(request('tag') ?? false or request('search') ?? false){
-        //     // dd(request());
-        //     return view('listings.search', [
-        //         'listings' => Listing::latest() ->filter(request(['tag', 'search']))-> simplePaginate(16),
-        //         // double colon is used for static methods
-        //         //search for all listings that have that specific tag
-        //         //returns the results in the recently added order
-                
-        //         'tagWord' => request('tag'),
-        //         'searchWord' => request('search'),
-        //         'yardSales' => YardSale::latest()->get()
-        //     ]); 
-        // }else{
-        //     return view('listings.index', [
-        //     // 'listings' => Listing::all() //return all listings
-        //     // 'listings' =>Listing::latest()->get()
-        //     'listings' =>Listing::latest()->simplePaginate(16),
-        //     'yardSales' => YardSale::latest()->take(6)->get(),
-        //     'listingsNear' => Listing::latest()->take(10)->get(),
-        //     'listingsRent' => Listing::latest()->take(10)->get()
-        // ]);
-        // }
-
-        $latest = Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16);
-        if(count($latest) == 0){
-            $latest = Listing::latest()->take(16)->get();
-        }
-
-        return view('listings.index', [
-            // 'listings' => Listing::all() //return all listings
-            // 'listings' =>Listing::latest()->get()
-
-            // for the listings, which should only be recently added -> make it within 24hrs -> set a limit for how many total listings to show and paginate or set a minimum to show -> if not possible-> select the most recent
-            'listings'=> $latest,
-            'listingsNear' => Listing::latest()->take(10)->get(),
-            'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
-            'subleases'=>Sublease::latest()->where('status', 'like', 'Available')->take(10)->get()
-        ]);
-    }
-
-    public function search(Request $request){
-        $map = new HashMap("String", "Array");
-        $input = $request->except('_token');
-        foreach ( $input as $key => $value) {
-            if($key == "page"){
-                continue;
-            }
-            $value = explode(",", $value);
-            $map -> put($key, $value);
-        }
-
-        if($request->fullUrl() != $request ->url() && 
-        ((request('distance') ?? false) 
-        || (request('negotiableFree') ?? false) 
-        || (request('search') ?? false) 
-        || (request('category') ?? false) 
-        || (request('tag') ?? false) 
-        || (request('condition') ?? false))){
-            // dd($request->all());
-            // dd($map ->keySet()); //get all the keys of the key value pairs
-            if(request('search') ?? false){
-                return view('listings.search', [
-                    'listings' => Listing::latest() ->filter(request($map ->keySet()))-> simplePaginate(16)
-                ]); 
-            } 
-        }else{
-            return view('listings.search', [
-                'listings' => Listing::latest()->simplePaginate(20)
-            ]);
-        }
-    }
-
     // show a single listing
     public function show(Listing $listing){
         // get the listings table
@@ -251,8 +170,23 @@ class ListingController extends Controller
     }
 
     public function destroy(Listing $listing){
+
+        if(is_array(json_decode($listing->image_uploads))){
+            foreach(json_decode($listing->image_uploads) as $link){
+               $this->removeImage('storage/' . $link);
+            }
+        }
         $listing->delete();
         return redirect('/')->with('message', "Listing Deleted Successfully!");
+    }
+
+    public function removeImage($filLink)
+    {  
+        if(file_exists(public_path($filLink))){
+            unlink(public_path($filLink));
+        }else{
+            dd('File not found');
+        }
     }
 
     public function updateStatus(Request $request, Listing $listing){

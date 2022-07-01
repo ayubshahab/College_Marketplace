@@ -24,16 +24,17 @@
           <li class = "footer-links">
             <a href="">Home</a>
           </li>
-          <li class = "footer-links"><a href="">Services</a></li>
-          <li class = "footer-links"><a href="">About US</a></li>
-          <li class = "footer-links"><a href="">Features</a></li>
+          <li class = "footer-links"><a href="/services">Services</a></li>
+          <li class = "footer-links"><a href="/about">About US</a></li>
+          <li class = "footer-links"><a href="/features">Features</a></li>
           <li class = "footer-links"><a href="/users/loginRegister">Login</a></li>
         </div>
         <div class="col">
           <h3>Newsletter <div class="underline"><span></span></div></h3>
-          <form action="" class="newsletter-form">
+          <form action="/newsletter" method="POST" class="newsletter-form">
+            @csrf
             <i class="fa-solid fa-envelope"></i>
-            <input type="email" placeholder="Enter your email id" required>
+            <input type="email" name = "email" placeholder="Enter your email id" required>
             <button type="submit">
               <i class="fa-solid fa-arrow-right"></i>
             </button>

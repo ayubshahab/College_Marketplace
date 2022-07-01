@@ -1,9 +1,20 @@
 @props(['listing', 'displayTags'])
 <li class="cards_item" data-aos="zoom-in" data-aos-once="true">
+    <div class="card-type">
+        <div class="card-type-inner">
+            @if($listing instanceof \App\Models\Listing)
+                <h5>For Sale</h5>
+            @elseif($listing instanceof \App\Models\Rentable)
+                <h5>For Rent</h5>
+            @else
+                <h5>For Lease</h5>
+            @endif
+        </div>
+    </div>
     <div class="card"> 
         <div class="card_image">
             @if($listing instanceof \App\Models\Listing)
-            <span class="ribbon ribbon-listing">{{$listing->status}}</span>
+            {{-- <span class="ribbon ribbon-listing">{{$listing->status}}</span> --}}
                 @if($listing->status =='Available')
                     <div class="status green">
                     </div>
@@ -27,7 +38,7 @@
                     <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
                 </a>
             @elseif($listing instanceof \App\Models\Rentable)
-            <span class="ribbon ribbon-rental">{{$listing->status}}</span>
+            {{-- <span class="ribbon ribbon-rental">{{$listing->status}}</span> --}}
                 @if($listing->status =='Available')
                     <div class="status green">
                     </div>
@@ -48,7 +59,7 @@
                     <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
                 </a>
             @else
-                <span class="ribbon ribbon-lease">{{$listing->status}}</span>
+                {{-- <span class="ribbon ribbon-lease">{{$listing->status}}</span> --}}
                 @if($listing->status =='Available')
                     <div class="status green">
                     </div>
@@ -89,7 +100,7 @@
                 <a href="/rentables/{{$listing->id}}">
                 <h1 class="card_title">{{$listing->rental_title}}</h1>
                 </a>
-                <h4>${{$listing->rental_charging}} Per {{$listing->rental_duration}}</h4>
+                <h4>${{$listing->rental_charging}} / {{$listing->rental_duration}}</h4>
                 <h4 class="card_text">{{$listing->city}}, {{$listing->state}}</h4>
                 <div class="listing-tags">
                     @if($displayTags)

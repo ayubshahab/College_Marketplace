@@ -21,6 +21,7 @@ class GoogleController extends Controller
             $user = Socialite::driver('google')->stateless()->user();
 
             if(explode("@", $user->email)[1] !== 'virginia.edu'){
+                // return Socialite::driver('google')->redirect();
                 return redirect('/')->with("message","Please login with your UVA email");
             }
 

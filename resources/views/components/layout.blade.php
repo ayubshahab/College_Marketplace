@@ -37,6 +37,8 @@
         <link rel="stylesheet" types ="text/css" href="/css/carousel.css">
 
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                 
     </head>
     <body>
@@ -44,6 +46,11 @@
             {{-- import the navigation bar --}}
             @include('partials._navigationBar')
         </header>
+        <div class="loading-page" id='loading-page'>
+            <div class="loading-icon">
+                <i class="fa fa-spinner fa-spin" style=" color:var(--red-accent-color);"></i>
+            </div>
+        </div>
         <x-flash-message />
         {{-- this is body where anything can be shown --}}
         {{-- search results, default listings, and etc --}}
@@ -56,7 +63,19 @@
          <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
         <script>
             AOS.init();
-        </script>
+            function displayLoadingPage(){
+                var page = document.getElementById('loading-page');
+                page.style.display="flex";
+            }
 
+            window.addEventListener('change', (event) => {
+                document.getElementById('loading-page');
+                page.style.display='none';
+            });
+            window.addEventListener('load', (event) => {
+                document.getElementById('loading-page');
+                page.style.display='none';
+            });
+        </script>
     </body>
 </html>
