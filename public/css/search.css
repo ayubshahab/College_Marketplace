@@ -94,15 +94,23 @@
 .filter-list #dist:checked ~ ul,
 .filter-list #cat:checked ~ ul,
 .filter-list #cost:checked ~ ul,
-.filter-list #cond:checked ~ ul{
+.filter-list #cond:checked ~ ul,
+.filter-list #type:checked ~ ul,
+.filter-list #util:checked ~ ul{
     max-height: 100vh;
 }
 
 .filter-list #dist:checked + label,
 .filter-list #cat:checked + label,
 .filter-list #cost:checked + label,
-.filter-list #cond:checked + label{
+.filter-list #cond:checked + label,
+.filter-list #type:checked + label,
+.filter-list #util:checked + label{
     background-color: var(--red-accent-color);
+}
+
+.picked {
+    background: var(--red-accent-color) !important;
 }
 
 @media (max-width: 400px){

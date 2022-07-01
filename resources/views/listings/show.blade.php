@@ -10,7 +10,7 @@
         <div class = "card-wrapper-selected">
             <div class = "card-selected">
                 <div class="back-button">
-                    <a href="/" class="button1 b-button">
+                    <a href="javascript:history.back()" class="button1 b-button">
                         <i class="fa-solid fa-arrow-left"></i> Back
                     </a>
                 </div> 

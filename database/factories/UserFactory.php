@@ -22,7 +22,7 @@ class UserFactory extends Factory
         return [
             'first_name' => $first_name,
             'last_name' => $last_name,
-            'google_id' => $this->faker->city(),
+            'google_id' =>$this->faker->text(random_int(5,100)),
             'username' => null,
             'password' => '$2y$10$cmktUJeB21VwcrKQowuPG.H0.XlTK/vVb32D/.FE3of4drXHedP7.', // password
             'email' => $first_name . "." . $last_name . "@virginia.edu",

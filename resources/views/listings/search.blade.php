@@ -1,13 +1,13 @@
 <?php
     use App\Libraries\HashMap;
     $map = new HashMap("String", "Array");
-    $base = "http://college_marketplace.test/shop/listings";
+    $base = "http://college_marketplace.test/shop/all";
 
     function deconstructUrl($input, $map){
         $data = $input;
         foreach ( $data as $key => $value) {
             $value = explode(",", $value);
-           $map -> put($key, $value);
+            $map -> put($key, $value);
         }
     }
 
@@ -83,7 +83,18 @@
             </label> 
             
             <ul class="filter-list">
-                <li><a href="/shop/listings">View All</a></li>
+                {{-- type dropdown --}}
+                <li>
+                    <input type="checkbox" id="type">
+                    <label for="type" style="position: relative;">Type <span class="down-arrow"></span> </label>
+                    <ul> 
+                        <li><a id= "all" href="{{urlBuilder(toggleParam('type', 'all', $map), $base)}}">Show All Items</a></li>
+                        <li><a id = "listing" href="{{urlBuilder(toggleParam('type', 'listing', $map), $base)}}">Listing</a></li>
+                        <li><a id="rentable" href="{{urlBuilder(toggleParam('type', 'rentable', $map), $base)}}">Rentable</a></li>
+                        <li><a id="lease" href="{{urlBuilder(toggleParam('type', 'lease', $map), $base)}}">Leaseable</a></li>
+                    </ul>
+                </li>
+                {{-- <li><a href="/shop/listings">View All</a></li> --}}
                 {{-- Category Dropdown --}}
                 <li>
                     <input type="checkbox" id="cat">
@@ -135,6 +146,19 @@
                     </ul>
                 </li>
 
+                 {{-- Utilities Dropdown --}}
+                <li>
+                    <input type="checkbox" id="util">
+                    <label for="util" style="position: relative;">Utilities <span class="down-arrow"></span> </label>
+
+                    <ul>
+                    <li><a href="{{urlBuilder(toggleParam('utilities', 'electric', $map), $base)}}">Electric</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('utilities', 'gas', $map), $base)}}">Gas</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('utilities', 'water', $map), $base)}}">Water</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('utilities', 'trash', $map), $base)}}">Trash</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('utilities', 'internet', $map), $base)}}">Internet</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         {{-- <div style = "padding-left: 50px">
@@ -153,4 +177,9 @@
             @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings), 'displayTags' => true])
         </div>
     </div>
+    <script>
+        function add(val){
+            $( "#"+val ).toggleClass( 'className', ".picked" );
+        }
+    </script>
 </x-layout> 

@@ -36,6 +36,7 @@
 
 .cards_item {
   display: flex;
+  flex-direction: column;
   padding: 1rem;
   width: 100%;
 }
@@ -43,13 +44,14 @@
 .card {
     /* background-color: var(--dark-color); */
     width: 100%;
+    height: 100%;
     /* border-radius: 10px; */
     /* box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25); */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 12px;
-    padding: 10px;
+    /* border-radius: 12px; */
+    /* padding: 10px; */
     background: linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%);
     box-shadow: 0px 12px 32px rgb(17 16 21 / 25%);
     z-index: 10;
@@ -60,7 +62,33 @@
   /* box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 1); */
   box-shadow: 0px 12px 32px rgb(17 16 21 / 100%);
 }
+.card-type{
+  /* background-color: var(--background-color); */
+  display: flex;
+  align-items:center;
+  justify-content: center;
+}
+.card-type-inner{
+  width: 110px;
+  height:fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%);
+  padding: 5px;
+  /* padding-bottom: 0; */
+  border-radius: 12px 12px 0 0;
+}
+.card-type h5{
+  padding: 5px 15px;
+  width: 100px;
+  border-bottom: none;
+  text-align: center;
+  color:var(--red-accent-color);
+  border-radius: 12px 12px 0 0;
+  /* background-color: var(--background-color); */
 
+}
 .card_image{
   width: 100%;
   max-height: 250px;
@@ -70,7 +98,7 @@
   overflow: hidden;
   position: relative;
   margin-bottom: 5px;
-  border-radius: 12px 12px 0 0;
+  /* border-radius: 12px 12px 0 0; */
 }
 
 .ribbon-listing{
@@ -135,7 +163,7 @@
     /* background-color: var(--dark-color); */
     color: white !important;
     background: linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%);
-
+    padding: 10px 15px;
   /* background: linear-gradient(to bottom left, #EF8D9C 40%, #FFC39E 100%); */
 }
 
@@ -143,10 +171,13 @@
   text-decoration: none !important;
   color: white;
   font-weight: 700;
+  font-size: 14px;
 }
 
 .listing-tags{
-  opacity: .8;
+  max-height: 56px;
+  overflow: hidden;
+  /* opacity: .8; */
 }
 
 .card_title {
@@ -204,7 +235,7 @@
 
 .pagination-container nav a,
 .pagination-container nav span{
-  background-color: black;
+  background-color: var(--red-accent-color);
   padding: 5px 10px;
   border-radius: 5px;
   color:white;
