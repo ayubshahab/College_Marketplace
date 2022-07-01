@@ -67,6 +67,15 @@
                 var page = document.getElementById('loading-page');
                 page.style.display="flex";
             }
+
+            window.addEventListener('change', (event) => {
+                document.getElementById('loading-page');
+                page.style.display='none';
+            });
+            window.addEventListener('load', (event) => {
+                document.getElementById('loading-page');
+                page.style.display='none';
+            });
         </script>
     </body>
 </html>

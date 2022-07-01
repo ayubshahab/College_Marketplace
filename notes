@@ -110,3 +110,53 @@ select users.id, users.first_name, users.last_name, users.avatar, users.email
                                         <h4>{{$listing->status}}</h4>
                                     </div>
                                 @endif 
+
+<!-- original index -->
+ //show all listings
+    public function index(){
+        // dd(request());
+
+        //no nested search functionality
+        // only searches for one tag and one search at a time
+        //can't search for two tags yet
+
+        //if the search tag is present return a different view
+        // if(request('tag') ?? false or request('search') ?? false){
+        //     // dd(request());
+        //     return view('listings.search', [
+        //         'listings' => Listing::latest() ->filter(request(['tag', 'search']))-> simplePaginate(16),
+        //         // double colon is used for static methods
+        //         //search for all listings that have that specific tag
+        //         //returns the results in the recently added order
+                
+        //         'tagWord' => request('tag'),
+        //         'searchWord' => request('search'),
+        //         'yardSales' => YardSale::latest()->get()
+        //     ]); 
+        // }else{
+        //     return view('listings.index', [
+        //     // 'listings' => Listing::all() //return all listings
+        //     // 'listings' =>Listing::latest()->get()
+        //     'listings' =>Listing::latest()->simplePaginate(16),
+        //     'yardSales' => YardSale::latest()->take(6)->get(),
+        //     'listingsNear' => Listing::latest()->take(10)->get(),
+        //     'listingsRent' => Listing::latest()->take(10)->get()
+        // ]);
+        // }
+
+        $latest = Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16);
+        if(count($latest) == 0){
+            $latest = Listing::latest()->take(16)->get();
+        }
+
+        return view('listings.index', [
+            // 'listings' => Listing::all() //return all listings
+            // 'listings' =>Listing::latest()->get()
+
+            // for the listings, which should only be recently added -> make it within 24hrs -> set a limit for how many total listings to show and paginate or set a minimum to show -> if not possible-> select the most recent
+            'listings'=> $latest,
+            'listingsNear' => Listing::latest()->take(10)->get(),
+            'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
+            'subleases'=>Sublease::latest()->where('status', 'like', 'Available')->take(10)->get()
+        ]);
+    }

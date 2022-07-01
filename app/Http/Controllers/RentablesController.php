@@ -80,8 +80,22 @@ class RentablesController extends Controller
     }
 
     public function destroy(Rentable $rentable){
+        if(is_array(json_decode($rentable->image_uploads))){
+            foreach(json_decode($rentable->image_uploads) as $link){
+                $this->removeImage('storage/'.$link);
+            }
+        }
         $rentable->delete();
         return redirect('/')->with('message', "Rentable Item Deleted Successfully!");
+    }
+
+    public function removeImage($filLink)
+    {  
+        if(file_exists(public_path($filLink))){
+            unlink(public_path($filLink));
+        }else{
+            dd('File not found');
+        }
     }
 
     public function updateStatus(Request $request, Rentable $rentable){
