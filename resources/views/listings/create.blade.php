@@ -21,7 +21,7 @@
                         >
 
                         {{-- card #1 --}}
-                        <div class = "listingCard">
+                        <section class = "listingCard">
                             <p class="create-listing-header">Item Description</p>
                             <input type="text" name = "item_name" placeholder="Item Title"  value="{{ old('item_name', null) }}" />
                             @error('item_name')
@@ -115,10 +115,10 @@
                                     <p>{{$message}}</p>
                                 @enderror
                             </div>        
-                        </div>
+                        </section>
 
                         {{-- card #2 --}}
-                        <div class = "listingCard">
+                        <section class = "listingCard">
                             <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
                             <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
                             @error('tags')
@@ -136,10 +136,10 @@
                             @error('image_uploads')
                                 <p>{{$message}}</p>
                             @enderror
-                        </div>
+                        </section>
 
                         {{-- card #3 --}}
-                        <div class = "listingCard">
+                        <section class = "listingCard">
                             <p class="create-listing-header">Address:</p>
                             <input type="text" name="street" placeholder="Street, nbr"  value="{{ old('street', null) }}"/>
                             @error('street')
@@ -164,7 +164,7 @@
 
                             {{-- <p class="create-listing-header">Use My Location:</p>
                             <div onclick="getLocation()">Get Location</div> --}}
-                        </div>
+                        </section>
 
 
                         <div class = "listingButtonsContainer">
