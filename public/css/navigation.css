@@ -302,8 +302,11 @@ a:hover, label:hover{
 }
 
 
-@media screen and (orientation:landscape) {
-  .wrapper{
+@media only screen 
+and (max-width : 1024px)
+and (orientation:landscape) {
+  /* Styles */
+   .wrapper{
     position: relative;
   }
 }
