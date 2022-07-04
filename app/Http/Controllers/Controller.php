@@ -53,15 +53,33 @@ class Controller extends BaseController
         || (request('search') ?? false) 
         || (request('category') ?? false) 
         || (request('tag') ?? false) 
-        || (request('condition') ?? false))){
-            // dd($request->all());
-            // dd($map ->keySet()); //get all the keys of the key value pairs
-            if(request('search') ?? false){
+        || (request('condition') ?? false)
+        || (request('type') ?? false))){
+            if((request('type') ?? false) && request('type') == 'listing'){
+                // show results from listings table with filters applied
+                $listings = Listing::latest()->filter(request()->all())->simplePaginate(16);                
                 return view('listings.search', [
-                    'listings' => Listing::latest() ->filter(request($map ->keySet()))-> simplePaginate(16)
+                    'listings' => $listings
                 ]); 
-            } 
-        }else{
+            }elseif((request('type') ?? false) && request('type') == 'rentable'){
+                // show results from rentables table with filters applied
+                return view('listings.search', [
+                    'listings' => Rentable::latest()-> simplePaginate(16)
+                ]); 
+            }elseif((request('type') ?? false) && request('type') == 'lease'){
+                // show results from sublease table with filters applied
+                return view('listings.search', [
+                    'listings' => Sublease::latest()-> simplePaginate(16)
+                ]); 
+            }elseif((request('type') ?? false) && request('type') == 'all'){
+                // show results from all three tables with filters applied
+                dd('request type all');
+            }elseif(request('search') ?? false){
+                // show results from all three table with filters applied plus search terms
+                dd('search request');
+            }
+
+        }else{ //for all the listings button
             return view('listings.search', [
                 'listings' => Listing::latest()->simplePaginate(20)
             ]);

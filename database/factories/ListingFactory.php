@@ -30,7 +30,7 @@ class ListingFactory extends Factory
             'price' => random_int(50,500),
             'negotiableFree'=>$negotiable[array_rand($negotiable)],
             'condition' => $rentalCondition[array_rand($rentalCondition)],
-            'category' => $rentalCategory[array_rand($rentalCondition)],
+            'category' => $rentalCategory[array_rand($rentalCategory)],
             'tags' => strval($commaSeperatedString) ,
             'description' => $this->faker->paragraph(5),
             'image_uploads'=>null,
