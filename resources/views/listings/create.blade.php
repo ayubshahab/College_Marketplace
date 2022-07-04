@@ -226,7 +226,7 @@
             $("#submit").addClass("disabled");
 
             $("section").not("section:nth-of-type(1)").hide();
-            $("section").not("section:nth-of-type(1)").css('transform','translateX(100px)');
+            $("section").not("section:nth-of-type(1)").css('display','none');
 
             var svgWidth = length * 200 + 24;
             $("#svg_wrap").html(
@@ -305,9 +305,10 @@
                 );
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
-                currentSection.css('transform','translateX(0)');
-                currentSection.prevAll('section').css('transform','translateX(-100px)');
-                currentSection.nextAll('section').css('transform','translateX(100px)');
+                currentSection.css('display','flex');
+                currentSection.css('flex-direction', 'column');
+                currentSection.prevAll('section').css('display','none');
+                currentSection.nextAll('section').css('display','none');
                 $('section').not(currentSection).hide();
             });
 
