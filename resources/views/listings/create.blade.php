@@ -8,7 +8,27 @@
                     
                 </div>
                 <div class = "listingFormContainer">
+                    
+                    {{-- SOURCE CODE FROM CODE PEN --}}
+                    {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
+                    <div id="svg_wrap"></div>
+                    <h1>Post An Item!</h1>
+                    <form class="listingForm" method = "POST" action="/listings" id="listingForm"
+                    enctype="multipart/form-data">
+                        @csrf
+                        
+                        <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
+                        >
 
+                        <div class = "listingButtonsContainer">
+                            <div class="button" id="prev">&larr; Previous</div>
+                            <div class="button" id="next">Next &rarr;</div>
+                            <button class="submit-create-listing button" id="submit" type="submit">
+                                Submit
+                            </button>
+                            {{-- <div class="button" id="submit" type="submit">Post</div> --}}
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
