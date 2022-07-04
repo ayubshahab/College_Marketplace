@@ -300,3 +300,10 @@ a:hover, label:hover{
   font-size: 45px;
   margin: 5px 0;
 }
+
+
+@media screen and (orientation:landscape) {
+  .wrapper{
+    position: relative;
+  }
+}
