@@ -8,7 +8,7 @@
         {{-- for ajax post calls  CSRF token--}}
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="description" content="" />
         <meta name="author" content="" />
 
@@ -41,7 +41,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                 
     </head>
-    <body style="width: 100vw;">
+    <body>
         <header style="height: 70px; width: 100%; position: relative;">
             {{-- import the navigation bar --}}
             @include('partials._navigationBar')
