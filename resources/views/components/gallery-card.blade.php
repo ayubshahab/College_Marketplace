@@ -1,15 +1,19 @@
 @props(['listing', 'displayTags'])
 <li class="cards_item" data-aos="zoom-in" data-aos-once="true">
     <div class="card-type">
-        <div class="card-type-inner">
-            @if($listing instanceof \App\Models\Listing)
-                <h5>For Sale</h5>
-            @elseif($listing instanceof \App\Models\Rentable)
-                <h5>For Rent</h5>
-            @else
-                <h5>For Lease</h5>
-            @endif
+        @if($listing instanceof \App\Models\Listing)
+        <div class="card-type-inner sale-border">
+            <h5>For Sale</h5>
         </div>
+        @elseif($listing instanceof \App\Models\Rentable)
+        <div class="card-type-inner rent-border">
+            <h5>For Rent</h5>
+        </div>
+        @else
+        <div class="card-type-inner lease-border">
+            <h5>For Lease</h5>
+        </div>
+        @endif
     </div>
     <div class="card"> 
         <div class="card_image">
@@ -26,16 +30,6 @@
                     </div>
                 @endif
                 <a href="/listings/{{$listing->id}}">
-                    {{-- @php
-                    $imgLinks = null;
-                        if(isset($listing->image_uploads)){
-                            $imgLinks = json_decode($listing->image_uploads);
-                            if(is_array($imgLinks)){
-                                $imgLinks = $imgLinks[0];
-                            }
-                        }
-                    @endphp
-                    <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist"> --}}
                      @php
                         $imgLinks = null;
                         if(isset($listing->image_uploads)){
@@ -54,11 +48,6 @@
                             $imgLinks = "/images/rotunda.jpg";
                         }
                     @endphp
-                    {{-- @if(file_exists(public_path('storage/'.$imgLinks)))
-                        <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
-                    @else
-                        <img src={{asset('/images/rotunda.jpg')}}  alt="replacement image for missing image">
-                    @endif --}}
                     <img src={{asset($imgLinks) }}  alt="title image">
                 </a>
             @elseif($listing instanceof \App\Models\Rentable)
