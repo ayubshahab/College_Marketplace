@@ -11,7 +11,7 @@
                     
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
-                    {{-- <div id="svg_wrap"></div> --}}
+                    <div id="svg_wrap"></div>
                     <h1>Post An Item!</h1>
                     <form class="listingForm" method = "POST" action="/listings" id="listingForm"
                     enctype="multipart/form-data">
@@ -21,7 +21,7 @@
                         >
 
                         {{-- card #1 --}}
-                        <section class = "listingCard">
+                        <div class = "listingCard">
                             <p class="create-listing-header">Item Description</p>
                             <input type="text" name = "item_name" placeholder="Item Title"  value="{{ old('item_name', null) }}" />
                             @error('item_name')
@@ -115,7 +115,57 @@
                                     <p>{{$message}}</p>
                                 @enderror
                             </div>        
-                        </section>
+                        </div>
+
+                        {{-- card #2 --}}
+                        <div class = "listingCard">
+                            <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
+                            <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
+                            @error('tags')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ old('description', null) }}</textarea>
+                            @error('description')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <p class="create-listing-header">Attach Images</p>
+                            <input class="imgUpload" type="file" id="image_uploads" name="image_uploads[]" accept=".jpg, .jpeg, .png" multiple >
+                            <div class="preview">
+                                <h6>Please select up to 5</h6>
+                            </div>
+                            @error('image_uploads')
+                                <p>{{$message}}</p>
+                            @enderror
+                        </div>
+
+                        {{-- card #3 --}}
+                        <div class = "listingCard">
+                            <p class="create-listing-header">Address:</p>
+                            <input type="text" name="street" placeholder="Street, nbr"  value="{{ old('street', null) }}"/>
+                            @error('street')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <input type="text" name = "city" placeholder="City"  value="{{ old('city', null) }}"/>
+                            @error('city')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <input type="text" name = "state" placeholder="State"  value="{{ old('state', null) }}"/>
+                            @error('state')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <input type="text" name = "country" placeholder="Country"  value="{{ old('country', null) }}" />
+                            @error('country')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <input type="text" name = "postcode"placeholder="Postcode"  value="{{ old('postcode', null) }}" />
+                            @error('postcode')
+                                <p>{{$message}}</p>
+                            @enderror
+
+                            {{-- <p class="create-listing-header">Use My Location:</p>
+                            <div onclick="getLocation()">Get Location</div> --}}
+                        </div>
+
 
                         <div class = "listingButtonsContainer">
                             <div class="button" id="prev">&larr; Previous</div>
