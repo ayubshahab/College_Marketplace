@@ -28,8 +28,8 @@
     width: 40%;
 	border-radius: 0 0 0 45px;
     /* background-color:azure; */
-	background-color: var(--dark-color);
-    background-color: rgba(0, 0, 0, 0.8);
+	/* background-color: var(--dark-color); */
+    /* background-color: rgba(0, 0, 0, 0.8); */
 
 	/* opacity: .7; */
 }
@@ -61,8 +61,8 @@
 
 .create-listing-header{
 	margin-top: 10px !important;
-	/* color: white !important; */
-	color: var(--background-color) !important;
+	color: white !important;
+	/* color: var(--background-color) !important; */
 	font-size: 17px !important;
 }
 .listingForm p{
@@ -77,6 +77,7 @@
 	width: 65%;
 	/* background:var(--dark-color); */
 	/* background:rgba(255,255,255,0.9); */
+	background: rgba(36,34,44, .5);
 	backdrop-filter:blur(10px);
 	box-shadow:0px 2px 10px rgba(0,0,0,0.3);
 	border-radius:5px;

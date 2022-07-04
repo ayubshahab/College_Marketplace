@@ -223,7 +223,7 @@ li{
 
 @media(max-width: 480px){
     .listings-parent-container{
-        padding: 1em 0 !important;
+        padding: 1em 20px !important;
     }
 }
 /* end list tag styling */
