@@ -20,6 +20,103 @@
                         <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
                         >
 
+                        {{-- card #1 --}}
+                        <section class = "listingCard">
+                            <p class="create-listing-header">Item Description</p>
+                            <input type="text" name = "item_name" placeholder="Item Title"  value="{{ old('item_name', null) }}" />
+                            @error('item_name')
+                                <p>{{$message}}</p>
+                            @enderror
+                            <input type="number" min="0.00" name = "price" max="10000.00" step="0.01" placeholder="Price or 0 for free"  value="{{ old('price', null) }}"/>
+                            @error('price')
+                                <p>{{$message}}</p>
+                            @enderror
+
+                            <p class="create-listing-header">
+                                Price Negotiable, Fixed, or Free
+                            </p>
+                            <div class="condition-box">
+                                <select name="negotiableFree" id="">
+                                    <option value="Fixed" {{ (old("negotiableFree") == 'Fixed' ? "selected":"") }}>Fixed</option>
+                                    
+                                    <option value="Negotiable" {{ (old("negotiableFree") == 'Negotiable' ? "selected":"") }}>Negotiable/ OBO (best offer)</option>
+
+                                    <option value="Free" {{ (old("negotiableFree") == 'Free' ? "selected":"") }}>Free</option>
+                                </select>
+                                @error('negotiableFree')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>
+
+                            <p class="create-listing-header">Condition</p>
+                            <div class ="conditionBox">
+                                <select name="condition" id="">
+                                    <option value="New" {{ (old("condition") == 'New' ? "selected":"") }}>New</option>
+                                    <option value="Good" {{ (old("condition") == 'Good' ? "selected":"") }}>Good</option>
+                                    <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
+                                    <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
+                                </select>
+                                @error('condition')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>
+
+                            <p class="create-listing-header">Categories</p>
+                            <div class ="conditionBox">
+                                <ul class="ks-cboxtags">
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxSix" value="Furniture" 
+                                        {{ old('category.0') == 'Furniture' ? 'checked' : '' }}
+                                        {{ old('category.1') == 'Furniture' ? 'checked' : '' }}
+                                        {{ old('category.2') == 'Furniture' ? 'checked' : '' }}
+                                        {{ old('category.3') == 'Furniture' ? 'checked' : '' }}
+                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}>
+                                        <label for="checkboxSix"
+                                        >Furniture</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxSeven" value="Clothes"
+                                        {{ old('category.0') == 'Clothes' ? 'checked' : '' }}
+                                        {{ old('category.1') == 'Clothes' ? 'checked' : '' }}
+                                        {{ old('category.2') == 'Clothes' ? 'checked' : '' }}
+                                        {{ old('category.3') == 'Clothes' ? 'checked' : '' }}
+                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}>
+                                        <label for="checkboxSeven">Clothes</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxEight" value="Electronics" 
+                                        {{ old('category.0') == 'Electronics' ? 'checked' : '' }}
+                                        {{ old('category.1') == 'Electronics' ? 'checked' : '' }}
+                                        {{ old('category.2') == 'Electronics' ? 'checked' : '' }}
+                                        {{ old('category.3') == 'Electronics' ? 'checked' : '' }}
+                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}>
+                                        <label for="checkboxEight">Electronics</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxNine" value="Kitchen"
+                                        {{ old('category.0') == 'Kitchen' ? 'checked' : '' }}
+                                        {{ old('category.1') == 'Kitchen' ? 'checked' : '' }}
+                                        {{ old('category.2') == 'Kitchen' ? 'checked' : '' }}
+                                        {{ old('category.3') == 'Kitchen' ? 'checked' : '' }}
+                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}>
+                                        <label for="checkboxNine">Kitchen</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxTen" value="School Accessories"
+                                        {{ old('category.0') == 'School Accessories' ? 'checked' : '' }}
+                                        {{ old('category.1') == 'School Accessories' ? 'checked' : '' }}
+                                        {{ old('category.2') == 'School Accessories' ? 'checked' : '' }}
+                                        {{ old('category.3') == 'School Accessories' ? 'checked' : '' }}
+                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}>
+                                        <label for="checkboxTen">School Accessories</label>
+                                    </li>
+                                </ul>
+                                @error('category')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>        
+                        </section>
+
                         <div class = "listingButtonsContainer">
                             <div class="button" id="prev">&larr; Previous</div>
                             <div class="button" id="next">Next &rarr;</div>
