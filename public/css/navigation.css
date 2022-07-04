@@ -207,6 +207,7 @@ a:hover, label:hover{
     left: 0%;
     background: rgba(29,28,36,0.1);
     backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
   }
   .content .links li{
     margin: 15px 20px;
