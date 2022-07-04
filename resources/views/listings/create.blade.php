@@ -11,7 +11,7 @@
                     
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
-                    <div id="svg_wrap"></div>
+                    {{-- <div id="svg_wrap"></div> --}}
                     <h1>Post An Item!</h1>
                     <form class="listingForm" method = "POST" action="/listings" id="listingForm"
                     enctype="multipart/form-data">
