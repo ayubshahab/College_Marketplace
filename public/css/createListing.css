@@ -64,7 +64,7 @@
 	align-items: center;
 	justify-content: center;
 	text-align: left;
-	width: 65%;
+	width: 100%;
 	overflow: hidden !important;
 	overflow-x: hidden !important;
 }
