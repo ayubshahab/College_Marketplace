@@ -23,9 +23,9 @@
         
 
         <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" /> --}}
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+        {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/> --}}
 
         {{-- for alpine js --}}
         {{-- for flash message --}}
@@ -56,7 +56,7 @@
         {{-- this is body where anything can be shown --}}
         {{-- search results, default listings, and etc --}}
 
-        {{$slot}}
+        {{-- {{$slot}} --}}
         
         {{-- the footer section --}}
         @include('partials._footer')
