@@ -56,7 +56,7 @@
         {{-- this is body where anything can be shown --}}
         {{-- search results, default listings, and etc --}}
 
-        {{-- {{$slot}} --}}
+        {{$slot}}
         
         {{-- the footer section --}}
         @include('partials._footer')
