@@ -17,6 +17,7 @@
     max-width: 250px;
     background: rgba(29,28,36,0.7);
     backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     transition: all .3s ease;
     border-right: 10px solid var(--red-accent-color);
     box-sizing: content-box;
