@@ -36,8 +36,10 @@ class RentablesController extends Controller
         if($request->hasFile('image_uploads'))
         {
             foreach ($request->file('image_uploads') as $file) {
-                $name = $file->store('rentables','public');
-                $data[] = $name; 
+                $path = $file->store('listings','s3');
+                \Storage::disk('s3')->setVisibility($file, 'public');
+                //$fullURL = \Storage::disk('s3')->url($name); 
+                $data[] = $path; 
             }
             $formFields['image_uploads']=json_encode($data);
         }
@@ -80,21 +82,19 @@ class RentablesController extends Controller
     }
 
     public function destroy(Rentable $rentable){
-        if(is_array(json_decode($rentable->image_uploads))){
-            foreach(json_decode($rentable->image_uploads) as $link){
-                $this->removeImage('storage/'.$link);
+        if(is_array(json_decode($listing->image_uploads))){
+            foreach(json_decode($listing->image_uploads) as $link){
+               $this->removeImage($link);
             }
         }
-        $rentable->delete();
-        return redirect('/')->with('message', "Rentable Item Deleted Successfully!");
+        $listing->delete();
+        return redirect('/')->with('message', "Listing Deleted Successfully!");
     }
 
     public function removeImage($filLink)
     {  
-        if(file_exists(public_path($filLink))){
-            unlink(public_path($filLink));
-        }else{
-            dd('File not found');
+        if(\Storage::disk('s3')->exists($filLink)) {
+            \Storage::disk('s3')->delete($filLink);
         }
     }
 
@@ -145,8 +145,10 @@ class RentablesController extends Controller
         if($request->hasFile('image_uploads'))
         {
             foreach ($request->file('image_uploads') as $file) {
-                $name = $file->store('listings','public');
-                $data[] = $name; 
+                $path = $file->store('listings','s3');
+                \Storage::disk('s3')->setVisibility($file, 'public');
+                //$fullURL = \Storage::disk('s3')->url($name); 
+                $data[] = $path; 
             }
             $formFields['image_uploads']=json_encode($data);
         }
