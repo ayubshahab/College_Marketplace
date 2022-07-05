@@ -21,7 +21,7 @@
                         >
 
                         {{-- card #1 --}}
-                        <div class = "listingCard">
+                        <section class = "listingCard">
                             <p class="create-listing-header">Item Description</p>
                             <input type="text" name = "item_name" placeholder="Item Title"  value="{{ old('item_name', null) }}" />
                             @error('item_name')
@@ -115,10 +115,10 @@
                                     <p>{{$message}}</p>
                                 @enderror
                             </div>        
-                        </div>
+                        </section>
 
                         {{-- card #2 --}}
-                        <div class = "listingCard">
+                        <section class = "listingCard">
                             <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
                             <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
                             @error('tags')
@@ -136,10 +136,10 @@
                             @error('image_uploads')
                                 <p>{{$message}}</p>
                             @enderror
-                        </div>
+                        </section>
 
                         {{-- card #3 --}}
-                        <div class = "listingCard">
+                        <section class = "listingCard">
                             <p class="create-listing-header">Address:</p>
                             <input type="text" name="street" placeholder="Street, nbr"  value="{{ old('street', null) }}"/>
                             @error('street')
@@ -164,7 +164,7 @@
 
                             {{-- <p class="create-listing-header">Use My Location:</p>
                             <div onclick="getLocation()">Get Location</div> --}}
-                        </div>
+                        </section>
 
 
                         <div class = "listingButtonsContainer">
@@ -226,7 +226,7 @@
             $("#submit").addClass("disabled");
 
             $("section").not("section:nth-of-type(1)").hide();
-            $("section").not("section:nth-of-type(1)").css('transform','translateX(100px)');
+            $("section").not("section:nth-of-type(1)").css('display','none');
 
             var svgWidth = length * 200 + 24;
             $("#svg_wrap").html(
@@ -305,9 +305,10 @@
                 );
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
-                currentSection.css('transform','translateX(0)');
-                currentSection.prevAll('section').css('transform','translateX(-100px)');
-                currentSection.nextAll('section').css('transform','translateX(100px)');
+                currentSection.css('display','flex');
+                currentSection.css('flex-direction', 'column');
+                currentSection.prevAll('section').css('display','none');
+                currentSection.nextAll('section').css('display','none');
                 $('section').not(currentSection).hide();
             });
 
