@@ -16,7 +16,6 @@
 	background-position: bottom;
     background-repeat: no-repeat;
 	background-size: cover;
-	overflow-x: hidden;
 	/* box-sizing: border-box; */
 }
 
@@ -29,20 +28,14 @@
     width: 40%;
 	border-radius: 0 0 0 45px;
     /* background-color:azure; */
-	/* background-color: var(--dark-color); */
-    /* background-color: rgba(0, 0, 0, 0.8); */
+	background-color: var(--dark-color);
+    background-color: rgba(0, 0, 0, 0.8);
 
 	/* opacity: .7; */
 }
 
 .listingFormContainer{
     width: 60%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden !important;
-	overflow-x: hidden !important;
     /* background-color: rgba(0, 0, 0, 0.7); */
 }
 
@@ -64,15 +57,12 @@
 	align-items: center;
 	justify-content: center;
 	text-align: left;
-	width: 100%;
-	overflow: hidden !important;
-	overflow-x: hidden !important;
 }
 
 .create-listing-header{
 	margin-top: 10px !important;
-	color: white !important;
-	/* color: var(--background-color) !important; */
+	/* color: white !important; */
+	color: var(--background-color) !important;
 	font-size: 17px !important;
 }
 .listingForm p{
@@ -87,12 +77,10 @@
 	width: 65%;
 	/* background:var(--dark-color); */
 	/* background:rgba(255,255,255,0.9); */
-	background: rgba(36,34,44, .5);
 	backdrop-filter:blur(10px);
 	box-shadow:0px 2px 10px rgba(0,0,0,0.3);
 	border-radius:5px;
 	transition:transform 0.2s ease-in-out;
-	overflow: hidden;
 }
 
 .listingButtonsContainer{

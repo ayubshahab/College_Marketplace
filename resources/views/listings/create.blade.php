@@ -8,7 +8,7 @@
                     
                 </div>
                 <div class = "listingFormContainer">
-                    
+
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
                     <div id="svg_wrap"></div>
@@ -46,6 +46,27 @@
                                 @error('negotiableFree')
                                     <p>{{$message}}</p>
                                 @enderror
+                                {{-- <ul class="ks-cboxtags">
+                                    <li>
+                                        
+                                        <label for="checkboxOne">
+                                            
+                                            <input type="hidden" id="checkboxOne" name = "negotiable" id ="check" value="0">
+                                            <input type="checkbox" id="checkboxOne" name = "negotiable" id ="check" class = "negotiable" value="{{ old('negotiable', 1) }}">    
+                                        Price Negotiable/ OBO</label>
+                                        @error('negotiable')
+                                            <p>{{$message}}</p>
+                                        @enderror
+                                    </li>
+                                    <li>
+                                        <input type="hidden" id="checkboxEleven" name = "free" id ="check" value="0">
+                                        <input type="checkbox" id="checkboxEleven" name = "free" id ="check" value="{{ old('free', "1") }}">
+                                        <label for="checkboxEleven">Free</label>
+                                        @error('free')
+                                            <p>{{$message}}</p>
+                                        @enderror
+                                    </li>
+                                </ul> --}}
                             </div>
 
                             <p class="create-listing-header">Condition</p>
@@ -56,6 +77,25 @@
                                     <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
                                     <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
                                 </select>
+                                {{-- <ul class="ks-cboxtags">
+                                    <li>
+                                        <input type="hidden" name="condition[] cond" class="checkT" id="checkboxTwo">
+                                        <input type="checkbox" name="condition[] cond" class="checkT" id="checkboxTwo" value="New">
+                                        <label for="checkboxTwo">New</label>
+                                    </li>
+                                    <li>
+                                        <input class="checkT" type="checkbox" name="condition[] cond" id="checkboxThree" value="Good">
+                                        <label for="checkboxThree">Good</label>
+                                    </li>
+                                    <li>
+                                        <input class="checkT" type="checkbox" name="condition[] cond" id="checkboxFour" value="Slightly Used" >
+                                        <label for="checkboxFour">Slightly Used</label>
+                                    </li>
+                                    <li>
+                                        <input class="checkT" type="checkbox" name="condition[] cond" id="checkboxFive" value="Used (normal wear)">
+                                        <label for="checkboxFive">Used (normal wear)</label>
+                                    </li>
+                                </ul> --}}
                                 @error('condition')
                                     <p>{{$message}}</p>
                                 @enderror
@@ -226,7 +266,7 @@
             $("#submit").addClass("disabled");
 
             $("section").not("section:nth-of-type(1)").hide();
-            $("section").not("section:nth-of-type(1)").css('display','none');
+            $("section").not("section:nth-of-type(1)").css('transform','translateX(100px)');
 
             var svgWidth = length * 200 + 24;
             $("#svg_wrap").html(
@@ -305,10 +345,9 @@
                 );
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
-                currentSection.css('display','flex');
-                currentSection.css('flex-direction', 'column');
-                currentSection.prevAll('section').css('display','none');
-                currentSection.nextAll('section').css('display','none');
+                currentSection.css('transform','translateX(0)');
+                currentSection.prevAll('section').css('transform','translateX(-100px)');
+                currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();
             });
 
