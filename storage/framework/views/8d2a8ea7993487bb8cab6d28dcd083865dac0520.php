@@ -40,9 +40,9 @@
                         </ul>
                     </li>
                     <li><a href="/shop/all?distance=0%20-%200.5%20Mi">Listings < .5 Mile</a></li>
-                    <li><a href="/shop/all?type=rentable">Rent Items</a></li>
-                    <li><a href="/shop/all?type=lease">Find Subleases</a></li>
-                    <li><a href="/shop/all">All Listings</a></li>
+                    <li><a href="/shop/all?type=rentable">For Rent</a></li>
+                    <li><a href="/shop/all?type=lease">For Lease</a></li>
+                    <li><a href="/shop/all?type=listing">For Sale</a></li>
                     </ul>
                 </li>
 
@@ -67,7 +67,8 @@
                         <input type="checkbox" id="show-user-links">
                         <label for="show-user-links"><?php echo e(auth()->user()->first_name); ?></label>
                         <ul>
-                            <li><a href="/users/manage" onclick="displayLoadingPage()">Manage Listings</a></li>
+                            
+                            <li><a href="/users/manage">Manage Listings</a></li>
                             <li>
                                 <a id="logout-button" onclick="document.getElementById('logout-form').submit();">Logout</a>
                                 <form method="POST" id="logout-form" action="/logout">

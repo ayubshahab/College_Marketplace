@@ -6,6 +6,7 @@
     height:calc(100vh - 70px);
     background: rgba(29,28,36,0.1);
     backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     top: 70px;
     z-index: 10;
     transition: all .3s ease ;
