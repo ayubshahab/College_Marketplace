@@ -37,16 +37,27 @@
                     </div>
                 <?php endif; ?>
                 <a href="/listings/<?php echo e($listing->id); ?>">
-                    <?php
-                    $imgLinks = null;
+                    
+                     <?php
+                        $imgLinks = null;
                         if(isset($listing->image_uploads)){
                             $imgLinks = json_decode($listing->image_uploads);
                             if(is_array($imgLinks)){
                                 $imgLinks = $imgLinks[0];
+                                if(file_exists(public_path('storage/'.$imgLinks))){
+                                    $imgLinks = "storage/".$imgLinks;
+                                }else{
+                                    $imgLinks = "/images/rotunda.jpg";
+                                }
+                            }else{
+                                 $imgLinks = "/images/rotunda.jpg";
                             }
+                        }else{
+                            $imgLinks = "/images/rotunda.jpg";
                         }
                     ?>
-                    <img src=<?php echo e($listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg')); ?>  alt="image doesnt exist">
+                    
+                    <img src=<?php echo e(asset($imgLinks)); ?>  alt="title image">
                 </a>
             <?php elseif($listing instanceof \App\Models\Rentable): ?>
             
