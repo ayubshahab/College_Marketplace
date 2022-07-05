@@ -82,8 +82,8 @@ class RentablesController extends Controller
     }
 
     public function destroy(Rentable $rentable){
-        if(is_array(json_decode($listing->image_uploads))){
-            foreach(json_decode($listing->image_uploads) as $link){
+        if(is_array(json_decode($rentable->image_uploads))){
+            foreach(json_decode($rentable->image_uploads) as $link){
                $this->removeImage($link);
             }
         }
