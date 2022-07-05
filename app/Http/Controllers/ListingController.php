@@ -193,8 +193,6 @@ class ListingController extends Controller
         }*/
         if(\Storage::disk('s3')->exists($filLink)) {
             \Storage::disk('s3')->delete($filLink);
-        } else {
-            dd('File not found');
         }
     }
 
