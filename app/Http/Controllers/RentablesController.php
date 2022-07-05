@@ -87,7 +87,7 @@ class RentablesController extends Controller
                $this->removeImage($link);
             }
         }
-        $listing->delete();
+        $rentable->delete();
         return redirect('/')->with('message', "Listing Deleted Successfully!");
     }
 
