@@ -34,15 +34,8 @@
                     @php
                         $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
                         $link = $hardLink[random_int(0, count($hardLink)-1)];
-
-                        if(file_exists(public_path('storage/'.$imgLinks))){
-                            $imgLinks = "storage/".$imgLinks;
-                        }else{
-                            $imgLinks = $link;
-                        }
                     @endphp
-
-                    <img src={{asset($link) }}  alt="image doesnt exist">
+                    <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset($link) }}  alt="image doesnt exist">
                 </a>
             </div>
             {{-- </a> --}}
@@ -83,18 +76,12 @@
                             }
                         }
                     @endphp
+                    {{-- <h1>{{$listing->image_uploads}}</h1> --}}
                     @php
                         $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
                         $link = $hardLink[random_int(0, count($hardLink)-1)];
-
-                        if(file_exists(public_path('storage/'.$imgLinks))){
-                            $imgLinks = "storage/".$imgLinks;
-                        }else{
-                            $imgLinks = $link;
-                        }
                     @endphp
-
-                    <img src={{asset($link) }}  alt="image doesnt exist">
+                    <img src={{$rentable->image_uploads ?asset('storage/'.$imgLinks) : asset($link) }}  alt="image doesnt exist">
                 </a>
             </div>
             {{-- </a> --}}
