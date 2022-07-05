@@ -35,7 +35,7 @@
                             }
                         }
                     @endphp
-                    <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
+                    <img src={{$listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
                 </a>
             @elseif($listing instanceof \App\Models\Rentable)
             {{-- <span class="ribbon ribbon-rental">{{$listing->status}}</span> --}}
@@ -56,7 +56,7 @@
                             }
                         }
                     @endphp
-                    <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
+                    <img src={{$listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
                 </a>
             @else
                 {{-- <span class="ribbon ribbon-lease">{{$listing->status}}</span> --}}
@@ -77,7 +77,7 @@
                             }
                         }
                     @endphp
-                    <img src={{$listing->image_uploads ?asset('storage/'.$imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
+                    <img src={{$listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
                 </a>
             @endif
         </div>
