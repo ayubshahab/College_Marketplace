@@ -32,6 +32,7 @@
                             $imgLinks = json_decode($listing->image_uploads);
                             if(is_array($imgLinks)){
                                 $imgLinks = $imgLinks[0];
+                                
                             }
                         }
                     @endphp

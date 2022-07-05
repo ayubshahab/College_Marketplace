@@ -44,13 +44,7 @@
                             $imgLinks = json_decode($listing->image_uploads);
                             if(is_array($imgLinks)){
                                 $imgLinks = $imgLinks[0];
-                                if(file_exists(public_path('storage/'.$imgLinks))){
-                                    $imgLinks = "storage/".$imgLinks;
-                                }else{
-                                    $imgLinks = "/images/rotunda.jpg";
-                                }
-                            }else{
-                                 $imgLinks = "/images/rotunda.jpg";
+                     
                             }
                         }else{
                             $imgLinks = "/images/rotunda.jpg";

@@ -149,7 +149,7 @@
                                     @if(is_array(json_decode($rentable->image_uploads)))
                                         @foreach(json_decode($rentable->image_uploads) as $link)
                                             <li>
-                                                 <img src={{$rentable->image_uploads ? asset('storage/'.$link) : asset('/images/rotunda.jpg')}} alt = "User Uploads">
+                                                 <img src={{$rentable->image_uploads ? Storage::disk('s3')->url($link): asset('/images/rotunda.jpg')}} alt = "User Uploads">
                                             </li>
                                         @endforeach
                                     @else
