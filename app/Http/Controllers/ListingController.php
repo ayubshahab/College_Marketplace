@@ -109,8 +109,10 @@ class ListingController extends Controller
         if($request->hasFile('image_uploads'))
         {
             foreach ($request->file('image_uploads') as $file) {
-                $name = $file->store('listings','public');
-                $data[] = $name; 
+                $path = $file->store('listings','s3');
+                \Storage::disk('s3')->setVisibility($file, 'public');
+                //$fullURL = \Storage::disk('s3')->url($name); 
+                $data[] = $path; 
             }
             $formFields['image_uploads']=json_encode($data);
         }
@@ -157,8 +159,10 @@ class ListingController extends Controller
         if($request->hasFile('image_uploads'))
         {
             foreach ($request->file('image_uploads') as $file) {
-                $name = $file->store('listings','public');
-                $data[] = $name; 
+                $path = $file->store('listings','s3');
+                \Storage::disk('s3')->setVisibility($file, 'public');
+                //$fullURL = \Storage::disk('s3')->url($name); 
+                $data[] = $path; 
             }
             $formFields['image_uploads']=json_encode($data);
         }
@@ -173,7 +177,7 @@ class ListingController extends Controller
 
         if(is_array(json_decode($listing->image_uploads))){
             foreach(json_decode($listing->image_uploads) as $link){
-               $this->removeImage('storage/' . $link);
+               $this->removeImage($link);
             }
         }
         $listing->delete();
@@ -182,9 +186,14 @@ class ListingController extends Controller
 
     public function removeImage($filLink)
     {  
-        if(file_exists(public_path($filLink))){
+        /*if(file_exists(public_path($filLink))){
             unlink(public_path($filLink));
         }else{
+            dd('File not found');
+        }*/
+        if(\Storage::disk('s3')->exists($filLink)) {
+            \Storage::disk('s3')->delete($filLink);
+        } else {
             dd('File not found');
         }
     }
