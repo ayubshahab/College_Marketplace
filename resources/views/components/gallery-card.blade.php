@@ -26,7 +26,7 @@
                     </div>
                 @endif
                 <a href="/listings/{{$listing->id}}">
-                    {{-- @php
+                    @php
                     $imgLinks = null;
                         if(isset($listing->image_uploads)){
                             $imgLinks = json_decode($listing->image_uploads);
@@ -36,31 +36,7 @@
                             }
                         }
                     @endphp
-                    <img src={{$listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist"> --}}
-                     @php
-                        $imgLinks = null;
-                        if(isset($listing->image_uploads)){
-                            $imgLinks = json_decode($listing->image_uploads);
-                            if(is_array($imgLinks)){
-                                $imgLinks = $imgLinks[0];
-                                if(file_exists(public_path($imgLinks))){
-                                    $imgLinks = $imgLinks;
-                                }else{
-                                    $imgLinks = "/images/rotunda.jpg";
-                                }
-                            }else{
-                                 $imgLinks = "/images/rotunda.jpg";
-                            }
-                        }else{
-                            $imgLinks = "/images/rotunda.jpg";
-                        }
-                    @endphp
-                    {{-- @if(file_exists(public_path($imgLinks)))
-                        <img src={{$listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
-                    @else
-                        <img src={{asset('/images/rotunda.jpg')}}  alt="replacement image for missing image">
-                    @endif --}}
-                    <img src={{asset($imgLinks) }}  alt="title image">
+                    <img src={{$listing->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset('/images/rotunda.jpg') }}  alt="image doesnt exist">
                 </a>
             @elseif($listing instanceof \App\Models\Rentable)
             {{-- <span class="ribbon ribbon-rental">{{$listing->status}}</span> --}}
