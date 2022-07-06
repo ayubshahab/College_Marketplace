@@ -69,7 +69,7 @@
   justify-content: center;
 }
 .card-type-inner{
-  width: 110px;
+  width: 120px;
   height:fit-content;
   display: flex;
   align-items: center;
@@ -79,9 +79,25 @@
   /* padding-bottom: 0; */
   border-radius: 12px 12px 0 0;
 }
+
+.for-sale{
+  border:2px solid peru;
+  border-bottom: 0;
+}
+
+.for-rent{
+  border:2px solid #207E82;
+  border-bottom: 0;
+}
+
+.for-lease{
+  border:2px solid #A98B98;
+  border-bottom: 0;
+}
+
 .card-type h5{
   padding: 5px 15px;
-  width: 100px;
+  width: 100%;
   border-bottom: none;
   text-align: center;
   color:var(--red-accent-color);
@@ -213,7 +229,7 @@
   width: 100%;
   padding: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   height: auto;
   z-index: 2;
   position: relative;

@@ -32,8 +32,16 @@
 
     function toggleParam($key, $value, $map){
         $nextMap = clone $map;
+
+        //if we are toggling the type, type always needs to have a default of all, unless specified
+        //the type=all is replaced by the specified type
         if($nextMap->contains($key)) {
             $storedAtKey = $nextMap->get($key);
+            if($key == "type"){
+                $nextMap->remove($key);
+                $nextMap->put($key, array($value));
+                return $nextMap;
+            }
             if(in_array($value, $storedAtKey)) {
                 // basically deleting key-> value pair if present
                 if (($index = array_search($value, $storedAtKey)) !== NULL) {
@@ -126,9 +134,9 @@
                     <label for="cost" style="position: relative;">Price <span class="down-arrow"></span> </label>
 
                     <ul>
-                    <li><a href="{{urlBuilder(toggleParam('negotiableFree', 'negotiable', $map), $base)}}">Negotiable</a></li>
-                    <li><a href="{{urlBuilder(toggleParam('negotiableFree', 'fixed', $map), $base)}}">Fixed</a></li>
-                    <li><a href="{{urlBuilder(toggleParam('negotiableFree', 'free', $map), $base)}}">Free</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('negotiable', 'negotiable', $map), $base)}}">Negotiable</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('negotiable', 'fixed', $map), $base)}}">Fixed</a></li>
+                    <li><a href="{{urlBuilder(toggleParam('negotiable', 'free', $map), $base)}}">Free</a></li>
                     </ul>
                 </li>
 

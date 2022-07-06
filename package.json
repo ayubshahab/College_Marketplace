@@ -17,6 +17,8 @@
     },
     "dependencies": {
         "aos": "^3.0.0-beta.6",
-        "flickity": "^3.0.0"
+        "flickity": "^3.0.0",
+        "leaflet": "^1.8.0",
+        "reverse-geocode": "^1.3.3"
     }
 }

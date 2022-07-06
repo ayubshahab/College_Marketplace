@@ -25,7 +25,7 @@ return new class extends Migration
             // listing price stands for 9999999.99
             $table->decimal('price',9,2);
             // listing negotiable
-            $table->string('negotiableFree');
+            $table->string('negotiable');
             // listing condition
             $table->string('condition');
             // listing category
@@ -38,12 +38,15 @@ return new class extends Migration
 
 
             // listing location
-            $table->string('street');
-            $table->string('city');
-            $table->string('state');
-            $table->string('country');
-            $table->string('postcode');
+            $table->string('street')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('postcode')->nullable();
             $table->string('status')->nullable()->default('Available');
+
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             //listing created_on and updated_on
             $table->timestamps();
         });

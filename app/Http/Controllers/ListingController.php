@@ -93,18 +93,21 @@ class ListingController extends Controller
             'user_id'=>'required',
             'item_name'=>'required',
             'price'=>'required',
-            'negotiableFree'=> 'required',
+            'negotiable'=> 'required',
             'condition'=>'required',
             'category'=>'required',
             'tags'=>'required',
             'description'=>'required',
             'image_uploads'=>'required',
-            'street'=>'required',
-            'city'=>'required',
-            'state'=>'required',
-            'country'=>'required',
-            'postcode'=>'required'
+            'street'=>'required_without:latitude',
+            'city'=>'required_without:latitude',
+            'state'=>'required_without:latitude',
+            'country'=>'required_without:latitude',
+            'postcode'=>'required_without:latitude',
+            'latitude' => 'required_without:street',
+            'longitude' =>'required_without:street'
         ]);
+        //  dd($request);
         $formFields['user_id']=auth()->id();
         if($request->hasFile('image_uploads'))
         {
@@ -142,7 +145,7 @@ class ListingController extends Controller
             'user_id'=>'required',
             'item_name'=>'required',
             'price'=>'required',
-            'negotiableFree'=> 'required',
+            'negotiable'=> 'required',
             'condition'=>'required',
             'category'=>'required',
             'tags'=>'required',

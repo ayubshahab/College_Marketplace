@@ -74,6 +74,7 @@
     color:#EDEFF8;
     border-bottom: solid 1px #EDEFF8;
     position: relative;
+    padding: 10px 0;
 }
 
 @media(max-width:600px){

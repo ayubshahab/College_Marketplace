@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('rental_title');
             $table->string('rental_duration');
             $table->decimal('rental_charging', 9, 2);
+            $table->string('negotiable');
             $table->string('condition');
             $table->string('category');
             $table->string('tags');

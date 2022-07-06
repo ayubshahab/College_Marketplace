@@ -13,7 +13,7 @@ class Listing extends Model
         'user_id',
         'item_name',
         'price',
-        'negotiableFree',
+        'negotiable',
         'condition',
         'category',
         'tags',

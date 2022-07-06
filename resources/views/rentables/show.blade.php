@@ -69,6 +69,9 @@
 
                         {{-- price and other info --}}
                         <div class = "product-details show-top">
+                            <h4>Item Negotiable or Fixed: 
+                                <span>{{$rentable->negotiable}}</span>
+                            </h4>
                             <h4>Condition: 
                                 <span>{{$rentable->condition}}</span>
                             </h4>
