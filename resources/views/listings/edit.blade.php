@@ -36,15 +36,15 @@
                                 Price Negotiable, Fixed, or Free
                             </p>
                             <div class="condition-box">
-                                <select name="negotiableFree" id="">
-                                     <option value="Fixed"{{ $listing->negotiableFree == 'Fixed' ? "selected":""}}>Fixed</option>
+                                <select name="negotiable" id="">
+                                     <option value="Fixed"{{ $listing->negotiable == 'Fixed' ? "selected":""}}>Fixed</option>
                                     
-                                    <option value="Negotiable" {{ $listing->negotiableFree == 'Negotiable' ? "selected":""}}
+                                    <option value="Negotiable" {{ $listing->negotiable == 'Negotiable' ? "selected":""}}
                                         >Negotiable/ OBO (best offer)</option>
 
-                                    <option value="Free" {{ $listing->negotiableFree == 'Free' ? "selected":""}}>Free</option>
+                                    <option value="Free" {{ $listing->negotiable == 'Free' ? "selected":""}}>Free</option>
                                 </select>
-                                @error('negotiableFree')
+                                @error('negotiable')
                                     <p>{{$message}}</p>
                                 @enderror
                             </div>

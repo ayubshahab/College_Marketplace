@@ -25,18 +25,18 @@
                     <input type="checkbox" id="show-features">
                     <label for="show-features" style="position: relative;">Buy <span class="down-arrow"></span> </label>
                     <ul>
-                    <li><a href="/shop/all?negotiableFree=free">Free Listings</a></li>
+                    <li><a href="/shop/all?type=all&negotiable=free">Free Listings</a></li>
                     <li>
                         <a class="desktop-link">By Category</a>
                         <input type="checkbox" id="show-items">
 
                         <label for="show-items" style="position:relative;">By Category<span class="down-arrow"></span></label>
                         <ul>
-                        <li><a href="/shop/all?category=furniture">Furniture</a></li>
-                        <li><a href="/shop/all?category=kitchen">Kitchen</a></li>
-                        <li><a href="/shop/all?category=electronics">Electronics</a></li>
-                        <li><a href="/shop/all?category=clothes">Clothes</a></li>
-                        <li><a href="/shop/all?category=school%20accessories">School Accessories</a></li>
+                        <li><a href="/shop/all?type=all&category=furniture">Furniture</a></li>
+                        <li><a href="/shop/all?type=all&category=kitchen">Kitchen</a></li>
+                        <li><a href="/shop/all?type=all&category=electronics">Electronics</a></li>
+                        <li><a href="/shop/all?type=all&category=clothes">Clothes</a></li>
+                        <li><a href="/shop/all?type=all&category=school%20accessories">School Accessories</a></li>
                         </ul>
                     </li>
                     <li><a href="/shop/all?distance=0%20-%200.5%20Mi">Listings < .5 Mile</a></li>
@@ -87,7 +87,8 @@
 
         {{-- this is the search forum --}}
         <label for="show-search" class="search-icon"><i class="fas fa-search"></i></label>
-        <form action="/shop/all/" class="search-box">
+        <form action="/shop/all" class="search-box">
+            <input type="hidden" name="type" value="all">
             <input type="text" name = "search" placeholder="Type Something to Search..." required>
             <button type="submit" class="go-icon"><i class="fas fa-long-arrow-alt-right"></i></button>
         </form>

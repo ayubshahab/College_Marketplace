@@ -13,6 +13,7 @@ class Rentable extends Model
         'rental_title',
         'rental_duration', //hourly, daily, weekly, monthly
         'rental_charging', //amount charging per time period
+        'negotiable',
         'condition',
         'category',
         'tags',

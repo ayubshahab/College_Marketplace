@@ -76,7 +76,7 @@
                         {{-- price and other info --}}
                         <div class = "product-details show-top">
                             <h4>Item Negotiable/Free/Fixed: 
-                                <span>{{$listing->negotiableFree}}</span>
+                                <span>{{$listing->negotiable}}</span>
                             </h4>
                             <h4>Condition: 
                                 <span>{{$listing->condition}}</span>
@@ -147,8 +147,8 @@
 
             {{-- user chat and map area --}}
             <div class="map-chat-container">
-                <div class="map-container">
-                    <h1>Maps feature</h1>
+                <div class="map-container" id = "map-container">
+                    {{-- <h1>Maps feature</h1> --}}
                 </div>
                 <div class="chat-container">
                     {{-- only want to go through list of users & the messages from each user if the current listing is mine --}}
@@ -223,9 +223,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    
 
     {{-- for pusher real time messages --}}
-     <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+    <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+   
     <script>
+        
+        var map = L.map('map-container').setView([51.505, -0.09], 13);
 
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");

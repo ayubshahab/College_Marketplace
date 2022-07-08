@@ -73,6 +73,20 @@
                                 <p>{{$message}}</p>
                             @enderror
 
+                            <p class="create-listing-header">
+                                Price Negotiable or Fixed
+                            </p>
+                            <div class="condition-box">
+                                <select name="negotiable" id="">
+                                    <option value="Fixed" {{ (old("negotiable") == 'Fixed' ? "selected":"") }}>Fixed</option>
+                                    
+                                    <option value="Negotiable" {{ (old("negotiable") == 'Negotiable' ? "selected":"") }}>Negotiable/ OBO (best offer)</option>
+                                </select>
+                                @error('negotiable')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>
+
                             <p class="create-listing-header">Condition</p>
                             <div class ="conditionBox">
                                 <select name="condition" id="">

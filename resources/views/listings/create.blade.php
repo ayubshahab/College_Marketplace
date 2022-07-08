@@ -36,37 +36,16 @@
                                 Price Negotiable, Fixed, or Free
                             </p>
                             <div class="condition-box">
-                                <select name="negotiableFree" id="">
-                                    <option value="Fixed" {{ (old("negotiableFree") == 'Fixed' ? "selected":"") }}>Fixed</option>
+                                <select name="negotiable" id="">
+                                    <option value="Fixed" {{ (old("negotiable") == 'Fixed' ? "selected":"") }}>Fixed</option>
                                     
-                                    <option value="Negotiable" {{ (old("negotiableFree") == 'Negotiable' ? "selected":"") }}>Negotiable/ OBO (best offer)</option>
+                                    <option value="Negotiable" {{ (old("negotiable") == 'Negotiable' ? "selected":"") }}>Negotiable/ OBO (best offer)</option>
 
-                                    <option value="Free" {{ (old("negotiableFree") == 'Free' ? "selected":"") }}>Free</option>
+                                    <option value="Free" {{ (old("negotiable") == 'Free' ? "selected":"") }}>Free</option>
                                 </select>
-                                @error('negotiableFree')
+                                @error('negotiable')
                                     <p>{{$message}}</p>
                                 @enderror
-                                {{-- <ul class="ks-cboxtags">
-                                    <li>
-                                        
-                                        <label for="checkboxOne">
-                                            
-                                            <input type="hidden" id="checkboxOne" name = "negotiable" id ="check" value="0">
-                                            <input type="checkbox" id="checkboxOne" name = "negotiable" id ="check" class = "negotiable" value="{{ old('negotiable', 1) }}">    
-                                        Price Negotiable/ OBO</label>
-                                        @error('negotiable')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                    <li>
-                                        <input type="hidden" id="checkboxEleven" name = "free" id ="check" value="0">
-                                        <input type="checkbox" id="checkboxEleven" name = "free" id ="check" value="{{ old('free', "1") }}">
-                                        <label for="checkboxEleven">Free</label>
-                                        @error('free')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                </ul> --}}
                             </div>
 
                             <p class="create-listing-header">Condition</p>
@@ -77,25 +56,6 @@
                                     <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
                                     <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
                                 </select>
-                                {{-- <ul class="ks-cboxtags">
-                                    <li>
-                                        <input type="hidden" name="condition[] cond" class="checkT" id="checkboxTwo">
-                                        <input type="checkbox" name="condition[] cond" class="checkT" id="checkboxTwo" value="New">
-                                        <label for="checkboxTwo">New</label>
-                                    </li>
-                                    <li>
-                                        <input class="checkT" type="checkbox" name="condition[] cond" id="checkboxThree" value="Good">
-                                        <label for="checkboxThree">Good</label>
-                                    </li>
-                                    <li>
-                                        <input class="checkT" type="checkbox" name="condition[] cond" id="checkboxFour" value="Slightly Used" >
-                                        <label for="checkboxFour">Slightly Used</label>
-                                    </li>
-                                    <li>
-                                        <input class="checkT" type="checkbox" name="condition[] cond" id="checkboxFive" value="Used (normal wear)">
-                                        <label for="checkboxFive">Used (normal wear)</label>
-                                    </li>
-                                </ul> --}}
                                 @error('condition')
                                     <p>{{$message}}</p>
                                 @enderror
@@ -202,8 +162,11 @@
                                 <p>{{$message}}</p>
                             @enderror
 
-                            {{-- <p class="create-listing-header">Use My Location:</p>
-                            <div onclick="getLocation()">Get Location</div> --}}
+                            <input type="hidden" name="latitude" id ="latitude" value = "{{null}}">
+                            <input type="hidden" name="longitude" id = "longitude" value = "{{null}}">
+
+                            <p class="create-listing-header">Use My Location:</p>
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
                         </section>
 
 
@@ -220,19 +183,36 @@
             </div>
         </div>
     </div>
+
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <script src="../../../node_modules/reverse-geocode/reverse-geocode.js"></script>
     <script>
 
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
+                navigator.geolocation.getCurrentPosition(showPosition, showError, options);
             } else { 
                 console.log("location not supported")
             }
         }
 
         function showPosition(position) {
-           console.log("Latitude: " + position.coords.latitude + 
-            "<br>Longitude: " + position.coords.longitude);
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            // displayLocation(latitude,longitude);
+            // const reverse = require('reverse-geocode');
+            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
         }
 
         function showError(error) {
@@ -251,6 +231,31 @@
                 break;
             }
         }
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 1000,
+            maximumAge: 0
+        };
+
+        function displayLocation(latitude,longitude){
+            var request = new XMLHttpRequest();
+
+            var method = 'GET';
+            var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true';
+            var async = true;
+
+            request.open(method, url, async);
+            request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    console.log(address.formatted_address);
+                    // document.write(address.formatted_address);
+                }
+            };
+            request.send();
+        };
 
         // source code from code pen
         // link: https://codepen.io/webbarks/pen/QWjwWNV

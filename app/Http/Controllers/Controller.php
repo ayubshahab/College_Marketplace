@@ -10,11 +10,14 @@ use App\Libraries\HashMap;
 use App\Models\NewsLetter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 
 class Controller extends BaseController
@@ -46,7 +49,8 @@ class Controller extends BaseController
             $value = explode(",", $value);
             $map -> put($key, $value);
         }
-
+        // dd($request ->all());
+        // dd("test");
         if($request->fullUrl() != $request ->url() && 
         ((request('distance') ?? false) 
         || (request('negotiableFree') ?? false) 
@@ -56,36 +60,147 @@ class Controller extends BaseController
         || (request('condition') ?? false)
         || (request('type') ?? false))){
             if((request('type') ?? false) && request('type') == 'listing'){
-                // show results from listings table with filters applied
-                $listings = Listing::latest()->filter(request()->all())->simplePaginate(16);                
+                // show results from rentables table with filters applied
+                $totalResults = null;
+                if(!empty($request->except('_token', 'type', 'page'))){
+                    $listingResults = $this->getListingsQuery($request);
+                    $totalResults = collect($listingResults)->sortByDesc('id') -> paginate(16);
+                }else{
+                    $totalResults = collect(Listing::latest()->get())->sortByDesc('id')->paginate(16);
+                }
+                
                 return view('listings.search', [
-                    'listings' => $listings
+                    'listings' => $totalResults
                 ]); 
             }elseif((request('type') ?? false) && request('type') == 'rentable'){
                 // show results from rentables table with filters applied
+                $totalResults = null;
+                if(!empty($request->except('_token', 'type', 'page'))){
+                    $rentableResults = $this->getRentableQuery($request);
+                    $totalResults = collect($rentableResults)->sortByDesc('id') -> paginate(16);
+                }else{
+                    $totalResults = Rentable::latest()->paginate(16);
+                }
+                
                 return view('listings.search', [
-                    'listings' => Rentable::latest()-> simplePaginate(16)
+                    'listings' => $totalResults
                 ]); 
             }elseif((request('type') ?? false) && request('type') == 'lease'){
-                // show results from sublease table with filters applied
+                $totalResults = null;
+                if(!empty($request->except('_token', 'type', 'page'))){
+                    $subleaseResults = $this->getSubleaseQuery($request);
+                    $totalResults = collect($subleaseResults)->sortByDesc('id') -> paginate(16);
+                }else{
+                    $totalResults = Sublease::latest()->paginate(16);
+                }
+                
                 return view('listings.search', [
-                    'listings' => Sublease::latest()-> simplePaginate(16)
+                    'listings' => $totalResults
                 ]); 
-            }elseif((request('type') ?? false) && request('type') == 'all'){
-                // show results from all three tables with filters applied
-                dd('request type all');
-            }elseif(request('search') ?? false){
-                // show results from all three table with filters applied plus search terms
-                dd('search request');
-            }
 
-        }else{ //for all the listings button
-            return view('listings.search', [
-                'listings' => Listing::latest()->simplePaginate(20)
-            ]);
+            }elseif((request('type') ?? false) && request('type') == 'all'){
+                $totalResults = null;
+                if(!empty($request->except('_token', 'type', 'page'))){
+                    $listingResults = $this->getListingsQuery($request);
+                    $rentableResults = $this->getRentableQuery($request);
+                    $subleaseResults = $this->getSubleaseQuery($request);
+                    $totalResults = collect($listingResults)->merge($rentableResults)->sortByDesc('id') -> paginate(16);
+                }else{
+                    $totalResults = collect(Listing::latest()->get())->merge(Rentable::latest()->get())->merge(Sublease::latest()->get())->sortByDesc('id')->paginate(16);
+                }
+                
+                return view('listings.search', [
+                    'listings' => $totalResults
+                ]); 
+
+            }
         }
     }
+
+    public function getListingsQuery(Request $map){
+        // dd($map);
+        $map = $map->except('_token', 'type', 'page');
+        $string = "Select * from listings as l where ";
+        foreach($map as $key => $values){
+            if($key == "search"){
+                $arrayValues = explode(" ", $values);
+                $string = $string . "(" ;
+                foreach($arrayValues as $value){
+                    $string = $string . " (" ;
+                    $string = $string . "l.item_name LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.tags LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.description LIKE '%" . $value . "%' OR ";
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                    $string = $string . " AND ";
+                }
+                $string = substr($string, 0, -4);
+                $string = $string . ")";
+            }elseif($key == 'tags'){
+                $string = $string . " (" ;
+                $string = $string . "l.tags LIKE '%" . $values . "%'";
+                $string = $string . ")";
+            }
+            else{
+                $arrayValues = explode(",", $values);
+                $string = $string . "(" ;
+                foreach($arrayValues as $value ){
+                    $string = $string . "l." . $key . " = '" . $value . "' OR ";
+                }
+                $string = substr($string, 0, -4);
+                $string = $string . ")";
+            }
+            $string = $string . " AND ";
+        }
+        $string = substr($string, 0, -5);
+        // dd($string);
+        $userQuery =DB::select($string);
+        return Listing::hydrate($userQuery);
+    }
+
+    public function getRentableQuery(Request $map){
+        $map = $map->except('_token', 'type', 'page');
+        $string = "Select * from rentables as r where ";
+        foreach($map as $key => $values){
+           if($key == "search"){
+                $arrayValues = explode(" ", $values);
+                $string = $string . "(" ;
+                foreach($arrayValues as $value){
+                    $string = $string . " (" ;
+                    $string = $string . "r.rental_title LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.tags LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.description LIKE '%" . $value . "%' OR ";
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                    $string = $string . " AND ";
+                }
+                $string = substr($string, 0, -4);
+                $string = $string . ")";
+            }elseif($key == 'tags'){
+                $string = $string . " (" ;
+                $string = $string . "r.tags LIKE '%" . $values . "%'";
+                $string = $string . ")";
+            }else{
+                $arrayValues = explode(",", $values);
+                $string = $string . "(" ;
+                foreach($arrayValues as $value ){
+                    $string = $string . "r." . $key . " = '" . $value . "' OR ";
+                }
+                $string = substr($string, 0, -4);
+                $string = $string . ")";
+            }
+            $string = $string . " AND ";
+        }
+        $string = substr($string, 0, -5);
+        // dd($string);
+        $userQuery =DB::select($string);
+        return Rentable::hydrate($userQuery);
+    }
     
+    public function getSubleaseQuery(Request $map){
+        return;
+    }
+
     public function enrollEmail(Request $request){
         // dd($request->all());
         $formfields = [

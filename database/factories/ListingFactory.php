@@ -28,7 +28,7 @@ class ListingFactory extends Factory
             'user_id'=> random_int(1,10),
             'item_name' => $this->faker->text(random_int(5,100)),
             'price' => random_int(50,500),
-            'negotiableFree'=>$negotiable[array_rand($negotiable)],
+            'negotiable' => $negotiable[array_rand($negotiable)],
             'condition' => $rentalCondition[array_rand($rentalCondition)],
             'category' => $rentalCategory[array_rand($rentalCategory)],
             'tags' => strval($commaSeperatedString) ,

@@ -24,7 +24,21 @@
         <div class="pagination-container">
             @if($listings instanceof \Illuminate\Pagination\Paginator ||
             $listings instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                {{$listings->appends(request()->query())->links()}}
+                {{-- {{$listings->appends(request()->query())->links()}} --}}
+                @if($listings->currentPage() > 1)
+                    {{-- <a class="button1 paginate-previous" href="{{ $listings->previousPageUrl()}}">Previous</a> --}}
+                    <a class="button1 paginate-previous" href="{{$listings->appends(request()->query())->previousPageUrl()}}">Previous</a>
+                @else
+                    {{-- first page --}}
+                    <a class="button1 paginate-previous">First Page</a>
+                @endif
+                @if($listings->hasMorePages())
+                    {{-- <a class ="button1 paginate-next" href="{{ $listings->nextPageUrl() }}">Next</a> --}}
+                    <a class="button1 paginate-next" href="{{$listings->appends(request()->query())->nextPageUrl()}}">Next</a>
+                @else
+                    {{-- last page --}}
+                    <a class ="button1 paginate-next" >Last Page</a>
+                @endif
             @endif
         </div>
     </div>
