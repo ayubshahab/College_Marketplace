@@ -77,7 +77,6 @@ class UserController extends Controller
     }
 
     public function addFavorite(Request $request){
-        // dd($request->all());
         $currentUser = User::find(auth()->id());
         $favorites = null;
         if($request->type == "listing"){ //if favorite type is listing

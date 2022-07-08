@@ -109,7 +109,9 @@
                                         {{ old('category.1') == 'Furniture' ? 'checked' : '' }}
                                         {{ old('category.2') == 'Furniture' ? 'checked' : '' }}
                                         {{ old('category.3') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}>
+                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}
+                                        {{ old('category.5') == 'Furniture' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
@@ -119,7 +121,9 @@
                                         {{ old('category.1') == 'Clothes' ? 'checked' : '' }}
                                         {{ old('category.2') == 'Clothes' ? 'checked' : '' }}
                                         {{ old('category.3') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}>
+                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}
+                                        {{ old('category.5') == 'Clothes' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
@@ -128,7 +132,9 @@
                                         {{ old('category.1') == 'Electronics' ? 'checked' : '' }}
                                         {{ old('category.2') == 'Electronics' ? 'checked' : '' }}
                                         {{ old('category.3') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}>
+                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}
+                                        {{ old('category.5') == 'Electronics' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
@@ -137,7 +143,9 @@
                                         {{ old('category.1') == 'Kitchen' ? 'checked' : '' }}
                                         {{ old('category.2') == 'Kitchen' ? 'checked' : '' }}
                                         {{ old('category.3') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}>
+                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}
+                                        {{ old('category.5') == 'Kitchen' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
@@ -146,8 +154,21 @@
                                         {{ old('category.1') == 'School Accessories' ? 'checked' : '' }}
                                         {{ old('category.2') == 'School Accessories' ? 'checked' : '' }}
                                         {{ old('category.3') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}>
+                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}
+                                        {{ old('category.5') == 'School Accessories' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxTen">School Accessories</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
+                                        {{ old('category.0') == 'Books' ? 'checked' : '' }}
+                                        {{ old('category.1') == 'Books' ? 'checked' : '' }}
+                                        {{ old('category.2') == 'Books' ? 'checked' : '' }}
+                                        {{ old('category.3') == 'Books' ? 'checked' : '' }}
+                                        {{ old('category.4') == 'Books' ? 'checked' : '' }}
+                                        {{ old('category.5') == 'Books' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxEleven">Books</label>
                                     </li>
                                 </ul>
                                 @error('category')
@@ -274,9 +295,9 @@
                 }
             })
 
-            var base_color = "rgb(230,230,230)";
+            var base_color = "black";
             // var active_color = "rgb(237, 40, 70)";
-            var active_color = "#cc5500";
+            var active_color = "#db6657";
 
             var child = 1;
             var length = $("section").length - 1;

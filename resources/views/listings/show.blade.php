@@ -50,7 +50,7 @@
                                     }
                                 }
                             @endphp
-                            <img src={{$listing->image_uploads ? Storage::disk('s3')->url($titleImage) : asset('/images/rotunda.jpg')}} id = "expandedImg" alt="image doesnt exist">;
+                            <img src={{$listing->image_uploads ? Storage::disk('s3')->url($titleImage) : asset('/images/rotunda.jpg')}} id = "expandedImg" alt="image doesnt exist">
                         </div>
                         <div class = "img-showcase">
                             @if(is_array(json_decode($listing->image_uploads)))
@@ -61,8 +61,8 @@
                         </div>
                     </div>
                     <!-- card right -->
+                    
                     <div class = "product-content">
-
                         {{-- product title --}}
                         <div class = "product-header show-top">
                             <div class="name-status">
@@ -90,7 +90,7 @@
                             <div class="categories">
                                 <h4 class="spacer">Categories:</h4>
                                 @foreach($categories as $category)
-                                    <a href="/category?category={{$category}}">{{$category}}</a>
+                                    <a href="/shop/all?type=all&category={{$category}}">{{$category}}</a>
                                 @endforeach
                             </div> 
                         </div>  
@@ -111,9 +111,19 @@
                             <ul>
                                 <li>
                                     @if($currentUser != null and $currentUser->favorites != null and in_array($listing->id, explode(", " , $currentUser->favorites)))
-                                        <a href="/users/removefavorite?type=listing&id={{$listing->id}}"><i class="fa-solid fa-heart saved"></i></a>
+                                        <form action="/users/removefavorite" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="type" value="listing">
+                                            <input type="hidden" name="id" value="{{$listing->id}}">
+                                            <button><i class="fa-solid fa-heart saved"></i></button>
+                                        </form>
                                     @else
-                                        <a href="/users/addfavorite?type=listing&id={{$listing->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
+                                        <form action="/users/addfavorite" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="type" value="listing">
+                                            <input type="hidden" name="id" value="{{$listing->id}}">
+                                            <button><i class="fa-solid fa-heart bouncy"></i></button>
+                                        </form>
                                     @endif                                
                                 </li>
                                 @if($currentUser != null and $listing->user_id == $currentUser->id)
@@ -121,7 +131,6 @@
                                         <form method="POST" action="/listings/{{$listing->id}}/update">
                                             @csrf
                                             @method('PUT')
-                                            {{-- <input type="hidden" name="id" value={{$listing->user_id}} --}}
                                             <select name="status" id="status" style = " font-size: 17px; text-align:center;" onchange="this.form.submit()">
                                                 <option style = "text-align:center;">Status</option>
                                                 <option style = "text-align:center;" value="Available">Available</option>
@@ -130,7 +139,12 @@
                                             </select>
                                         </form>
                                     </li>
-                                    <li><a href="/listings/{{$listing->id}}/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+                                    <li>
+                                        <form action="/listings/{{$listing->id}}/edit" method = "GET">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{$listing->id}}">
+                                            <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        </form>
                                     <li>
                                         <form method="POST" action="/listings/{{$listing->id}}">
                                             @csrf

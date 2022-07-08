@@ -132,7 +132,7 @@ class ListingController extends Controller
             abort('404', 'Unauthorized Access');
             return redirect('/')->with('message', 'Please only edit listings you own');
         }
-        
+        // dd($listing);
         return view('listings.edit', ['listing' =>$listing]);
     }
 

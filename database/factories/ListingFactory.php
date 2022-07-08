@@ -22,7 +22,7 @@ class ListingFactory extends Factory
         $commaSeperatedString = implode(", ", $randomTagsArray);
         $rentalCondition = array('New' , 'Good', 'Slightly Used', 'Used Normal Wear');
         $rentalStatus = array('Rented', 'Available');
-        $rentalCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories');
+        $rentalCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories', "Books");
         $negotiable =array('Fixed', 'Negotiable' , 'Free');
         return [
             'user_id'=> random_int(1,10),

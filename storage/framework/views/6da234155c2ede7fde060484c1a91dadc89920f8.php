@@ -58,7 +58,7 @@
                                     }
                                 }
                             ?>
-                            <img src=<?php echo e($listing->image_uploads ? Storage::disk('s3')->url($titleImage) : asset('/images/rotunda.jpg')); ?> id = "expandedImg" alt="image doesnt exist">;
+                            <img src=<?php echo e($listing->image_uploads ? Storage::disk('s3')->url($titleImage) : asset('/images/rotunda.jpg')); ?> id = "expandedImg" alt="image doesnt exist">
                         </div>
                         <div class = "img-showcase">
                             <?php if(is_array(json_decode($listing->image_uploads))): ?>
@@ -69,8 +69,8 @@
                         </div>
                     </div>
                     <!-- card right -->
+                    
                     <div class = "product-content">
-
                         
                         <div class = "product-header show-top">
                             <div class="name-status">
@@ -99,7 +99,7 @@
                             <div class="categories">
                                 <h4 class="spacer">Categories:</h4>
                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <a href="/category?category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
+                                    <a href="/shop/all?type=all&category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div> 
                         </div>  
@@ -134,9 +134,19 @@
                             <ul>
                                 <li>
                                     <?php if($currentUser != null and $currentUser->favorites != null and in_array($listing->id, explode(", " , $currentUser->favorites))): ?>
-                                        <a href="/users/removefavorite?type=listing&id=<?php echo e($listing->id); ?>"><i class="fa-solid fa-heart saved"></i></a>
+                                        <form action="/users/removefavorite" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="type" value="listing">
+                                            <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
+                                            <button><i class="fa-solid fa-heart saved"></i></button>
+                                        </form>
                                     <?php else: ?>
-                                        <a href="/users/addfavorite?type=listing&id=<?php echo e($listing->id); ?>"><i class="fa-solid fa-heart bouncy"></i></a>
+                                        <form action="/users/addfavorite" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="type" value="listing">
+                                            <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
+                                            <button><i class="fa-solid fa-heart bouncy"></i></button>
+                                        </form>
                                     <?php endif; ?>                                
                                 </li>
                                 <?php if($currentUser != null and $listing->user_id == $currentUser->id): ?>
@@ -144,7 +154,6 @@
                                         <form method="POST" action="/listings/<?php echo e($listing->id); ?>/update">
                                             <?php echo csrf_field(); ?>
                                             <?php echo method_field('PUT'); ?>
-                                            
                                             <select name="status" id="status" style = " font-size: 17px; text-align:center;" onchange="this.form.submit()">
                                                 <option style = "text-align:center;">Status</option>
                                                 <option style = "text-align:center;" value="Available">Available</option>
@@ -153,7 +162,12 @@
                                             </select>
                                         </form>
                                     </li>
-                                    <li><a href="/listings/<?php echo e($listing->id); ?>/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+                                    <li>
+                                        <form action="/listings/<?php echo e($listing->id); ?>/edit" method = "GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
+                                            <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        </form>
                                     <li>
                                         <form method="POST" action="/listings/<?php echo e($listing->id); ?>">
                                             <?php echo csrf_field(); ?>

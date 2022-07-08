@@ -1,7 +1,7 @@
 <?php
     use App\Libraries\HashMap;
     $map = new HashMap("String", "Array");
-    $base = "http://college_marketplace.test/shop/all";
+    $base = URL::to('/shop/all');
 
     function deconstructUrl($input, $map){
         $data = $input;
@@ -24,9 +24,6 @@
                 }
             }
         );
-
-        // Remove last character since key value pairs will end in &.
-        // With no key value pairs the last character is a ? so that would need to be removed anyways.
         return substr($base, 0, -1);
     }
 
@@ -61,18 +58,6 @@
         }
         return $nextMap;
     }
-
-    // whats in your map is currenlty whats in your url query,
-    // currently the state of the page
-    // its okay if a key value pair is not present
-    
-
-
-    // button is selected -> a -> is clicked
-    //what ever the state is to check if it is enabled
-    // toggleParam($kvs, "gender", "male", $pageEl.selected)
-    // $url = urlFactory($base, $kvs)
-    // href={{urlFactory($base, toggleParam($kvs, $pageEl.name))}}
 ?>
 
 <link rel="stylesheet" types ="text/css" href="/css/search.css" />
@@ -85,10 +70,6 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    
-   
-    
-
     <div style="position: relative; overflow:hidden;">
         <input type="checkbox" id="show-filter" class="show-filter">
         
@@ -121,6 +102,7 @@
                         <li><a href="<?php echo e(urlBuilder(toggleParam('category', 'electronics', $map), $base)); ?>">Electronics</a></li>
                         <li><a href="<?php echo e(urlBuilder(toggleParam('category', 'kitchen', $map), $base)); ?>">Kitchen</a></li>
                         <li><a href="<?php echo e(urlBuilder(toggleParam('category', 'school accessories', $map), $base)); ?>">School Accessories</a></li>
+                        <li><a href="<?php echo e(urlBuilder(toggleParam('category', 'books', $map), $base)); ?>">Books</a></li>
                     </ul>
                 </li>
 
@@ -148,6 +130,17 @@
                     </ul>
                 </li>
 
+                <li>
+                    <label for="" class="price-label">
+                        <div>
+                            <input type="number" min="0.00" name = "minprice" max="10000.00" step="0.01" placeholder="Min Price" id="minprice" value="<?php echo e(old('minprice', null)); ?>"/>
+                            <h5>To</h5>
+                            <input type="number" min="0.00" name = "maxprice" max="10000.00" step="0.01" placeholder="Max Price" id="maxprice" value="<?php echo e(old('maxprice', null)); ?>" />
+                            <input type="submit" value="GO" onclick="submitPriceRange()"/>    
+                        </div>
+                        <p class="price-error-message" id="error-msg">Please enter min or max</p>
+                    </label>
+                </li>
                 
                 <li>
                     <input type="checkbox" id="dist">
@@ -177,16 +170,89 @@
                 </li>
             </ul>
         </div>
-        
 
+        <div class="filters-applied-container">
+            <ul class="filters-applied-list" id="filters-ul">
+                  <?php
+                        $data = Request::except('_token');
+                        foreach ( $data as $key => $values) {
+                            $value = explode(",", $values);
+                            foreach($value as $val){
+                                $response = urlBuilder(toggleParam($key, $val, $map), $base);
+                                ?>
+                                    <li><span><?php echo e($key); ?>: </span><?php echo e($val); ?><a href="<?php echo e($response); ?>"><i class='fa-solid fa-xmark'></i></a></li>
+                                <?php
+                            }
+                        }
+                  ?>
+            </ul>
+        </div>
         
         <div class = "listings-parent-container" style="min-height: 100vh;">
             <?php echo $__env->make('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings), 'displayTags' => true], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
     </div>
     <script>
-        function add(val){
-            $( "#"+val ).toggleClass( 'className', ".picked" );
+        function isEmpty(val){
+            return (val === undefined || val == null || val.length <= 0) ? true : false;
+        }
+
+        function submitPriceRange(){
+            //creating a map from the current url string including parameters
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            entries = urlParams.entries();
+            const myMap = new Map();
+            for(const entry of entries) {
+                let key = entry[0];
+                let values = entry[1].split(",");
+                let set = new Set();
+                for(const value of values){
+                    set.add(value);
+                }
+                myMap.set(key, set);
+            }
+
+            var min = document.getElementById('minprice').value;
+            var max = document.getElementById('maxprice').value;
+            console.log(min, max);
+            if(isEmpty(min) && isEmpty(max)){
+                document.getElementById('error-msg').style.display = 'flex';
+                if(myMap.has('minprice')){myMap.delete('minprice');}
+                if(myMap.has('maxprice')){myMap.delete('maxprice');}
+                // console.log(myMap); 
+                // return;/
+            }else{
+                document.getElementById('error-msg').style.display = 'none';
+            }
+            
+            //logic to add minprice
+            if(myMap.has('minprice')){
+                myMap.delete('minprice');
+            }
+            if(!isEmpty(min))
+            {
+                myMap.set('minprice', new Set([min]));
+            }
+
+            // logic to add maxprice
+            if(myMap.has('maxprice')){
+                myMap.delete('maxprice');
+            }
+            if(!isEmpty(max))
+            {
+                myMap.set('maxprice', new Set([max]));
+            }
+
+            if(myMap.has('page')){myMap.delete('page')};
+            var base = "<?php echo e($base); ?>" + "?";
+            for(const x of myMap.entries()){
+                let key =x[0];
+                let values = Array.from(x[1]).join(',');
+                base = base + key + "=" + values + "&";
+            }
+            base = base.slice(0,-1);
+            location.assign(base);
         }
     </script>
  <?php echo $__env->renderComponent(); ?>

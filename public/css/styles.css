@@ -66,7 +66,7 @@ li{
     align-items: center;
     justify-content: center;
     background-color: var(--dark-color);
-    background:url("../images/rotunda.jpg");
+    background:url("../images/old-cabell.jpg");
     background-repeat:  no-repeat;
     background-position:bottom;
     background-size: cover;
@@ -246,7 +246,7 @@ li{
 
 @media(max-width: 480px){
     .listings-parent-container{
-        padding: 1em 0 !important;
+        padding: 0em 20px !important;
     }
 }
 /* end list tag styling */

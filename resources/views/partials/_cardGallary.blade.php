@@ -16,7 +16,7 @@
                     <x-gallery-card :listing="$listing" :displayTags="$displayTags"/>
                 @endforeach
             @else
-                <p>NO Listings Found!</p>
+                <p class="empty-gallary-message">NO Listings Found!</p>
             @endunless
             
         </ul>
@@ -28,14 +28,14 @@
                 @if($listings->currentPage() > 1)
                     {{-- <a class="button1 paginate-previous" href="{{ $listings->previousPageUrl()}}">Previous</a> --}}
                     <a class="button1 paginate-previous" href="{{$listings->appends(request()->query())->previousPageUrl()}}">Previous</a>
-                @else
+                @elseif($listings->hasPages())
                     {{-- first page --}}
                     <a class="button1 paginate-previous">First Page</a>
                 @endif
                 @if($listings->hasMorePages())
                     {{-- <a class ="button1 paginate-next" href="{{ $listings->nextPageUrl() }}">Next</a> --}}
                     <a class="button1 paginate-next" href="{{$listings->appends(request()->query())->nextPageUrl()}}">Next</a>
-                @else
+                @elseif($listings->hasPages())
                     {{-- last page --}}
                     <a class ="button1 paginate-next" >Last Page</a>
                 @endif
