@@ -84,7 +84,7 @@
                             <div class="categories">
                                 <h4 class="spacer">Categories:</h4>
                                 @foreach($categories as $category)
-                                    <a href="/category?category={{$category}}">{{$category}}</a>
+                                    <a href="/shop/all?type=all&category={{$category}}">{{$category}}</a>
                                 @endforeach
                             </div> 
                         </div>  
@@ -105,9 +105,19 @@
                             <ul>
                                 <li>
                                     @if($currentUser != null and $currentUser->rentableFavorites != null and in_array($rentable->id, explode(", " , $currentUser->rentableFavorites)))
-                                        <a href="/users/removefavorite?type=rentable&id={{$rentable->id}}"><i class="fa-solid fa-heart saved"></i></a>
+                                        <form action="/users/removefavorite" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="type" value="rentable">
+                                            <input type="hidden" name="id" value={{$rentable->id}}>
+                                            <button><i class="fa-solid fa-heart saved"></i></button>
+                                        </form>
                                     @else
-                                        <a href="/users/addfavorite?type=rentable&id={{$rentable->id}}"><i class="fa-solid fa-heart bouncy"></i></a>
+                                        <form action="/users/addfavorite" method="GET">
+                                            @csrf
+                                            <input type="hidden" name="type" value="rentable">
+                                            <input type="hidden" name="id" value="{{$rentable->id}}">
+                                            <button><i class="fa-solid fa-heart bouncy"></i></button>
+                                        </form>
                                     @endif
                                 </li>
                                 
@@ -123,7 +133,12 @@
                                             </select>
                                         </form>
                                     </li>
-                                    <li><a href="/rentables/{{$rentable->id}}/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+                                    <li>
+                                        <form action="/rentables/{{$rentable->id}}/edit" method="GET">
+                                            @csrf
+                                            <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        </form>
+                                    </li>
                                     <li>
                                         <form method="POST" action="/rentables/{{$rentable->id}}">
                                             @csrf

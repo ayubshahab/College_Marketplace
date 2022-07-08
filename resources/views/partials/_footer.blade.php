@@ -27,7 +27,12 @@
           <li class = "footer-links"><a href="/services">Services</a></li>
           <li class = "footer-links"><a href="/about">About US</a></li>
           <li class = "footer-links"><a href="/features">Features</a></li>
-          <li class = "footer-links"><a href="/users/loginRegister">Login</a></li>
+          @guest
+            <li class = "footer-links"><a href="/login">Login</a></li>
+          @endguest
+          @auth
+            <li class = "footer-links"><a href="{{Request::fullUrl() }}">Login</a></li>  
+          @endauth
         </div>
         <div class="col">
           <h3>Newsletter <div class="underline"><span></span></div></h3>

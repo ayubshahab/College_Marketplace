@@ -93,7 +93,7 @@
                             <div class="categories">
                                 <h4 class="spacer">Categories:</h4>
                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <a href="/category?category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
+                                    <a href="/shop/all?type=all&category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div> 
                         </div>  
@@ -128,9 +128,19 @@
                             <ul>
                                 <li>
                                     <?php if($currentUser != null and $currentUser->rentableFavorites != null and in_array($rentable->id, explode(", " , $currentUser->rentableFavorites))): ?>
-                                        <a href="/users/removefavorite?type=rentable&id=<?php echo e($rentable->id); ?>"><i class="fa-solid fa-heart saved"></i></a>
+                                        <form action="/users/removefavorite" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="type" value="rentable">
+                                            <input type="hidden" name="id" value=<?php echo e($rentable->id); ?>>
+                                            <button><i class="fa-solid fa-heart saved"></i></button>
+                                        </form>
                                     <?php else: ?>
-                                        <a href="/users/addfavorite?type=rentable&id=<?php echo e($rentable->id); ?>"><i class="fa-solid fa-heart bouncy"></i></a>
+                                        <form action="/users/addfavorite" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="type" value="rentable">
+                                            <input type="hidden" name="id" value="<?php echo e($rentable->id); ?>">
+                                            <button><i class="fa-solid fa-heart bouncy"></i></button>
+                                        </form>
                                     <?php endif; ?>
                                 </li>
                                 
@@ -146,7 +156,12 @@
                                             </select>
                                         </form>
                                     </li>
-                                    <li><a href="/rentables/<?php echo e($rentable->id); ?>/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+                                    <li>
+                                        <form action="/rentables/<?php echo e($rentable->id); ?>/edit" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        </form>
+                                    </li>
                                     <li>
                                         <form method="POST" action="/rentables/<?php echo e($rentable->id); ?>">
                                             <?php echo csrf_field(); ?>

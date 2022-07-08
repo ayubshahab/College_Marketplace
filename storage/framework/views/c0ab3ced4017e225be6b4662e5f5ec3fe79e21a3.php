@@ -21,7 +21,7 @@
 
                 
                 <li>
-                    <a class="desktop-link">Buy</a>
+                    <a class="desktop-link">Buy </a>
                     <input type="checkbox" id="show-features">
                     <label for="show-features" style="position: relative;">Buy <span class="down-arrow"></span> </label>
                     <ul>
@@ -92,6 +92,10 @@
             <input type="text" name = "search" placeholder="Type Something to Search..." required>
             <button type="submit" class="go-icon"><i class="fas fa-long-arrow-alt-right"></i></button>
         </form>
+        <div class="search-message">
+            <span></span>
+            <p>Please keep the search generic and consise. We can't compete with Google.</p>
+        </div>
     </nav>
     <script>
         // var form = document.getElementById("logout-form");

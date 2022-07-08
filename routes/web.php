@@ -27,6 +27,7 @@ use App\Http\Controllers\GoogleController;
 // main routes
 Route::get('/', [Controller::class, 'index']);
 Route::get('/shop/all', [Controller::class, 'search']);
+Route::get('/pricerangefilter', [Controller::class, 'pricerangefilter']);
 
 // supplementary routes
 Route::get('/features', [Controller::class, 'features']);

@@ -40,6 +40,7 @@ class Controller extends BaseController
     }
 
     public function search(Request $request){
+        // dd(\Request::getRequestUri());
         $map = new HashMap("String", "Array");
         $input = $request->except('_token');
         foreach ( $input as $key => $value) {
@@ -119,9 +120,15 @@ class Controller extends BaseController
 
     public function getListingsQuery(Request $map){
         // dd($map);
+        // "type" => "all"
+    //   "condition" => "new,slightly used"
+    //   "negotiable" => "fixed"
+    //   "minprice" => "23"
         $map = $map->except('_token', 'type', 'page');
         $string = "Select * from listings as l where ";
         foreach($map as $key => $values){
+            // dd($key);
+            // dd($values);
             if($key == "search"){
                 $arrayValues = explode(" ", $values);
                 $string = $string . "(" ;
@@ -136,13 +143,36 @@ class Controller extends BaseController
                 }
                 $string = substr($string, 0, -4);
                 $string = $string . ")";
+                // dd('top branch');
             }elseif($key == 'tags'){
                 $string = $string . " (" ;
                 $string = $string . "l.tags LIKE '%" . $values . "%'";
                 $string = $string . ")";
-            }
-            else{
+            }elseif($key == 'category'){
+                //can have multiple categories selected
+                $categories = explode(",", $values);
+                $string = $string . "(" ;
+                foreach($categories as $category){
+                    $string = $string . "l.category LIKE '%" . $category . "%' OR ";
+                }
+                $string = substr($string, 0, -4);
+                $string = $string . ")";
+                // $string = $string . " (" ;
+                // $string = $string . "l.category LIKE '%" . $values . "%'";
+                // $string = $string . ")";
+                // dd('third branch');
+
+            }elseif($key=='minprice'){
+                $string = $string . "(" ;
+                $string = $string . "l.price >= " . $values;
+                $string = $string . ")" ;
+            }elseif($key=="maxprice"){
+                $string = $string . "(" ;
+                $string = $string . "l.price <= " . $values;
+                $string = $string . ")" ;
+            }else{
                 $arrayValues = explode(",", $values);
+                // dd($arrayValues);
                 $string = $string . "(" ;
                 foreach($arrayValues as $value ){
                     $string = $string . "l." . $key . " = '" . $value . "' OR ";
@@ -180,6 +210,25 @@ class Controller extends BaseController
                 $string = $string . " (" ;
                 $string = $string . "r.tags LIKE '%" . $values . "%'";
                 $string = $string . ")";
+            }elseif($key == 'category'){
+                $categories = explode(",", $values);
+                $string = $string . "(" ;
+                foreach($categories as $category){
+                    $string = $string . "r.category LIKE '%" . $category . "%' OR ";
+                }
+                $string = substr($string, 0, -4);
+                $string = $string . ")";
+                // $string = $string . " (" ;
+                // $string = $string . "r.category LIKE '%" . $values . "%'";
+                // $string = $string . ")";
+            }elseif($key=='minprice'){
+                $string = $string . "(" ;
+                $string = $string . "r.rental_charging >= " . $values;
+                $string = $string . ")" ;
+            }elseif($key=="maxprice"){
+                $string = $string . "(" ;
+                $string = $string . "r.rental_charging <= " . $values;
+                $string = $string . ")" ;
             }else{
                 $arrayValues = explode(",", $values);
                 $string = $string . "(" ;

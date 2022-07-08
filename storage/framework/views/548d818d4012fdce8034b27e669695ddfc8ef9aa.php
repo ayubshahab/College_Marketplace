@@ -27,7 +27,12 @@
           <li class = "footer-links"><a href="/services">Services</a></li>
           <li class = "footer-links"><a href="/about">About US</a></li>
           <li class = "footer-links"><a href="/features">Features</a></li>
-          <li class = "footer-links"><a href="/users/loginRegister">Login</a></li>
+          <?php if(auth()->guard()->guest()): ?>
+            <li class = "footer-links"><a href="/login">Login</a></li>
+          <?php endif; ?>
+          <?php if(auth()->guard()->check()): ?>
+            <li class = "footer-links"><a href="<?php echo e(Request::fullUrl()); ?>">Login</a></li>  
+          <?php endif; ?>
         </div>
         <div class="col">
           <h3>Newsletter <div class="underline"><span></span></div></h3>

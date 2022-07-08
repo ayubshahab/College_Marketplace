@@ -132,7 +132,7 @@ unset($__errorArgs, $__bag); ?>
                             <div class ="conditionBox">
                                  <?php
                                     $categories = explode(", ", $rentable->category);
-                                    while(count($categories)<5)
+                                    while(count($categories)<6)
                                         array_push($categories, '')
                                     
                                 ?>
@@ -147,7 +147,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e($categories[3] == 'Furniture' ? 'checked' : ''); ?>
 
-                                        <?php echo e($categories[4] == 'Furniture' ? 'checked' : ''); ?>>
+                                        <?php echo e($categories[4] == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[5] == 'Furniture' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
@@ -161,7 +165,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e($categories[3]  == 'Clothes' ? 'checked' : ''); ?>
 
-                                        <?php echo e($categories[4]  == 'Clothes' ? 'checked' : ''); ?>>
+                                        <?php echo e($categories[4]  == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[5]  == 'Clothes' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
@@ -174,7 +182,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e($categories[3]  == 'Electronics' ? 'checked' : ''); ?>
 
-                                        <?php echo e($categories[4] == 'Electronics' ? 'checked' : ''); ?>>
+                                        <?php echo e($categories[4] == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[5] == 'Electronics' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
@@ -187,7 +199,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e($categories[3]  == 'Kitchen' ? 'checked' : ''); ?>
 
-                                        <?php echo e($categories[4]  == 'Kitchen' ? 'checked' : ''); ?>>
+                                        <?php echo e($categories[4]  == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[5]  == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
@@ -200,8 +216,29 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e($categories[3]  == 'School Accessories' ? 'checked' : ''); ?>
 
-                                        <?php echo e($categories[4] == 'School Accessories' ? 'checked' : ''); ?>>
+                                        <?php echo e($categories[4] == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[5] == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxTen">School Accessories</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
+                                        <?php echo e($categories[0]  == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[1]  == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[2]  == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[3]  == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[4] == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e($categories[5] == 'Books' ? 'checked' : ''); ?>
+
+                                        >
+                                        <label for="checkboxEleven">Books</label>
                                     </li>
                                 </ul>
                                 <?php $__errorArgs = ['category'];
@@ -401,9 +438,9 @@ unset($__errorArgs, $__bag); ?>
                 }
             })
 
-            var base_color = "rgb(230,230,230)";
+            var base_color = "black";
             // var active_color = "rgb(237, 40, 70)";
-            var active_color = "#cc5500";
+            var active_color = "#db6657";
 
             var child = 1;
             var length = $("section").length - 1;

@@ -87,7 +87,7 @@
                             <div class ="conditionBox">
                                  @php
                                     $categories = explode(", ", $rentable->category);
-                                    while(count($categories)<5)
+                                    while(count($categories)<6)
                                         array_push($categories, '')
                                     
                                 @endphp
@@ -98,7 +98,9 @@
                                         {{ $categories[1] == 'Furniture' ? 'checked' : '' }}
                                         {{ $categories[2] == 'Furniture' ? 'checked' : '' }}
                                         {{ $categories[3] == 'Furniture' ? 'checked' : '' }}
-                                        {{ $categories[4] == 'Furniture' ? 'checked' : '' }}>
+                                        {{ $categories[4] == 'Furniture' ? 'checked' : '' }}
+                                        {{ $categories[5] == 'Furniture' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
@@ -108,7 +110,9 @@
                                         {{ $categories[1]  == 'Clothes' ? 'checked' : '' }}
                                         {{ $categories[2]  == 'Clothes' ? 'checked' : '' }}
                                         {{ $categories[3]  == 'Clothes' ? 'checked' : '' }}
-                                        {{ $categories[4]  == 'Clothes' ? 'checked' : '' }}>
+                                        {{ $categories[4]  == 'Clothes' ? 'checked' : '' }}
+                                        {{ $categories[5]  == 'Clothes' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
@@ -117,7 +121,9 @@
                                         {{ $categories[1] == 'Electronics' ? 'checked' : '' }}
                                         {{ $categories[2]  == 'Electronics' ? 'checked' : '' }}
                                         {{ $categories[3]  == 'Electronics' ? 'checked' : '' }}
-                                        {{ $categories[4] == 'Electronics' ? 'checked' : '' }}>
+                                        {{ $categories[4] == 'Electronics' ? 'checked' : '' }}
+                                        {{ $categories[5] == 'Electronics' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
@@ -126,7 +132,9 @@
                                         {{ $categories[1]  == 'Kitchen' ? 'checked' : '' }}
                                         {{ $categories[2]  == 'Kitchen' ? 'checked' : '' }}
                                         {{ $categories[3]  == 'Kitchen' ? 'checked' : '' }}
-                                        {{ $categories[4]  == 'Kitchen' ? 'checked' : '' }}>
+                                        {{ $categories[4]  == 'Kitchen' ? 'checked' : '' }}
+                                        {{ $categories[5]  == 'Kitchen' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
@@ -135,8 +143,21 @@
                                         {{ $categories[1]  == 'School Accessories' ? 'checked' : '' }}
                                         {{ $categories[2]  == 'School Accessories' ? 'checked' : '' }}
                                         {{ $categories[3]  == 'School Accessories' ? 'checked' : '' }}
-                                        {{ $categories[4] == 'School Accessories' ? 'checked' : '' }}>
+                                        {{ $categories[4] == 'School Accessories' ? 'checked' : '' }}
+                                        {{ $categories[5] == 'School Accessories' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxTen">School Accessories</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
+                                        {{ $categories[0]  == 'Books' ? 'checked' : '' }}
+                                        {{ $categories[1]  == 'Books' ? 'checked' : '' }}
+                                        {{ $categories[2]  == 'Books' ? 'checked' : '' }}
+                                        {{ $categories[3]  == 'Books' ? 'checked' : '' }}
+                                        {{ $categories[4] == 'Books' ? 'checked' : '' }}
+                                        {{ $categories[5] == 'Books' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxEleven">Books</label>
                                     </li>
                                 </ul>
                                 @error('category')
@@ -274,9 +295,9 @@
                 }
             })
 
-            var base_color = "rgb(230,230,230)";
+            var base_color = "black";
             // var active_color = "rgb(237, 40, 70)";
-            var active_color = "#cc5500";
+            var active_color = "#db6657";
 
             var child = 1;
             var length = $("section").length - 1;

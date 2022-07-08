@@ -24,7 +24,7 @@ class RentableFactory extends Factory
         $rentalType = array('Hourly', 'Daily', 'Weekly', 'Monthly');
         $rentalCondition = array('New' , 'Good', 'Slightly Used', 'Used Normal Wear');
         $rentalStatus = array('Rented', 'Available');
-        $rentalCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories');
+        $rentalCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories', "Books");
         $negotiable = array('Fixed', 'Negotiable');
         return [
             // ownership
