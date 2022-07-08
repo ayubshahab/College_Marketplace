@@ -46,7 +46,7 @@ class GoogleController extends Controller
                 $saveUser = User::where('email', $user->getEmail())->first();
             }
             Auth::loginUsingId($saveUser->id);
-
+            echo "here";
             return redirect('/')->with("message","User logged In");
         } catch (\Throwable $th) {
             return redirect('/login');
