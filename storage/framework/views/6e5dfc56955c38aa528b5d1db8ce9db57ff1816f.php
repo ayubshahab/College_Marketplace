@@ -14,7 +14,7 @@
 <ul class = "unordered-tags-list">
     <?php $__currentLoopData = $tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <li class="tags-list-item">
-            <a href="/shop/all?tag=<?php echo e($tag); ?>">
+            <a href="/shop/all?type=all&tags=<?php echo e($tag); ?>">
                 <?php echo e($tag); ?>
 
             </a>

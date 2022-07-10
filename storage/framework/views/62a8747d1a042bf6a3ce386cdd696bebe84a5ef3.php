@@ -12,15 +12,19 @@
 <?php unset($__defined_vars); ?>
 <li class="cards_item" data-aos="zoom-in" data-aos-once="true">
     <div class="card-type">
-        <div class="card-type-inner">
-            <?php if($listing instanceof \App\Models\Listing): ?>
+        <?php if($listing instanceof \App\Models\Listing): ?>
+            <div class="card-type-inner for-sale">
                 <h5>For Sale</h5>
-            <?php elseif($listing instanceof \App\Models\Rentable): ?>
+            </div>
+        <?php elseif($listing instanceof \App\Models\Rentable): ?>
+            <div class="card-type-inner for-rent">
                 <h5>For Rent</h5>
-            <?php else: ?>
-                <h5>For Lease</h5>
-            <?php endif; ?>
+            </div>
+        <?php elseif($listing instanceof \App\Models\Sublease): ?>
+        <div class="card-type-inner for-lease">
+            <h5>For Lease</h5>
         </div>
+        <?php endif; ?>
     </div>
     <div class="card"> 
         <div class="card_image">

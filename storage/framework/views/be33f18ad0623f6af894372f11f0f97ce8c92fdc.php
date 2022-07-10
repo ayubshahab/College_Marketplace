@@ -58,14 +58,14 @@ unset($__errorArgs, $__bag); ?>
                                 Price Negotiable, Fixed, or Free
                             </p>
                             <div class="condition-box">
-                                <select name="negotiableFree" id="">
-                                    <option value="Fixed" <?php echo e((old("negotiableFree") == 'Fixed' ? "selected":"")); ?>>Fixed</option>
+                                <select name="negotiable" id="">
+                                    <option value="Fixed" <?php echo e((old("negotiable") == 'Fixed' ? "selected":"")); ?>>Fixed</option>
                                     
-                                    <option value="Negotiable" <?php echo e((old("negotiableFree") == 'Negotiable' ? "selected":"")); ?>>Negotiable/ OBO (best offer)</option>
+                                    <option value="Negotiable" <?php echo e((old("negotiable") == 'Negotiable' ? "selected":"")); ?>>Negotiable/ OBO (best offer)</option>
 
-                                    <option value="Free" <?php echo e((old("negotiableFree") == 'Free' ? "selected":"")); ?>>Free</option>
+                                    <option value="Free" <?php echo e((old("negotiable") == 'Free' ? "selected":"")); ?>>Free</option>
                                 </select>
-                                <?php $__errorArgs = ['negotiableFree'];
+                                <?php $__errorArgs = ['negotiable'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -75,7 +75,6 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                
                             </div>
 
                             <p class="create-listing-header">Condition</p>
@@ -86,7 +85,6 @@ unset($__errorArgs, $__bag); ?>
                                     <option value="Slightly Used" <?php echo e((old("condition") == 'Slightly Used' ? "selected":"")); ?>>Slightly Used </option>
                                     <option value="Used Normal Wear" <?php echo e((old("condition") == 'Used Normal Wear' ? "selected":"")); ?>>Used Normal Wear </option>
                                 </select>
-                                
                                 <?php $__errorArgs = ['condition'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -112,7 +110,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Furniture' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Furniture' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
@@ -126,7 +128,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Clothes' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Clothes' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
@@ -139,7 +145,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Electronics' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Electronics' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
@@ -152,7 +162,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Kitchen' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Kitchen' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
@@ -165,8 +179,29 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'School Accessories' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'School Accessories' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxTen">School Accessories</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
+                                        <?php echo e(old('category.0') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Books' ? 'checked' : ''); ?>
+
+                                        >
+                                        <label for="checkboxEleven">Books</label>
                                     </li>
                                 </ul>
                                 <?php $__errorArgs = ['category'];
@@ -283,7 +318,11 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-                            
+                            <input type="hidden" name="latitude" id ="latitude" value = "<?php echo e(null); ?>">
+                            <input type="hidden" name="longitude" id = "longitude" value = "<?php echo e(null); ?>">
+
+                            <p class="create-listing-header">Use My Location:</p>
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
                         </section>
 
 
@@ -300,19 +339,36 @@ unset($__errorArgs, $__bag); ?>
             </div>
         </div>
     </div>
+
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <script src="../../../node_modules/reverse-geocode/reverse-geocode.js"></script>
     <script>
 
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
+                navigator.geolocation.getCurrentPosition(showPosition, showError, options);
             } else { 
                 console.log("location not supported")
             }
         }
 
         function showPosition(position) {
-           console.log("Latitude: " + position.coords.latitude + 
-            "<br>Longitude: " + position.coords.longitude);
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            // displayLocation(latitude,longitude);
+            // const reverse = require('reverse-geocode');
+            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
         }
 
         function showError(error) {
@@ -332,13 +388,38 @@ unset($__errorArgs, $__bag); ?>
             }
         }
 
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 1000,
+            maximumAge: 0
+        };
+
+        function displayLocation(latitude,longitude){
+            var request = new XMLHttpRequest();
+
+            var method = 'GET';
+            var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true';
+            var async = true;
+
+            request.open(method, url, async);
+            request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    var data = JSON.parse(request.responseText);
+                    var address = data.results[0];
+                    console.log(address.formatted_address);
+                    // document.write(address.formatted_address);
+                }
+            };
+            request.send();
+        };
+
         // source code from code pen
         // link: https://codepen.io/webbarks/pen/QWjwWNV
         // script to change between view cards for create listing
         $( document ).ready(function() {
-            var base_color = "rgb(230,230,230)";
+            var base_color = "black";
             // var active_color = "rgb(237, 40, 70)";
-            var active_color = "#cc5500";
+            var active_color = "#db6657";
 
             var child = 1;
             var length = $("section").length - 1;

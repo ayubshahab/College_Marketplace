@@ -30,7 +30,7 @@
 <?php endif; ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             <?php else: ?>
-                <p>NO Listings Found!</p>
+                <p class="empty-gallary-message">NO Listings Found!</p>
             <?php endif; ?>
             
         </ul>
@@ -38,8 +38,21 @@
         <div class="pagination-container">
             <?php if($listings instanceof \Illuminate\Pagination\Paginator ||
             $listings instanceof \Illuminate\Pagination\LengthAwarePaginator): ?>
-                <?php echo e($listings->appends(request()->query())->links()); ?>
-
+                
+                <?php if($listings->currentPage() > 1): ?>
+                    
+                    <a class="button1 paginate-previous" href="<?php echo e($listings->appends(request()->query())->previousPageUrl()); ?>">Previous</a>
+                <?php elseif($listings->hasPages()): ?>
+                    
+                    <a class="button1 paginate-previous">First Page</a>
+                <?php endif; ?>
+                <?php if($listings->hasMorePages()): ?>
+                    
+                    <a class="button1 paginate-next" href="<?php echo e($listings->appends(request()->query())->nextPageUrl()); ?>">Next</a>
+                <?php elseif($listings->hasPages()): ?>
+                    
+                    <a class ="button1 paginate-next" >Last Page</a>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
