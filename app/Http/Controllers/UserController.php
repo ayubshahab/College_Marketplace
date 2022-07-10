@@ -7,6 +7,9 @@ use App\Models\Listing;
 use App\Models\WatchItem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
+use phpDocumentor\Reflection\Types\Null_;
 
 class UserController extends Controller
 {
@@ -53,14 +56,131 @@ class UserController extends Controller
     }*/
 
     public function manage(){
-        return view('users.manage' , 
-        // myListings needs to include listings, rentables, & sublease items
+        //call function to update all matches found
+        $userWatchItems = WatchItem::latest()->where('user_id', 'like', auth()->user()->id)->orderBy('matches_found', 'desc')->get();
+        // dd($userWatchItems);
+        $this->recommendMatches($userWatchItems);
+        // dd('test');
+        return view('users.manage' ,
         ['myListings'=> auth()->user()->allPosts(),
         'likedList' => auth()->user()->allLiked(),
-        'watchList' => WatchItem::latest()->where('user_id', 'like', auth()->user()->id)->get(),
-        // would need to create a function to go through key words and find matches for each item in the watch list
-        //would retun a json of key value pairs
-        'matches'=>Listing::latest()->take(10)->get()]);
+        'watchList' => $userWatchItems]);
+    }
+
+    //words aut est rem dicta animi et 
+    // Ipsam Est Ut.
+    // sed 
+    // sunt sed
+    public function recommendMatches(Collection $userWatchItems){
+        // dd($userWatchItems);
+        foreach($userWatchItems as $watchItem){
+            $watchTags = explode(", ", $watchItem->key_tags);
+            if($watchItem->type == "listing"){
+                $string = "Select * from listings as l where ";
+                $string = $string . "(" ;
+                foreach($watchTags as $value){
+                    $string = $string . " (" ;
+                    $string = $string . "l.item_name LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.negotiable LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.condition LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.category LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.tags LIKE '%" . $value . "%' OR ";
+                    $string = $string . "l.description LIKE '%" . $value . "%' OR ";
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                    $string = $string . " AND ";
+                }
+
+                if($watchItem->dont_recommend != null and $watchItem != ""){
+                    $dontRecommendArray = explode(", ", $watchItem->dont_recommend);
+                    $string = $string . "(" ;
+                    foreach($dontRecommendArray as $recommendation){
+                        $string = $string . "l.id != " . $recommendation . " AND ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ") AND ";
+                }
+
+                $string = substr($string, 0, -4);
+                $string = $string . ") limit 10 ";
+
+                // dd($string);
+                $listingQuery =DB::select($string);
+                // dd($listingQuery);
+
+                $matchesFound = array();
+                foreach($listingQuery as $match){
+                    array_push($matchesFound, $match->id);
+                }
+                if(!empty($matchesFound)){
+                    $watchItem->matches_found = implode(', ', $matchesFound);
+                }else{
+                    $watchItem->matches_found = NULL;
+                }
+                $watchItem->save();
+            }elseif($watchItem->type == 'rentable'){
+                $string = "Select * from rentables as r where ";
+                $string = $string . "(" ;
+                foreach($watchTags as $value){
+                    $string = $string . " (" ;
+                    $string = $string . "r.rental_title LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.negotiable LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.condition LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.category LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.tags LIKE '%" . $value . "%' OR ";
+                    $string = $string . "r.description LIKE '%" . $value . "%' OR ";
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                    $string = $string . " AND ";
+                }
+
+                if($watchItem->dont_recommend != null and $watchItem != ""){
+                    $dontRecommendArray = explode(", ", $watchItem->dont_recommend);
+                    $string = $string . "(" ;
+                    foreach($dontRecommendArray as $recommendation){
+                        $string = $string . "r.id != " . $recommendation . " AND ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ") AND ";
+                }
+
+                $string = substr($string, 0, -4);
+                $string = $string . ") limit 10";
+                // dd($string);
+                $listingQuery =DB::select($string);
+
+                $matchesFound = array();
+                foreach($listingQuery as $match){
+                    array_push($matchesFound, $match->id);
+                }
+                if(!empty($matchesFound)){
+                    $watchItem->matches_found = implode(', ', $matchesFound);
+                }else{
+                    $watchItem->matches_found = NULL;
+                }
+                $watchItem->save();
+            }elseif($watchItem->type == 'lease'){
+
+            }   
+        }
+        return;
+    }   
+
+    public function removeRecommendedItem(Request $request){
+        // dd($request->all());
+        $recommendedItem = WatchItem::find($request->watchitem_id);
+        $dontRecommendArray = null;
+        if($recommendedItem->dont_recommend !=null){
+            $dontRecommendArray = explode(", ", $recommendedItem->dont_recommend);
+        }else{
+            $dontRecommendArray = array();
+        }
+        if(!in_array($request->recommendation_id, $dontRecommendArray)){
+            array_push($dontRecommendArray, $request->recommendation_id);
+            $recommendedItem->dont_recommend = implode(", ", $dontRecommendArray);
+            $recommendedItem->save();
+        }
+        return back()->with('message', "The Recommended Item will no longer be associated with the WatchList");
     }
 
     public function createWatchItem(Request $request){
@@ -74,6 +194,11 @@ class UserController extends Controller
         ]);
         $newWatchItem = WatchItem::create($formFields);
         return back()->with('message', 'Watch Item Created!');
+    }
+
+    public function deleteWatchItem(Request $request, WatchItem $watchItem){
+        $watchItem->delete();
+        return back()->with('message', "Watch Item Deleted Successfully!");
     }
 
     public function addFavorite(Request $request){

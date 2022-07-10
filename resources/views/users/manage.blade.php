@@ -1,3 +1,7 @@
+@inject('listingProvider', 'App\Http\Controllers\ListingController')
+@inject('rentableProvider', 'App\Http\Controllers\RentablesController')
+@inject('userProvider', 'App\Http\Controllers\UserController')
+
 <x-layout>
     <link rel="stylesheet" types="text/css" href="/css/manage.css">
     <!-- CSS -->
@@ -150,26 +154,149 @@
                         @if(count($watchList) != 0)
                             @foreach($watchList as $watchItem)
                             <div class='watchitem'>
-                                <h3>{{$watchItem->watchitem_title}}</h3>
-                                <h5>{{$watchItem->type}} | Match Rate:  {{$watchItem->match_rate}}</h5>
+                                <div class="watchitem-header">
+                                    <div class="watchitem-heading-inner">
+                                        <h3>{{$watchItem->watchitem_title}}</h3>
+                                        @if($watchItem->type == "listing")
+                                            <h5><span class="watchitem-listing">{{$watchItem->type}}</span> | Match Rate:  {{$watchItem->match_rate}}%</h5>
+                                        @elseif($watchItem->type == "rentable")
+                                            <h5><span class="watchitem-rentable">{{$watchItem->type}}</span> | Match Rate:  {{$watchItem->match_rate}}%</h5>
+                                        @elseif($watchItem->type == 'lease')
+                                            <h5><span class="watchitem-sublease">{{$watchItem->type}}</span> | Match Rate:  {{$watchItem->match_rate}}%</h5>
+                                        @endif
+                                    </div>
+                                    <div class="watchitem-crud">
+                                        {{-- <form action="" method = "GET">
+                                            @csrf
+                                            <input type="hidden" name="id" value="">
+                                            <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        </form> --}}
+                                        <form method="POST" action="/watchitems/{{$watchItem->id}}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button><i class="fa fa-trash" ></i></button>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="tags-container">
                                     @php
                                         $tags = explode(", ", $watchItem->key_tags);
+                                        $matches = $watchItem->matches_found == null ? null : explode(', ', $watchItem->matches_found) ;
                                     @endphp
                                     <x-listing-tags :tags="$tags"/>
                                 </div>
                                 <div class="found-carousel">
                                     <div class="carousel" aria-label="carousel" Tabindex="0">
                                         <div class="slides">
-                                            @foreach($matches as $match)
-                                                <div class="slides-item" id="slide-1">
-                                                    1
-                                                </div>
-                                            @endforeach
+                                            @if($watchItem->type == 'listing')
+                                                @if( $matches != null)
+                                                    @foreach($matches as $match)
+                                                        <div class="slides-item" id="slide-1">
+                                                            @php
+                                                        
+                                                                $foundMatch = $listingProvider::getListingById($match);
+
+                                                                $imgLinks = null;
+                                                                if(isset($foundMatch->image_uploads)){
+                                                                    $imgLinks = json_decode($foundMatch->image_uploads);
+                                                                    if(is_array($imgLinks)){
+                                                                        $imgLinks = $imgLinks[0];
+                                                                    }
+                                                                }
+
+                                                                $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
+                                                                $link = $hardLink[random_int(0, count($hardLink)-1)];
+                                                            @endphp
+                                                            @if($foundMatch != null)
+                                                                <a href="/listings/{{$foundMatch->id}}">
+                                                                    <img src={{$foundMatch->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset($link) }}  alt="image doesnt exist">
+                                                                </a>
+                                                                <div class="slidesitem-details">
+                                                                    <h1>{{$foundMatch->item_name}}</h1>
+                                                                    <h3>${{$foundMatch->price}}</h3>
+                                                                </div>
+
+                                                                <div class="remove-recommendation">
+                                                                    <form action="/remove_recommendation" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <input type="hidden" name="watchitem_id" value="{{$watchItem->id}}">
+                                                                        <input type="hidden" name="recommendation_id" value="{{$match}}">
+                                                                        <button type="submit"><i class="fa-solid fa-x"></i></button>
+                                                                    </form>
+                                                                </div> 
+                                                                @if($foundMatch->status =='Available')
+                                                                    <div class="status green">
+                                                                    </div>
+                                                                @elseif($foundMatch->status == "Pending")
+                                                                    <div class="status yellow">
+                                                                    </div>
+                                                                @else
+                                                                    <div class="status ">
+                                                                    </div>
+                                                                @endif 
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <p>No matches found. Please stand by as we look for more!</p>
+                                                @endif
+                                            @elseif($watchItem->type == 'rentable')
+                                                @if($matches != null)
+                                                    @foreach($matches as $match)
+                                                        <div class="slides-item" id="slide-1">
+                                                            @php
+                                                                $foundMatch = $rentableProvider::getRentableById($match);
+
+                                                                $imgLinks = null;
+                                                                if(isset($foundMatch->image_uploads)){
+                                                                    $imgLinks = json_decode($foundMatch->image_uploads);
+                                                                    if(is_array($imgLinks)){
+                                                                        $imgLinks = $imgLinks[0];
+                                                                    }
+                                                                }
+
+                                                                $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
+                                                                $link = $hardLink[random_int(0, count($hardLink)-1)];
+                                                            @endphp
+                                                            @if($foundMatch != null)
+                                                                <a href="/rentables/{{$foundMatch->id}}">
+                                                                    <img src={{$foundMatch->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset($link) }}  alt="image doesnt exist">
+                                                                </a>
+                                                                <div class="slidesitem-details">
+                                                                    <h1>{{$foundMatch->rental_title}}</h1>
+                                                                    <h3>${{$foundMatch->rental_charging}}</h3>
+                                                                </div>
+
+                                                                <div class="remove-recommendation">
+                                                                    <form action="/remove_recommendation" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <input type="hidden" name="watchitem_id" value="{{$watchItem->id}}">
+                                                                        <input type="hidden" name="recommendation_id" value="{{$match}}">
+                                                                        <button type="submit"><i class="fa-solid fa-x"></i></button>
+                                                                    </form>
+                                                                </div>  
+
+                                                                {{-- <h1>{{$foundMatch->status}}</h1> --}}
+                                                                @if($foundMatch->status =='Available')
+                                                                    <div class="status green">
+                                                                    </div>
+                                                                @else
+                                                                    <div class="status ">
+                                                                    </div>
+                                                                @endif 
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <p>No matches found. Please stand by as we look for more!</p>
+                                                @endif
+                                            @elseif($watchItem->type == 'lease')
+                                                    <h1>Type is lease</h1>
+                                            @endif
                                         </div>  
                                     </div>
                                 </div>
-                                <div class="bottom-ribbon"></div>
+                                {{-- <div class="bottom-ribbon"></div> --}}
                             </div>
                             @endforeach
                         @endif
@@ -185,7 +312,7 @@
                                 @csrf
                                 <input type="hidden" name="user_id"
                                 value={{auth()->user()->id}}>
-                                <input type="text" placeholder="Title" name="watchitem_title">
+                                <input type="text" placeholder="Title" name="watchitem_title" required>
                                 <div class="watch-tags-container">
                                     <input type="hidden" name="key_tags" id="key_tags">
                                     <ul class="tags-list" id="tags-list">
@@ -200,17 +327,17 @@
                                             <option value="lease">Lease</option>
                                         </select>
                                         <select name="match_rate" id="match_rate" >
-                                            <option value="" disabled selected>Match Rate</option>
-                                            <option value="20">20%</option>
-                                            <option value="40">40%</option>
-                                            <option value="60">60%</option>
-                                            <option value="80">80%</option>
-                                            <option value="100">100%</option>
+                                            {{-- <option value="" disabled selected>Match Rate</option> --}}
+                                            {{-- <option value="20">20%</option> --}}
+                                            {{-- <option value="40">40%</option> --}}
+                                            {{-- <option value="60">60%</option> --}}
+                                            {{-- <option value="80">80%</option> --}}
+                                            <option value="100" selected>100%</option>
                                         </select>
                                     </div>
                                     <div class="right">
                                         <input type="text" placeholder="Press Enter to Add Tag Word"  onkeydown="search(this)" class="input">
-                                        <input type="submit" value="Set Filter" class="submit-form">
+                                        <input type="submit" value="Create" class="submit-form">
                                     </div>
                                 </div>
                             </form>
@@ -229,7 +356,6 @@
         function toggleDiv(id) {
             const myElement = document.getElementById('main-panels-container');
             const options = document.getElementsByClassName('selector');
-            console.log(options);
             for (let i = 0; i < myElement.children.length; i++) {
                 if(i == id){
                     myElement.children[i].style.display = 'flex';

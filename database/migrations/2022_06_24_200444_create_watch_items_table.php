@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('type');
             $table->string('match_rate');
             $table->string('key_tags');
-            $table->string('matches-found')->nullable();
+            $table->string('matches_found')->nullable();
+            $table->string('dont_recommend')->nullable();
             $table->timestamps();
         });
     }

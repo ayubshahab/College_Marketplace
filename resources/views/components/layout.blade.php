@@ -43,17 +43,27 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
         integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
         crossorigin=""/>    
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     </head>
     <body>
         <header style="height: 70px; width: 100%; position: relative;">
             {{-- import the navigation bar --}}
             @include('partials._navigationBar')
         </header>
-        <div class="loading-page" id='loading-page'>
+        {{-- <div class="loading-page" id='loading-page'>
             <div class="loading-icon">
                 <i class="fa fa-spinner fa-spin" style=" color:var(--red-accent-color);"></i>
             </div>
+        </div> --}}
+
+        <div class="loader-wrapper">
+            <span class="loader">
+                <span class="loader-inner">
+                </span>
+            </span>
         </div>
+
         <x-flash-message />
         {{-- this is body where anything can be shown --}}
         {{-- search results, default listings, and etc --}}
@@ -79,6 +89,12 @@
                 document.getElementById('loading-page');
                 page.style.display='none';
             });
+            $(document).ready(function(){
+            $(window).on("load",function(){
+                $(".loader-wrapper").fadeOut("slow");
+            });
+            });
+
         </script>
     </body>
 </html>

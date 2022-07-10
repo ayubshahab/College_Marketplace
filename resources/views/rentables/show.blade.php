@@ -226,9 +226,10 @@
 
     {{-- carousel section --}}
     <section class = "listings-parent-container">
-        {{-- <h1>helo</h1> --}}
-        {{-- @include('partials._rentableCarousel', ['rentables' => $rentables]) --}}
-         @include('partials._rentablesCarousel', ['rentables' => $rentables, 'message' => 'Related Items', 'carouselClass'=>'','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'])
+        {{-- carousel for rentable items --}}
+        @include('partials._rentablesCarousel',
+        ['rentables'=> $rentables, 'message' => 'Items For Rent' , 'carouselClass' => 'slider2',
+        'carouselControls' => 'controls2', 'carouselP' =>' previous previous2', 'carouselN' => 'next next2'])
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    

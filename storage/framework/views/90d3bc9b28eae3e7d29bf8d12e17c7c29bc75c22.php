@@ -12,8 +12,18 @@
     <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
+                <div class="back-button">
+                    <a href="javascript:history.back()" class="button1 b-button">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </a>
+                </div> 
+
                 <div class="info">
-                    
+                    <h1>Lorem ipsum dolor sit amet consectetur.</h1>
+
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eum tempore nam consectetur, possimus dolorum quidem tempora et laboriosam est deleniti sunt modi, provident quasi!</p>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate temporibus ab excepturi doloremque cumque.</p>
                 </div>
                 <div class = "listingFormContainer">
 
@@ -29,7 +39,7 @@
                         >
 
                         
-                        <section class = "listingCard">
+                        <section class = "listingCard default-card">
                             <p class="create-listing-header">Rental Details</p>
                             <input type="text" name = "rental_title" placeholder="Rental Title"  value="<?php echo e(old('rental_title', null)); ?>" />
                             <?php $__errorArgs = ['rental_title'];
@@ -67,7 +77,6 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                
                             </div>
 
                             <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="<?php echo e(old('rental_charging', null)); ?>"/>
@@ -417,7 +426,6 @@ unset($__errorArgs, $__bag); ?>
             })
 
             var base_color = "black";
-            // var active_color = "rgb(237, 40, 70)";
             var active_color = "#db6657";
 
             var child = 1;
@@ -506,6 +514,8 @@ unset($__errorArgs, $__bag); ?>
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
                 currentSection.css('transform','translateX(0)');
+                currentSection.css('display', 'flex');
+                currentSection.css('flex-direction', 'column');
                 currentSection.prevAll('section').css('transform','translateX(-100px)');
                 currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();

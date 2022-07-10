@@ -4,9 +4,20 @@
     <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
+
+                <div class="back-button">
+                    <a href="javascript:history.back()" class="button1 b-button">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </a>
+                </div> 
+
                 <div class="info">
-                    
+                    <h1>Lorem ipsum dolor sit amet consectetur.</h1>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eum tempore nam consectetur, possimus dolorum quidem tempora et laboriosam est deleniti sunt modi, provident quasi!</p>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate temporibus ab excepturi doloremque cumque.</p>
                 </div>
+
                 <div class = "listingFormContainer">
  
                     {{-- SOURCE CODE FROM CODE PEN --}}
@@ -21,7 +32,7 @@
                         >
 
                         {{-- card #1 --}}
-                        <section class = "listingCard">
+                        <section class = "listingCard default-card">
                             <p class="create-listing-header">Item Description</p>
                             <input type="text" name = "item_name" placeholder="Item Title"  value="{{ $listing->item_name}}" />
                             @error('item_name')
@@ -325,6 +336,9 @@
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
                 currentSection.css('transform','translateX(0)');
+                currentSection.css('display', 'flex');
+                currentSection.css('flex-direction', 'column');
+
                 currentSection.prevAll('section').css('transform','translateX(-100px)');
                 currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();
