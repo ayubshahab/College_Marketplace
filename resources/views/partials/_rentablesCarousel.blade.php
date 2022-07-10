@@ -5,47 +5,42 @@
     <div class="container">
         <div class="subcontainer">
             <div class="slider-wrapper">
-                <div id="{{$carouselControls}}">
-                    <button class = "{{$carouselP}}">
-                        <i   class="fa-solid fa-angle-left"></i>
-                    </button>
-                    <button class = "{{$carouselN}}">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </button>
-                </div>
+                @unless(count($rentables) == 0)
+                    <div id="{{$carouselControls}}">
+                        <button class = "{{$carouselP}}">
+                            <i   class="fa-solid fa-angle-left"></i>
+                        </button>
+                        <button class = "{{$carouselN}}">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </button>
+                    </div>
+                @endunless
                 <div class="controller">
                     <div> 
                         <h2>{{$message}}: @php echo count($rentables) @endphp</h2>
                     </div>
                 </div>
                 <br>
-                <div class="my-slider {{$carouselClass}}">
-
-                    {{-- need to loop in here  --}}
-                    
-                    @unless(count($rentables) == 0)
+                @unless(count($rentables) == 0)
+                    <div class="{{$carouselClass}}">
                         @foreach($rentables as $rentable)
                             <x-carousel-card :listing="null" :rentable="$rentable"/>
                         @endforeach
-
-                        @else
-                            <p>No Rentables Found!</p>
-                    @endunless
-                      
-                </div>
+                    </div>
+                @else
+                    <p class="empty-gallary-message">No Rentables Found!</p>
+                @endunless
             </div>
         </div>
     </div>
     <script>
 
         tns({
-            container: ".my-slider",
+            container: ".slider2",
             "slideBy":1,
             "speed":400,
             "nav":false,
-            controlsContainer:"#controls",
-            prevButton:".previous1",
-            nextButton:".next1",
+            controlsContainer:"#controls2",
             responsive:{
                 1500:{
                     items: 5,
@@ -63,7 +58,7 @@
                     items: 3,
                     gutter: 15
                 },
-                768:{
+                700:{
                     items: 2,
                     gutter: 20
                 },

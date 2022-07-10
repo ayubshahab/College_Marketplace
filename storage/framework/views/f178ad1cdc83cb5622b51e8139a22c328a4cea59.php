@@ -1,3 +1,7 @@
+<?php $listingProvider = app('App\Http\Controllers\ListingController'); ?>
+<?php $rentableProvider = app('App\Http\Controllers\RentablesController'); ?>
+<?php $userProvider = app('App\Http\Controllers\UserController'); ?>
+
 <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
 <?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.layout','data' => []] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('layout'); ?>
@@ -200,11 +204,30 @@ unset($__errorArgs, $__bag); ?>
                         <?php if(count($watchList) != 0): ?>
                             <?php $__currentLoopData = $watchList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $watchItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class='watchitem'>
-                                <h3><?php echo e($watchItem->watchitem_title); ?></h3>
-                                <h5><?php echo e($watchItem->type); ?> | Match Rate:  <?php echo e($watchItem->match_rate); ?></h5>
+                                <div class="watchitem-header">
+                                    <div class="watchitem-heading-inner">
+                                        <h3><?php echo e($watchItem->watchitem_title); ?></h3>
+                                        <?php if($watchItem->type == "listing"): ?>
+                                            <h5><span class="watchitem-listing"><?php echo e($watchItem->type); ?></span> | Match Rate:  <?php echo e($watchItem->match_rate); ?>%</h5>
+                                        <?php elseif($watchItem->type == "rentable"): ?>
+                                            <h5><span class="watchitem-rentable"><?php echo e($watchItem->type); ?></span> | Match Rate:  <?php echo e($watchItem->match_rate); ?>%</h5>
+                                        <?php elseif($watchItem->type == 'lease'): ?>
+                                            <h5><span class="watchitem-sublease"><?php echo e($watchItem->type); ?></span> | Match Rate:  <?php echo e($watchItem->match_rate); ?>%</h5>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="watchitem-crud">
+                                        
+                                        <form method="POST" action="/watchitems/<?php echo e($watchItem->id); ?>">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <button><i class="fa fa-trash" ></i></button>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="tags-container">
                                     <?php
                                         $tags = explode(", ", $watchItem->key_tags);
+                                        $matches = $watchItem->matches_found == null ? null : explode(', ', $watchItem->matches_found) ;
                                     ?>
                                     <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
 <?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.listing-tags','data' => ['tags' => $tags]] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
@@ -225,15 +248,115 @@ unset($__errorArgs, $__bag); ?>
                                 <div class="found-carousel">
                                     <div class="carousel" aria-label="carousel" Tabindex="0">
                                         <div class="slides">
-                                            <?php $__currentLoopData = $matches; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $match): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <div class="slides-item" id="slide-1">
-                                                    1
-                                                </div>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($watchItem->type == 'listing'): ?>
+                                                <?php if( $matches != null): ?>
+                                                    <?php $__currentLoopData = $matches; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $match): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <div class="slides-item" id="slide-1">
+                                                            <?php
+                                                        
+                                                                $foundMatch = $listingProvider::getListingById($match);
+
+                                                                $imgLinks = null;
+                                                                if(isset($foundMatch->image_uploads)){
+                                                                    $imgLinks = json_decode($foundMatch->image_uploads);
+                                                                    if(is_array($imgLinks)){
+                                                                        $imgLinks = $imgLinks[0];
+                                                                    }
+                                                                }
+
+                                                                $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
+                                                                $link = $hardLink[random_int(0, count($hardLink)-1)];
+                                                            ?>
+                                                            <?php if($foundMatch != null): ?>
+                                                                <a href="/listings/<?php echo e($foundMatch->id); ?>">
+                                                                    <img src=<?php echo e($foundMatch->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset($link)); ?>  alt="image doesnt exist">
+                                                                </a>
+                                                                <div class="slidesitem-details">
+                                                                    <h1><?php echo e($foundMatch->item_name); ?></h1>
+                                                                    <h3>$<?php echo e($foundMatch->price); ?></h3>
+                                                                </div>
+
+                                                                <div class="remove-recommendation">
+                                                                    <form action="/remove_recommendation" method="POST" enctype="multipart/form-data">
+                                                                        <?php echo csrf_field(); ?>
+                                                                        <input type="hidden" name="watchitem_id" value="<?php echo e($watchItem->id); ?>">
+                                                                        <input type="hidden" name="recommendation_id" value="<?php echo e($match); ?>">
+                                                                        <button type="submit"><i class="fa-solid fa-x"></i></button>
+                                                                    </form>
+                                                                </div> 
+                                                                <?php if($foundMatch->status =='Available'): ?>
+                                                                    <div class="status green">
+                                                                    </div>
+                                                                <?php elseif($foundMatch->status == "Pending"): ?>
+                                                                    <div class="status yellow">
+                                                                    </div>
+                                                                <?php else: ?>
+                                                                    <div class="status ">
+                                                                    </div>
+                                                                <?php endif; ?> 
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php else: ?>
+                                                    <p>No matches found. Please stand by as we look for more!</p>
+                                                <?php endif; ?>
+                                            <?php elseif($watchItem->type == 'rentable'): ?>
+                                                <?php if($matches != null): ?>
+                                                    <?php $__currentLoopData = $matches; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $match): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <div class="slides-item" id="slide-1">
+                                                            <?php
+                                                                $foundMatch = $rentableProvider::getRentableById($match);
+
+                                                                $imgLinks = null;
+                                                                if(isset($foundMatch->image_uploads)){
+                                                                    $imgLinks = json_decode($foundMatch->image_uploads);
+                                                                    if(is_array($imgLinks)){
+                                                                        $imgLinks = $imgLinks[0];
+                                                                    }
+                                                                }
+
+                                                                $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
+                                                                $link = $hardLink[random_int(0, count($hardLink)-1)];
+                                                            ?>
+                                                            <?php if($foundMatch != null): ?>
+                                                                <a href="/rentables/<?php echo e($foundMatch->id); ?>">
+                                                                    <img src=<?php echo e($foundMatch->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset($link)); ?>  alt="image doesnt exist">
+                                                                </a>
+                                                                <div class="slidesitem-details">
+                                                                    <h1><?php echo e($foundMatch->rental_title); ?></h1>
+                                                                    <h3>$<?php echo e($foundMatch->rental_charging); ?></h3>
+                                                                </div>
+
+                                                                <div class="remove-recommendation">
+                                                                    <form action="/remove_recommendation" method="POST" enctype="multipart/form-data">
+                                                                        <?php echo csrf_field(); ?>
+                                                                        <input type="hidden" name="watchitem_id" value="<?php echo e($watchItem->id); ?>">
+                                                                        <input type="hidden" name="recommendation_id" value="<?php echo e($match); ?>">
+                                                                        <button type="submit"><i class="fa-solid fa-x"></i></button>
+                                                                    </form>
+                                                                </div>  
+
+                                                                
+                                                                <?php if($foundMatch->status =='Available'): ?>
+                                                                    <div class="status green">
+                                                                    </div>
+                                                                <?php else: ?>
+                                                                    <div class="status ">
+                                                                    </div>
+                                                                <?php endif; ?> 
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php else: ?>
+                                                    <p>No matches found. Please stand by as we look for more!</p>
+                                                <?php endif; ?>
+                                            <?php elseif($watchItem->type == 'lease'): ?>
+                                                    <h1>Type is lease</h1>
+                                            <?php endif; ?>
                                         </div>  
                                     </div>
                                 </div>
-                                <div class="bottom-ribbon"></div>
+                                
                             </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php endif; ?>
@@ -249,7 +372,7 @@ unset($__errorArgs, $__bag); ?>
                                 <?php echo csrf_field(); ?>
                                 <input type="hidden" name="user_id"
                                 value=<?php echo e(auth()->user()->id); ?>>
-                                <input type="text" placeholder="Title" name="watchitem_title">
+                                <input type="text" placeholder="Title" name="watchitem_title" required>
                                 <div class="watch-tags-container">
                                     <input type="hidden" name="key_tags" id="key_tags">
                                     <ul class="tags-list" id="tags-list">
@@ -264,17 +387,17 @@ unset($__errorArgs, $__bag); ?>
                                             <option value="lease">Lease</option>
                                         </select>
                                         <select name="match_rate" id="match_rate" >
-                                            <option value="" disabled selected>Match Rate</option>
-                                            <option value="20">20%</option>
-                                            <option value="40">40%</option>
-                                            <option value="60">60%</option>
-                                            <option value="80">80%</option>
-                                            <option value="100">100%</option>
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            <option value="100" selected>100%</option>
                                         </select>
                                     </div>
                                     <div class="right">
                                         <input type="text" placeholder="Press Enter to Add Tag Word"  onkeydown="search(this)" class="input">
-                                        <input type="submit" value="Set Filter" class="submit-form">
+                                        <input type="submit" value="Create" class="submit-form">
                                     </div>
                                 </div>
                             </form>
@@ -293,7 +416,6 @@ unset($__errorArgs, $__bag); ?>
         function toggleDiv(id) {
             const myElement = document.getElementById('main-panels-container');
             const options = document.getElementsByClassName('selector');
-            console.log(options);
             for (let i = 0; i < myElement.children.length; i++) {
                 if(i == id){
                     myElement.children[i].style.display = 'flex';

@@ -4,8 +4,18 @@
     <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
+                <div class="back-button">
+                    <a href="javascript:history.back()" class="button1 b-button">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </a>
+                </div> 
+
                 <div class="info">
-                    
+                    <h1>Lorem ipsum dolor sit amet consectetur.</h1>
+
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eum tempore nam consectetur, possimus dolorum quidem tempora et laboriosam est deleniti sunt modi, provident quasi!</p>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate temporibus ab excepturi doloremque cumque.</p>
                 </div>
                 <div class = "listingFormContainer">
 
@@ -21,7 +31,7 @@
                         >
 
                         {{-- card #1 --}}
-                        <section class = "listingCard">
+                        <section class = "listingCard default-card">
                             <p class="create-listing-header">Rental Details</p>
                             <input type="text" name = "rental_title" placeholder="Rental Title"  value="{{ old('rental_title', null) }}" />
                             @error('rental_title')
@@ -45,27 +55,6 @@
                                 @error('rental_duration')
                                     <p>{{$message}}</p>
                                 @enderror
-                                {{-- <ul class="ks-cboxtags">
-                                    <li>
-                                        
-                                        <label for="checkboxOne">
-                                            
-                                            <input type="hidden" id="checkboxOne" name = "negotiable" id ="check" value="0">
-                                            <input type="checkbox" id="checkboxOne" name = "negotiable" id ="check" class = "negotiable" value="{{ old('negotiable', 1) }}">    
-                                        Price Negotiable/ OBO</label>
-                                        @error('negotiable')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                    <li>
-                                        <input type="hidden" id="checkboxEleven" name = "free" id ="check" value="0">
-                                        <input type="checkbox" id="checkboxEleven" name = "free" id ="check" value="{{ old('free', "1") }}">
-                                        <label for="checkboxEleven">Free</label>
-                                        @error('free')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                </ul> --}}
                             </div>
 
                             <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="{{ old('rental_charging', null) }}"/>
@@ -296,7 +285,6 @@
             })
 
             var base_color = "black";
-            // var active_color = "rgb(237, 40, 70)";
             var active_color = "#db6657";
 
             var child = 1;
@@ -385,6 +373,8 @@
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
                 currentSection.css('transform','translateX(0)');
+                currentSection.css('display', 'flex');
+                currentSection.css('flex-direction', 'column');
                 currentSection.prevAll('section').css('transform','translateX(-100px)');
                 currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();

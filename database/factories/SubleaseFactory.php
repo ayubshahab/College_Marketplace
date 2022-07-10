@@ -19,6 +19,7 @@ class SubleaseFactory extends Factory
         $utilities = array('Electric', 'Trash', 'Internet', 'Gas', 'Water');
         $subleaseCondition = array('New' , 'Good', 'Slightly Used', 'Used Normal Wear');
         $negotiable = array('Fixed', 'Negotiable');
+        $leaseStatus = array('Leased', 'Available');
         return [
             // owner of sublease
             'user_id'=> random_int(1,10),
@@ -40,6 +41,7 @@ class SubleaseFactory extends Factory
             'state'=>$this->faker->state(),
             'country'=>$this->faker->country(),
             'postcode'=>$this->faker->postcode(),
+            'status'=> $leaseStatus[array_rand($leaseStatus)],
             'created_at' => now(),
             'updated_at' => now()
         ];

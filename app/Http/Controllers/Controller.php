@@ -33,7 +33,7 @@ class Controller extends BaseController
 
         return view('listings.index', [
             'listings'=> $latest,
-            'listingsNear' => Listing::latest()->take(10)->get(),
+            'listingsNear' => Listing::latest()->where('status', '!=', 'Sold' )->take(10)->get(),
             'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
             'subleases'=>Sublease::latest()->where('status', 'like', 'Available')->take(10)->get()
         ]);

@@ -8,6 +8,7 @@ use App\Models\Rentable;
 use App\Models\Sublease;
 use App\Models\YardSale;
 use App\Libraries\HashMap;
+use Faker\Core\Number;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -177,7 +178,7 @@ class ListingController extends Controller
     }
 
     public function destroy(Listing $listing){
-
+        $this->removeFromRecommendations($listing->id);
         if(is_array(json_decode($listing->image_uploads))){
             foreach(json_decode($listing->image_uploads) as $link){
                $this->removeImage($link);
@@ -187,6 +188,20 @@ class ListingController extends Controller
         return redirect('/')->with('message', "Listing Deleted Successfully!");
     }
 
+    public function removeFromRecommendations($id){
+        $string = "Select * from watch_items as w where (w.type LIKE 'listing') AND (w.matches_found LIKE '% " . $id .",%' OR w.matches_found LIKE '% " . $id ."%' )";
+        $results = DB::select($string);
+        // dd($id ,"   " ,$string, $results);
+
+        foreach($results as $result){
+            $matchedItems = explode(", ", $result->matches_found);
+            if (($key = array_search($id, $matchedItems)) !== false) {
+                unset($matchedItems[$key]);
+            }
+            DB::table('watch_items')->where('id', $result->id)->update(['matches_found' => implode(", ", $matchedItems)]);
+        }
+    }
+    
     public function removeImage($filLink)
     {  
         /*if(file_exists(public_path($filLink))){
@@ -208,5 +223,11 @@ class ListingController extends Controller
         $data->status = $request->status;
         $data->save();
         return back()->with('message', "Listing Updated Successfully");
+    }
+
+    public static function getListingById($listing){
+        // dd("test");
+        //if no listing is found - > meaning the listing must have been deleted then remove that recommendation from that watchlist
+        return Listing::find($listing);
     }
 }
