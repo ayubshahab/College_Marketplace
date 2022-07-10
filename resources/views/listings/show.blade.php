@@ -231,7 +231,7 @@
     <section class = "listings-parent-container">
         {{-- <h1>helo</h1> --}}
         {{-- @include('partials._listingCarousel', ['listings' => $listings]) --}}
-         @include('partials._listingCarousel', ['listings' => $listings, 'message' => 'Related Items', 'carouselClass'=>'','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'])
+         @include('partials._listingCarousel', ['listings' => $listings, 'message' => 'Related Items', 'carouselClass'=>'my-slider','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'])
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    

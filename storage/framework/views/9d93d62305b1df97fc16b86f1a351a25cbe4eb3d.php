@@ -5,7 +5,8 @@
     <div class="container">
         <div class="subcontainer">
             <div class="slider-wrapper">
-                <div id="<?php echo e($carouselControls); ?>">
+                <?php if (! (count($listings) == 0)): ?>
+                    <div id="<?php echo e($carouselControls); ?>">
                         <button class = "<?php echo e($carouselP); ?>">
                             <i   class="fa-solid fa-angle-left"></i>
                         </button>
@@ -13,17 +14,18 @@
                             <i class="fa-solid fa-angle-right"></i>
                         </button>
                     </div>
+                <?php endif; ?>
                 <div class="controller">
                     <div> 
                         <h2><?php echo e($message); ?>: <?php echo count($listings) ?></h2>
                     </div>
                 </div>
                 <br>
-                <div class="my-slider <?php echo e($carouselClass); ?>">
-                    <?php if (! (count($listings) == 0)): ?>
+                <?php if (! (count($listings) == 0)): ?>
+                    <div class="my-slider <?php echo e($carouselClass); ?>">
                         <?php $__currentLoopData = $listings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $listing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div>
-                            <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
+                            <div>
+                                <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
 <?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.carousel-card','data' => ['listing' => $listing]] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('carousel-card'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -38,14 +40,12 @@
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
 <?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
 <?php endif; ?>
-                        </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                        <?php else: ?>
-                            <p>No Listings Found!</p>
-                        <?php endif; ?>
-                      
-                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                      
+                    </div>
+                <?php else: ?>
+                    <p class="empty-gallary-message">No Listings Found!</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -57,8 +57,6 @@
             "speed":400,
             "nav":false,
             controlsContainer:"#controls",
-            prevButton:".previous1",
-            nextButton:".next1",
             responsive:{
                 1500:{
                     items: 5,
@@ -76,7 +74,7 @@
                     items: 3,
                     gutter: 15
                 },
-                768:{
+                700:{
                     items: 2,
                     gutter: 20
                 },

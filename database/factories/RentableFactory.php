@@ -25,7 +25,7 @@ class RentableFactory extends Factory
         $rentalCondition = array('New' , 'Good', 'Slightly Used', 'Used Normal Wear');
         $rentalStatus = array('Rented', 'Available');
         $rentalCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories', "Books");
-        $negotiable = array('Fixed', 'Negotiable');
+        $rentableNegotiable = array('Fixed', 'Negotiable');
         return [
             // ownership
             'user_id'=> random_int(1,10),
@@ -34,7 +34,7 @@ class RentableFactory extends Factory
             'rental_title' => $this->faker->text(random_int(5,100)),
             'rental_duration' => $rentalType[array_rand($rentalType)],
             'rental_charging' => random_int(50,500),
-            'negotiable' => $negotiable[array_rand($negotiable)],
+            'negotiable' => $rentableNegotiable[array_rand($rentableNegotiable)],
             'condition' => $rentalCondition[array_rand($rentalCondition)],
             'category' => $rentalCategory[array_rand($rentalCategory)],
             'tags' => strval($commaSeperatedString) ,

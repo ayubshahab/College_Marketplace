@@ -364,13 +364,14 @@
     margin: 0;
 }
 .watchList-main{
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     color:#C9C9DC;
     height: fit-content;
     overflow-y: scroll;
     /* display: flex; */
     flex-direction: column;
 }
+
 
 .watchlist-header{
     display: flex;
@@ -380,7 +381,14 @@
     /* background-color: blue; */
     height:fit-content;
     width: 100%;
-    margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: unset;
+    z-index: 1;
+    padding: 10px;
+    background: rgba(36,34,44, .6);
+    backdrop-filter: blur(5px);
 }
 
 .create-watch-item{
@@ -402,6 +410,7 @@
 
 .watchitem-container{
     height: fit-content;
+    margin:10px 20px;
 }
 
 .watchitem{
@@ -432,6 +441,57 @@
     text-transform:capitalize;
 }
 
+.watchitem-container .watchitem .watchitem-listing{
+    color:peru;
+}
+.watchitem-container .watchitem .watchitem-rentable{
+    color:#207E82;
+}
+
+.watchitem-container .watchitem .watchitem-sublease{
+    color: #A98B98;
+}
+
+.watchitem-header{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.watchitem-crud{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.watchitem-crud form{
+    width: 30px;
+    height:30px;
+    background-color: var(--red-accent-color);
+    margin:5px;
+    border-radius: 25%;
+}
+
+.watchitem-crud form button{
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+}
+
+.watchitem-crud form button:hover{
+    cursor: pointer;
+}
+
+.watchitem-crud form button i{
+    font-size: 17px;
+    color:white;
+}
+
+
 .tags-container{
     margin:10px 0;
     /* background:linear-gradient(261.71deg, #3A3845 13.92%, #2C2A36 84.19%); */
@@ -441,7 +501,8 @@
 
 .found-carousel{
     width:100%;
-    height: 250px;
+    /* height: 250px; */
+    height: fit-content;
     background-color: #3A3845;
     /* padding: 0 10px; */
     box-sizing: border-box;
@@ -475,10 +536,12 @@
 
 .slides-item {
     border-radius: 10px;
+    overflow: hidden;
     flex-shrink:0;
     /* font-size: 100px; */
     width: 25%;
-    height: 100%;
+    /* height: 100%; */
+    height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -498,6 +561,94 @@
 .slides-item:hover{
     box-shadow: 0px 12px 32px var(--red-accent-color);
     cursor: pointer;
+}
+
+.slides-item a{
+    width: 100%;
+    height: 100%;
+    /* background: var(--red-accent-color); */
+    overflow: hidden;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+}
+
+.slides-item a img{
+    height: 100%;
+    width: 100%;
+}
+
+.slides-item .slidesitem-details{
+    position: absolute;
+    bottom:0;
+    width: 100%;
+    /* height: 100px; */
+    background:rgba(36, 34, 44, .8);
+    padding: 10px;
+    box-sizing: border-box;
+    text-align:left;
+}
+
+.slidesitem-details h1{
+    font-size: 18px;
+    color:white;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+.slidesitem-details h3{
+    font-size: 16px;
+    color:var(--red-accent-color);
+}
+
+
+.remove-recommendation{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--background-color);
+    border-radius: 25%;
+}
+
+.remove-recommendation button{
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    padding: 6px 8px;
+}
+
+.remove-recommendation button:hover{
+    cursor:pointer;
+}
+
+.remove-recommendation button:hover > i{
+    color:var(--red-accent-color);
+}
+
+.remove-recommendation i{
+    color:white;
+}
+.status{
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    background-color: red;
+    z-index: 1;
+    border: 2px solid white;
+    border-radius: 100%;
+}
+
+.green{
+    background-color: green !important;
+}
+
+.yellow{
+    background-color: yellow !important;
 }
 
 .modal {
@@ -764,6 +915,11 @@
         width:100%;
         /* scroll-snap-align:start; */
     }
+
+    .slides-item a img{
+        width: 100%;
+        height: auto;
+    }
 }
 
 @media(max-width: 500px){
@@ -773,6 +929,11 @@
     .modal-content{
         width: 80%;
     }
+
+    .slides-item a img{
+         width: auto;
+        height: 100%;
+    }
 }
 
 @media( max-width: 400px){
@@ -781,5 +942,11 @@
     }
     .modal-content{
         width: 90%;
+    }    
+}
+
+@media (max-width: 350px){
+    .found-carousel{
+        height: 200px;
     }
 }

@@ -10,7 +10,7 @@
 
         {{-- carousel for listings --}}
         <div class = "listings-parent-container">
-            @include('partials._listingCarousel', ['listings' => $listingsNear, 'message' => 'Items Within A Mile', 'carouselClass'=>'','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'])
+            @include('partials._listingCarousel', ['listings' => $listingsNear, 'message' => 'Items Within A Mile', 'carouselClass'=>'my-slider','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'])
         </div>
 
         {{-- carousel for rentables --}}
@@ -32,63 +32,4 @@
             'carouselControls' => 'controls3', 'carouselP' =>' previous previous3', 'carouselN' => 'next next3'])
         </div>
     </main>
-    <script>
-        tns({
-            container: ".slider2",
-            "slideBy":1,
-            "speed":400,
-            "nav":false,
-            controlsContainer:"#controls2",
-            responsive:{
-                1500:{
-                    items: 5,
-                    gutter: 5
-                },
-                1200:{
-                    items: 4,
-                    gutter: 10
-                },
-                1024:{
-                    items: 3,
-                    gutter: 15
-                },
-                768:{
-                    items: 2,
-                    gutter: 20
-                },
-                480:{
-                    items: 1
-                }
-            }
-        })
-
-        tns({
-            container: ".slider3",
-            "slideBy":1,
-            "speed":400,
-            "nav":false,
-            controlsContainer:"#controls3",
-            responsive:{
-                1500:{
-                    items: 5,
-                    gutter: 5
-                },
-                1200:{
-                    items: 4,
-                    gutter: 10
-                },
-                1024:{
-                    items: 3,
-                    gutter: 15
-                },
-                768:{
-                    items: 2,
-                    gutter: 20
-                },
-                480:{
-                    items: 1
-                }
-            }
-        })
-    </script>
 </x-layout>

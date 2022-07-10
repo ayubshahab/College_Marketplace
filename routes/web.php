@@ -81,6 +81,8 @@ Route::get('/users/removefavorite', [UserController::class, 'removeFavorite'])->
 Route::get('/users/addfavorite', [UserController::class, 'addFavorite'])->middleware('auth');
 Route::post('/users/additionalInfo', [UserController::class, 'updateInfo'])->middleware('auth');
 Route::delete('/users/delete/{user}', [UserController::class, 'destroy'])->middleware('auth');
+Route::delete('/watchitems/{watchItem}', [UserController::class, 'deleteWatchItem']);
+Route::post( '/remove_recommendation',[UserController::class, 'removeRecommendedItem']);
 
 //Google routes
 // Google URL

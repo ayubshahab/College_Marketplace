@@ -20,17 +20,17 @@ class ListingFactory extends Factory
         //create an array of random words
         $randomTagsArray = $this->faker->words($nbWords = 6, $asText = false);
         $commaSeperatedString = implode(", ", $randomTagsArray);
-        $rentalCondition = array('New' , 'Good', 'Slightly Used', 'Used Normal Wear');
-        $rentalStatus = array('Rented', 'Available');
-        $rentalCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories', "Books");
-        $negotiable =array('Fixed', 'Negotiable' , 'Free');
+        $listingCondition = array('New' , 'Good', 'Slightly Used', 'Used Normal Wear');
+        $listingStatus = array('Sold', 'Pending', 'Available');
+        $listingCategory = array('Furniture', 'Clothes', 'Electronics', 'Kitchen', 'School Accessories', "Books");
+        $listingNegotiable =array('Fixed', 'Negotiable' , 'Free');
         return [
             'user_id'=> random_int(1,10),
             'item_name' => $this->faker->text(random_int(5,100)),
             'price' => random_int(50,500),
-            'negotiable' => $negotiable[array_rand($negotiable)],
-            'condition' => $rentalCondition[array_rand($rentalCondition)],
-            'category' => $rentalCategory[array_rand($rentalCategory)],
+            'negotiable' => $listingNegotiable[array_rand($listingNegotiable)],
+            'condition' => $listingCondition[array_rand($listingCondition)],
+            'category' => $listingCategory[array_rand($listingCategory)],
             'tags' => strval($commaSeperatedString) ,
             'description' => $this->faker->paragraph(5),
             'image_uploads'=>null,
@@ -39,6 +39,7 @@ class ListingFactory extends Factory
             'state'=>$this->faker->state(),
             'country'=>$this->faker->country(),
             'postcode'=>$this->faker->postcode(),
+            'status'=> $listingStatus[array_rand($listingStatus)],
             'created_at' => now(),
             'updated_at' => now()
         ];

@@ -83,6 +83,7 @@ class RentablesController extends Controller
     }
 
     public function destroy(Rentable $rentable){
+        $this->removeFromRecommendations($rentable->id);
         if(is_array(json_decode($rentable->image_uploads))){
             foreach(json_decode($rentable->image_uploads) as $link){
                $this->removeImage($link);
@@ -90,6 +91,19 @@ class RentablesController extends Controller
         }
         $rentable->delete();
         return redirect('/')->with('message', "Listing Deleted Successfully!");
+    }
+
+    public function removeFromRecommendations($id){
+        $string = "Select * from watch_items as w where (w.type LIKE 'rentable') AND (w.matches_found LIKE '% " . $id .",%' OR w.matches_found LIKE '% " . $id ."%' )";
+        $results = DB::select($string);
+
+        foreach($results as $result){
+            $matchedItems = explode(", ", $result->matches_found);
+            if (($key = array_search($id, $matchedItems)) !== false) {
+                unset($matchedItems[$key]);
+            }
+            DB::table('watch_items')->where('id', $result->id)->update(['matches_found' => implode(", ", $matchedItems)]);
+        }
     }
 
     public function removeImage($filLink)
@@ -158,5 +172,10 @@ class RentablesController extends Controller
         // dd($rentable);
         $rentable->update($formFields);
         return redirect('/rentables/'.$rentable->id)->with('message', 'Listing Updated Successfully!');
+    }
+
+    public static function getRentableById($rentable){
+        // dd("test");
+        return Rentable::find($rentable);
     }
 }

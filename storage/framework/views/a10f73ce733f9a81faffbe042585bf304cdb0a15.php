@@ -30,13 +30,7 @@
                 <?php endif; ?>
                 <a href="/listings/<?php echo e($listing->id); ?>">
                     <?php
-                        /*function debug_to_console($data) {
-                                    $output = $data;
-                                    if (is_array($output))
-                                    $output = implode(',', $output);
-                                    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-                        }*/ 
-                    $imgLinks = null;
+                        $imgLinks = null;
                         if(isset($listing->image_uploads)){
                             //decode the json object
                             $imgLinks = json_decode($listing->image_uploads);
@@ -48,7 +42,6 @@
                             }
                         }
                     ?>
-                    
                     <?php
                         $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
                         $link = $hardLink[random_int(0, count($hardLink)-1)];

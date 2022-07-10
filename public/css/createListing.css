@@ -1,7 +1,7 @@
 
 .createListingSection {
     width: 100%;
-	/* min-height: 90vh; */
+	min-height: 90vh;
 
 	/* border-radius: 0 45px 45px 45px; */
     height: fit-content;
@@ -16,23 +16,34 @@
 	background-position: bottom;
     background-repeat: no-repeat;
 	background-size: cover;
-	/* box-sizing: border-box; */
+	position: relative;
 }
 
+.createListingSection .back-button{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
 .info, .listingFormContainer{
     height: auto;
     padding: 10px 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .info {
 	/* display:none; */
     width: 40%;
-	border-radius: 0 0 0 45px;
-    /* background-color:azure; */
-	/* background-color: var(--dark-color); */
-    /* background-color: rgba(0, 0, 0, 0.8); */
+	padding: 20px 40px;
+	box-sizing: border-box;
+	text-align: left;
+	padding-right: 0;
+}
 
-	/* opacity: .7; */
+.info h1{
+	color:var(--red-accent-color);
+	margin-bottom: 20px;
 }
 
 .listingFormContainer{
@@ -58,6 +69,7 @@
 	align-items: center;
 	justify-content: center;
 	text-align: left;
+	overflow: hidden !important;
 }
 
 .create-listing-header{
@@ -77,13 +89,19 @@
 .listingCard {
 	padding: 5% ;
 	width: 65%;
-	/* background:var(--dark-color); */
-	/* background:rgba(255,255,255,0.9); */
 	backdrop-filter:blur(10px);
 	box-shadow:0px 2px 10px rgba(0,0,0,0.3);
 	background-color: rgba(0,0,0,.2);
 	border-radius:5px;
 	transition:transform 0.2s ease-in-out;
+	/* for the initial page load so it doesnt overflow */
+	transform:translateX(0px);
+	display: none;
+}
+
+.default-card{
+	display: flex;
+	flex-direction: column;
 }
 
 .listingButtonsContainer{
@@ -239,14 +257,34 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	.listingCard{
 		width: 80%;
 	}
+
+	.info h1{
+		font-size:30px;
+	}
+}
+
+@media(max-width:900px){
+	.info h1{
+		font-size:25px;
+	}
 }
 @media(max-width: 800px){
-	.info{
-		display: none;
+	.createListingSection{
+		flex-direction: column-reverse;
+	}
+
+	.listingFormContainer, .info{
+		width: 100%;
 	}
 
 	.listingFormContainer{
-		width: 100%;
+		padding-top:50px;
+	}
+
+	.info{
+		padding: 40px 10%;
+		margin-top:20px;
+		background-color: rgba(0,0,0,.5);
 	}
 }
 
@@ -262,5 +300,9 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	}
 	ul.ks-cboxtags li label{
 		font-size: 12px;
+	}
+
+	.info p{
+		font-size:15px;
 	}
 }
