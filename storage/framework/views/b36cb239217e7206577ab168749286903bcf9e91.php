@@ -5,25 +5,24 @@
     <div class="container">
         <div class="subcontainer">
             <div class="slider-wrapper">
-                <div id="<?php echo e($carouselControls); ?>">
-                    <button class = "<?php echo e($carouselP); ?>">
-                        <i   class="fa-solid fa-angle-left"></i>
-                    </button>
-                    <button class = "<?php echo e($carouselN); ?>">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </button>
-                </div>
+                <?php if (! (count($rentables) == 0)): ?>
+                    <div id="<?php echo e($carouselControls); ?>">
+                        <button class = "<?php echo e($carouselP); ?>">
+                            <i   class="fa-solid fa-angle-left"></i>
+                        </button>
+                        <button class = "<?php echo e($carouselN); ?>">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </button>
+                    </div>
+                <?php endif; ?>
                 <div class="controller">
                     <div> 
                         <h2><?php echo e($message); ?>: <?php echo count($rentables) ?></h2>
                     </div>
                 </div>
                 <br>
-                <div class="my-slider <?php echo e($carouselClass); ?>">
-
-                    
-                    
-                    <?php if (! (count($rentables) == 0)): ?>
+                <?php if (! (count($rentables) == 0)): ?>
+                    <div class="<?php echo e($carouselClass); ?>">
                         <?php $__currentLoopData = $rentables; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rentable): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
 <?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.carousel-card','data' => ['listing' => null,'rentable' => $rentable]] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
@@ -41,25 +40,21 @@
 <?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
 <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                        <?php else: ?>
-                            <p>No Rentables Found!</p>
-                    <?php endif; ?>
-                      
-                </div>
+                    </div>
+                <?php else: ?>
+                    <p class="empty-gallary-message">No Rentables Found!</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
     <script>
 
         tns({
-            container: ".my-slider",
+            container: ".slider2",
             "slideBy":1,
             "speed":400,
             "nav":false,
-            controlsContainer:"#controls",
-            prevButton:".previous1",
-            nextButton:".next1",
+            controlsContainer:"#controls2",
             responsive:{
                 1500:{
                     items: 5,
@@ -77,7 +72,7 @@
                     items: 3,
                     gutter: 15
                 },
-                768:{
+                700:{
                     items: 2,
                     gutter: 20
                 },

@@ -171,24 +171,25 @@
 
                         {{-- card #3 --}}
                         <section class = "listingCard">
-                            <p class="create-listing-header">Address:</p>
-                            <input type="text" name="street" placeholder="Street, nbr"  value="{{ old('street', null) }}"/>
+                            <p class="create-listing-header">Location</p>
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ old('street', null) }}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "city" placeholder="City"  value="{{ old('city', null) }}"/>
+                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "state" placeholder="State"  value="{{ old('state', null) }}"/>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ old('state', null) }}"/>
                             @error('state')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "country" placeholder="Country"  value="{{ old('country', null) }}" />
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ old('country', null) }}" />
                             @error('country')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "postcode"placeholder="Postcode"  value="{{ old('postcode', null) }}" />
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ old('postcode', null) }}" />
                             @error('postcode')
                                 <p>{{$message}}</p>
                             @enderror
@@ -214,12 +215,93 @@
             </div>
         </div>
     </div>
-
+    @php
+    $apiKey = '{{ env(GOOGLE_API_KEY) }}';
+    //echo $apiKey; 
+    @endphp
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
     <script src="../../../node_modules/reverse-geocode/reverse-geocode.js"></script>
     <script>
+        function initAutocomplete() {
+            address1Field = document.getElementById("street");
+            address2Field = document.getElementById("streetTwo");
+            postalField = document.getElementById("postcode");
+
+            // Create the autocomplete object, restricting the search predictions to
+            // addresses in the US and Canada.
+            autocomplete = new google.maps.places.Autocomplete(address1Field, {
+            componentRestrictions: { country: ["us"] },
+            fields: ["address_components", "geometry"],
+            types: ["address"],
+            });
+            address1Field.focus();
+
+            // When the user selects an address from the drop-down, populate the
+            // address fields in the form.
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+        function fillInAddress() {
+            // Get the place details from the autocomplete object.
+            const place = autocomplete.getPlace();
+            let address1 = "";
+            let postcode = "";
+
+            // Get each component of the address from the place details,
+            // and then fill-in the corresponding field on the form.
+            // place.address_components are google.maps.GeocoderAddressComponent objects
+            // which are documented at http://goo.gle/3l5i5Mr
+            for (const component of place.address_components) {
+                // @ts-ignore remove once typings fixed
+                const componentType = component.types[0];
+
+                switch (componentType) {
+                    case "street_number": {
+                    address1 = `${component.long_name} ${address1}`;
+                    break;
+                }
+                case "route": {
+                    address1 = `${address1}${component.long_name} `;
+                    break;
+                }
+                case "postal_code": {
+                    postcode = `${component.long_name}${postcode}`;
+                    break;
+                }
+
+                case "postal_code_suffix": {
+                    postcode = `${postcode}-${component.long_name}`;
+                    break;
+                }
+
+                case "locality":
+                    (document.getElementById("city")).value =
+                    component.long_name;
+                    break;
+
+                case "administrative_area_level_1": {
+                    (document.getElementById("state")).value =
+                    component.short_name;
+                    break;
+                }
+
+                case "country":
+                    (document.getElementById("country")).value =
+                    component.long_name;
+                    break;
+                }
+            }
+            address1Field.value = address1;
+            postalField.value = postcode;
+
+            // After filling the form with address components from the Autocomplete
+            // prediction, set cursor focus on the second address line to encourage
+            // entry of subpremise information such as apartment, unit, or floor number.
+            address2Field.focus();
+        }
+
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -467,4 +549,8 @@
         }
 
     </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
+      defer
+    ></script>
 </x-layout>
