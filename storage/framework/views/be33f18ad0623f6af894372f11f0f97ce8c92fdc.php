@@ -350,10 +350,6 @@ unset($__errorArgs, $__bag); ?>
             </div>
         </div>
     </div>
-    <?php
-    $apiKey = '{{ env(GOOGLE_API_KEY) }}';
-    //echo $apiKey; 
-    ?>
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
@@ -379,7 +375,6 @@ unset($__errorArgs, $__bag); ?>
         }
 
         function fillInAddress() {
-            console.log("here");
             // Get the place details from the autocomplete object.
             const place = autocomplete.getPlace();
             let address1 = "";

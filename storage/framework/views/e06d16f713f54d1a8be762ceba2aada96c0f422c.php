@@ -12,8 +12,18 @@
     <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
+                <div class="back-button">
+                    <a href="javascript:history.back()" class="button1 b-button">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </a>
+                </div> 
+
                 <div class="info">
-                    
+                    <h1>Lorem ipsum dolor sit amet consectetur.</h1>
+
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eum tempore nam consectetur, possimus dolorum quidem tempora et laboriosam est deleniti sunt modi, provident quasi!</p>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate temporibus ab excepturi doloremque cumque.</p>
                 </div>
                 <div class = "listingFormContainer">
 
@@ -29,7 +39,7 @@
                         >
 
                         
-                        <section class = "listingCard">
+                        <section class = "listingCard default-card">
                             <p class="create-listing-header">Rental Details</p>
                             <input type="text" name = "rental_title" placeholder="Rental Title"  value="<?php echo e(old('rental_title', null)); ?>" />
                             <?php $__errorArgs = ['rental_title'];
@@ -67,7 +77,6 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                                
                             </div>
 
                             <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="<?php echo e(old('rental_charging', null)); ?>"/>
@@ -81,6 +90,27 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
+
+                            <p class="create-listing-header">
+                                Price Negotiable or Fixed
+                            </p>
+                            <div class="condition-box">
+                                <select name="negotiable" id="">
+                                    <option value="Fixed" <?php echo e((old("negotiable") == 'Fixed' ? "selected":"")); ?>>Fixed</option>
+                                    
+                                    <option value="Negotiable" <?php echo e((old("negotiable") == 'Negotiable' ? "selected":"")); ?>>Negotiable/ OBO (best offer)</option>
+                                </select>
+                                <?php $__errorArgs = ['negotiable'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            </div>
 
                             <p class="create-listing-header">Condition</p>
                             <div class ="conditionBox">
@@ -115,7 +145,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Furniture' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Furniture' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
@@ -129,7 +163,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Clothes' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Clothes' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
@@ -142,7 +180,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Electronics' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Electronics' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
@@ -155,7 +197,11 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'Kitchen' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'Kitchen' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
@@ -168,8 +214,29 @@ unset($__errorArgs, $__bag); ?>
 
                                         <?php echo e(old('category.3') == 'School Accessories' ? 'checked' : ''); ?>
 
-                                        <?php echo e(old('category.4') == 'School Accessories' ? 'checked' : ''); ?>>
+                                        <?php echo e(old('category.4') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        >
                                         <label for="checkboxTen">School Accessories</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
+                                        <?php echo e(old('category.0') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'Books' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.5') == 'Books' ? 'checked' : ''); ?>
+
+                                        >
+                                        <label for="checkboxEleven">Books</label>
                                     </li>
                                 </ul>
                                 <?php $__errorArgs = ['category'];
@@ -229,8 +296,8 @@ unset($__errorArgs, $__bag); ?>
 
                         
                         <section class = "listingCard">
-                            <p class="create-listing-header">Address:</p>
-                            <input type="text" name="street" placeholder="Street, nbr"  value="<?php echo e(old('street', null)); ?>"/>
+                        <p class="create-listing-header">Location</p>
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="<?php echo e(old('street', null)); ?>"/>
                             <?php $__errorArgs = ['street'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -241,7 +308,8 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "city" placeholder="City"  value="<?php echo e(old('city', null)); ?>"/>
+                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e(old('street', null)); ?>"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="<?php echo e(old('city', null)); ?>"/>
                             <?php $__errorArgs = ['city'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -252,7 +320,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "state" placeholder="State"  value="<?php echo e(old('state', null)); ?>"/>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="<?php echo e(old('state', null)); ?>"/>
                             <?php $__errorArgs = ['state'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -263,7 +331,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "country" placeholder="Country"  value="<?php echo e(old('country', null)); ?>" />
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="<?php echo e(old('country', null)); ?>" />
                             <?php $__errorArgs = ['country'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -274,7 +342,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "postcode"placeholder="Postcode"  value="<?php echo e(old('postcode', null)); ?>" />
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="<?php echo e(old('postcode', null)); ?>" />
                             <?php $__errorArgs = ['postcode'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -304,6 +372,83 @@ unset($__errorArgs, $__bag); ?>
         </div>
     </div>
     <script>
+        function initAutocomplete() {
+            address1Field = document.getElementById("street");
+            address2Field = document.getElementById("streetTwo");
+            postalField = document.getElementById("postcode");
+
+            // Create the autocomplete object, restricting the search predictions to
+            // addresses in the US and Canada.
+            autocomplete = new google.maps.places.Autocomplete(address1Field, {
+            componentRestrictions: { country: ["us"] },
+            fields: ["address_components", "geometry"],
+            types: ["address"],
+            });
+            address1Field.focus();
+
+            // When the user selects an address from the drop-down, populate the
+            // address fields in the form.
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+        function fillInAddress() {
+            // Get the place details from the autocomplete object.
+            const place = autocomplete.getPlace();
+            let address1 = "";
+            let postcode = "";
+
+            // Get each component of the address from the place details,
+            // and then fill-in the corresponding field on the form.
+            // place.address_components are google.maps.GeocoderAddressComponent objects
+            // which are documented at http://goo.gle/3l5i5Mr
+            for (const component of place.address_components) {
+                // @ts-ignore remove once typings fixed
+                const componentType = component.types[0];
+
+                switch (componentType) {
+                    case "street_number": {
+                    address1 = `${component.long_name} ${address1}`;
+                    break;
+                }
+                case "route": {
+                    address1 = `${address1}${component.long_name} `;
+                    break;
+                }
+                case "postal_code": {
+                    postcode = `${component.long_name}${postcode}`;
+                    break;
+                }
+
+                case "postal_code_suffix": {
+                    postcode = `${postcode}-${component.long_name}`;
+                    break;
+                }
+
+                case "locality":
+                    (document.getElementById("city")).value =
+                    component.long_name;
+                    break;
+
+                case "administrative_area_level_1": {
+                    (document.getElementById("state")).value =
+                    component.short_name;
+                    break;
+                }
+
+                case "country":
+                    (document.getElementById("country")).value =
+                    component.long_name;
+                    break;
+                }
+            }
+            address1Field.value = address1;
+            postalField.value = postcode;
+
+            // After filling the form with address components from the Autocomplete
+            // prediction, set cursor focus on the second address line to encourage
+            // entry of subpremise information such as apartment, unit, or floor number.
+            address2Field.focus();
+        }
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -358,9 +503,8 @@ unset($__errorArgs, $__bag); ?>
                 }
             })
 
-            var base_color = "rgb(230,230,230)";
-            // var active_color = "rgb(237, 40, 70)";
-            var active_color = "#cc5500";
+            var base_color = "black";
+            var active_color = "#db6657";
 
             var child = 1;
             var length = $("section").length - 1;
@@ -448,6 +592,8 @@ unset($__errorArgs, $__bag); ?>
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
                 currentSection.css('transform','translateX(0)');
+                currentSection.css('display', 'flex');
+                currentSection.css('flex-direction', 'column');
                 currentSection.prevAll('section').css('transform','translateX(-100px)');
                 currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();
@@ -528,8 +674,11 @@ unset($__errorArgs, $__bag); ?>
                 return (number/1048576).toFixed(1) + 'MB';
             }
         }
-
     </script>
+        <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
+      defer
+    ></script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>

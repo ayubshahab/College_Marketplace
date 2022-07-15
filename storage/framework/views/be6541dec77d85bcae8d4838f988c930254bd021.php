@@ -1,42 +1,47 @@
-<x-layout>
+<?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.layout','data' => []] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
     <link rel="stylesheet" types = "text/css" href="/css/createListing.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
-                <div class="back-button">
-                    <a href="javascript:history.back()" class="button1 b-button">
-                        <i class="fa-solid fa-arrow-left"></i> Back
-                    </a>
-                </div> 
-
                 <div class="info">
-                    <h1>Lorem ipsum dolor sit amet consectetur.</h1>
-
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eum tempore nam consectetur, possimus dolorum quidem tempora et laboriosam est deleniti sunt modi, provident quasi!</p>
-                    <br>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate temporibus ab excepturi doloremque cumque.</p>
+                    
                 </div>
                 <div class = "listingFormContainer">
 
-                    {{-- SOURCE CODE FROM CODE PEN --}}
-                    {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
+                    
+                    
                     <div id="svg_wrap"></div>
-                    <h1>Post A Rental!</h1>
+                    <h1>Post A Lease!</h1>
                     <form class="listingForm" method = "POST" action="/rentables" id="listingForm"
                     enctype="multipart/form-data">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         
-                        <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
+                        <input type="hidden" name="user_id"  value="<?php echo e(old('iser_id', '3')); ?>"
                         >
 
-                        {{-- card #1 --}}
-                        <section class = "listingCard default-card">
+                        
+                        <section class = "listingCard">
                             <p class="create-listing-header">Rental Details</p>
-                            <input type="text" name = "rental_title" placeholder="Rental Title"  value="{{ old('rental_title', null) }}" />
-                            @error('rental_title')
-                                <p>{{$message}}</p>
-                            @enderror
+                            <input type="text" name = "rental_title" placeholder="Rental Title"  value="<?php echo e(old('rental_title', null)); ?>" />
+                            <?php $__errorArgs = ['rental_title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             
 
                             <p class="create-listing-header">
@@ -44,49 +49,57 @@
                             </p>
                             <div class="condition-box">
                                 <select name="rental_duration" id="rentalDuration">
-                                    <option value="Hourly" {{ (old("rental_duration") == 'Hourly' ? "selected":"") }}>Hourly</option>
+                                    <option value="Hourly" <?php echo e((old("rental_duration") == 'Hourly' ? "selected":"")); ?>>Hourly</option>
                                     
-                                    <option value="Daily" {{ (old("rental_duration") == 'Daily' ? "selected":"") }}>Daily</option>
+                                    <option value="Daily" <?php echo e((old("rental_duration") == 'Daily' ? "selected":"")); ?>>Daily</option>
 
-                                    <option value="Weekly" {{ (old("rental_duration") == 'Free' ? "selected":"") }}>Weekly</option>
+                                    <option value="Weekly" <?php echo e((old("rental_duration") == 'Free' ? "selected":"")); ?>>Weekly</option>
 
-                                    <option value="Monthly" {{ (old("rental_duration") == 'Monthly' ? "selected":"") }}>Monthly</option>
+                                    <option value="Monthly" <?php echo e((old("rental_duration") == 'Monthly' ? "selected":"")); ?>>Monthly</option>
                                 </select>
-                                @error('rental_duration')
-                                    <p>{{$message}}</p>
-                                @enderror
+                                <?php $__errorArgs = ['rental_duration'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                
                             </div>
 
-                            <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="{{ old('rental_charging', null) }}"/>
-                            @error('rental_charging')
-                                <p>{{$message}}</p>
-                            @enderror
-
-                            <p class="create-listing-header">
-                                Price Negotiable or Fixed
-                            </p>
-                            <div class="condition-box">
-                                <select name="negotiable" id="">
-                                    <option value="Fixed" {{ (old("negotiable") == 'Fixed' ? "selected":"") }}>Fixed</option>
-                                    
-                                    <option value="Negotiable" {{ (old("negotiable") == 'Negotiable' ? "selected":"") }}>Negotiable/ OBO (best offer)</option>
-                                </select>
-                                @error('negotiable')
-                                    <p>{{$message}}</p>
-                                @enderror
-                            </div>
+                            <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="<?php echo e(old('rental_charging', null)); ?>"/>
+                            <?php $__errorArgs = ['rental_charging'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
                             <p class="create-listing-header">Condition</p>
                             <div class ="conditionBox">
                                 <select name="condition" id="">
-                                    <option value="New" {{ (old("condition") == 'New' ? "selected":"") }}>New</option>
-                                    <option value="Good" {{ (old("condition") == 'Good' ? "selected":"") }}>Good</option>
-                                    <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
-                                    <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
+                                    <option value="New" <?php echo e((old("condition") == 'New' ? "selected":"")); ?>>New</option>
+                                    <option value="Good" <?php echo e((old("condition") == 'Good' ? "selected":"")); ?>>Good</option>
+                                    <option value="Slightly Used" <?php echo e((old("condition") == 'Slightly Used' ? "selected":"")); ?>>Slightly Used </option>
+                                    <option value="Used Normal Wear" <?php echo e((old("condition") == 'Used Normal Wear' ? "selected":"")); ?>>Used Normal Wear </option>
                                 </select>
-                                @error('condition')
-                                    <p>{{$message}}</p>
-                                @enderror
+                                <?php $__errorArgs = ['condition'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
 
                             <p class="create-listing-header">Categories</p>
@@ -94,126 +107,186 @@
                                 <ul class="ks-cboxtags">
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxSix" value="Furniture" 
-                                        {{ old('category.0') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Furniture' ? 'checked' : '' }}
-                                        >
+                                        <?php echo e(old('category.0') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'Furniture' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'Furniture' ? 'checked' : ''); ?>>
                                         <label for="checkboxSix"
                                         >Furniture</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxSeven" value="Clothes"
-                                        {{ old('category.0') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Clothes' ? 'checked' : '' }}
-                                        >
+                                        <?php echo e(old('category.0') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'Clothes' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'Clothes' ? 'checked' : ''); ?>>
                                         <label for="checkboxSeven">Clothes</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxEight" value="Electronics" 
-                                        {{ old('category.0') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Electronics' ? 'checked' : '' }}
-                                        >
+                                        <?php echo e(old('category.0') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'Electronics' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'Electronics' ? 'checked' : ''); ?>>
                                         <label for="checkboxEight">Electronics</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxNine" value="Kitchen"
-                                        {{ old('category.0') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Kitchen' ? 'checked' : '' }}
-                                        >
+                                        <?php echo e(old('category.0') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'Kitchen' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'Kitchen' ? 'checked' : ''); ?>>
                                         <label for="checkboxNine">Kitchen</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="category[]" id="checkboxTen" value="School Accessories"
-                                        {{ old('category.0') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'School Accessories' ? 'checked' : '' }}
-                                        >
+                                        <?php echo e(old('category.0') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.1') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.2') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.3') == 'School Accessories' ? 'checked' : ''); ?>
+
+                                        <?php echo e(old('category.4') == 'School Accessories' ? 'checked' : ''); ?>>
                                         <label for="checkboxTen">School Accessories</label>
                                     </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
-                                        {{ old('category.0') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Books' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxEleven">Books</label>
-                                    </li>
                                 </ul>
-                                @error('category')
-                                    <p>{{$message}}</p>
-                                @enderror
+                                <?php $__errorArgs = ['category'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>        
                         </section>
 
-                        {{-- card #2 --}}
+                        
                         <section class = "listingCard">
                             <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
-                            <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
-                            @error('tags')
-                                <p>{{$message}}</p>
-                            @enderror
-                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ old('description', null) }}</textarea>
-                            @error('description')
-                                <p>{{$message}}</p>
-                            @enderror
+                            <input name = "tags" type="text" placeholder="Tags" value="<?php echo e(old('tags', null)); ?>"/>
+                            <?php $__errorArgs = ['tags'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;"><?php echo e(old('description', null)); ?></textarea>
+                            <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             <p class="create-listing-header">Attach Images</p>
                             <input class="imgUpload" type="file" id="image_uploads" name="image_uploads[]" accept=".jpg, .jpeg, .png" multiple >
                             <div class="preview">
                                 <h6>Please select up to 5</h6>
                             </div>
-                            @error('image_uploads')
-                                <p>{{$message}}</p>
-                            @enderror
+                            <?php $__errorArgs = ['image_uploads'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </section>
 
-                        {{-- card #3 --}}
+                        
                         <section class = "listingCard">
                         <p class="create-listing-header">Location</p>
-                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ old('street', null) }}"/>
-                            @error('street')
-                                <p>{{$message}}</p>
-                            @enderror
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
-                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
-                            @error('city')
-                                <p>{{$message}}</p>
-                            @enderror
-                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ old('state', null) }}"/>
-                            @error('state')
-                                <p>{{$message}}</p>
-                            @enderror
-                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ old('country', null) }}" />
-                            @error('country')
-                                <p>{{$message}}</p>
-                            @enderror
-                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ old('postcode', null) }}" />
-                            @error('postcode')
-                                <p>{{$message}}</p>
-                            @enderror
-
-                            {{-- <p class="create-listing-header">Use My Location:</p>
-                            <div onclick="getLocation()">Get Location</div> --}}
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="<?php echo e(old('street', null)); ?>"/>
+                            <?php $__errorArgs = ['street'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e(old('street', null)); ?>"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="<?php echo e(old('city', null)); ?>"/>
+                            <?php $__errorArgs = ['city'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="<?php echo e(old('state', null)); ?>"/>
+                            <?php $__errorArgs = ['state'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="<?php echo e(old('country', null)); ?>" />
+                            <?php $__errorArgs = ['country'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="<?php echo e(old('postcode', null)); ?>" />
+                            <?php $__errorArgs = ['postcode'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            
                         </section>
 
 
@@ -223,7 +296,7 @@
                             <button class="submit-create-listing button" id="submit" type="submit">
                                 Submit
                             </button>
-                            {{-- <div class="button" id="submit" type="submit">Post</div> --}}
+                            
                         </div>
                     </form>
                 </div>
@@ -309,6 +382,7 @@
             address2Field.focus();
         }
 
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -344,26 +418,27 @@
         // script to change between view cards for create listing
         $( document ).ready(function() {
 
-            $("#rental_charging").attr("placeholder", "Rental Price per Hour");
+            $("#rental_charging").attr("placeholder", "Rental Price per hour");
             $('#rentalDuration').change(function(){
                 switch ($(this).val()){
                     case 'Hourly':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Hour");
+                        $("#rental_charging").attr("placeholder", "Rental Price per hour");
                         break;
                     case 'Daily':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Day");
+                        $("#rental_charging").attr("placeholder", "Rental Price per day");
                         break;
                     case 'Weekly':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Week");
+                        $("#rental_charging").attr("placeholder", "Rental Price per week");
                         break;
                     case 'Monthly':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Month");
+                        $("#rental_charging").attr("placeholder", "Rental Price per month");
                         break;
                 }
             })
 
-            var base_color = "black";
-            var active_color = "#db6657";
+            var base_color = "rgb(230,230,230)";
+            // var active_color = "rgb(237, 40, 70)";
+            var active_color = "#cc5500";
 
             var child = 1;
             var length = $("section").length - 1;
@@ -451,8 +526,6 @@
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
                 currentSection.css('transform','translateX(0)');
-                currentSection.css('display', 'flex');
-                currentSection.css('flex-direction', 'column');
                 currentSection.prevAll('section').css('transform','translateX(-100px)');
                 currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();
@@ -538,4 +611,9 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
+<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
+<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
+<?php endif; ?><?php /**PATH C:\xampp\htdocs\COLLEGE_MARKETPLACE\resources\views/subleases/create.blade.php ENDPATH**/ ?>
