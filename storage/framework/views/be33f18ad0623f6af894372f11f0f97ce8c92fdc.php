@@ -680,7 +680,7 @@ unset($__errorArgs, $__bag); ?>
         }
 
     </script>
-    <script
+    <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>
