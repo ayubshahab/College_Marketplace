@@ -246,7 +246,45 @@
     <script>
         
         var map = L.map('map-container').setView([51.505, -0.09], 13);
+                
+        function initMap() {
+            var mapTwo;
+            var geocoder;
 
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(-34.397, 150.644);
+            var mapOptions = {
+                zoom: 15,
+                center: latlng
+            }
+
+            mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+
+            if("{{$listing->latitude}}" === "" || "{{$listing->longitude}}" === "") {
+                var address = "{{$listing->street." ".$listing->city}}";
+                //console.log(address);
+                geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == 'OK') {
+                    mapTwo.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: results[0].geometry.location
+                });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+            } else {
+                var latlng = new google.maps.LatLng("{{$listing->latitude}}", "{{$listing->langitude}}");
+                //console.log(latlng);
+                var mapOptions = {
+                    zoom: 15,
+                    center: latlng
+                }
+                mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+            }
+        }
+        
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");
             expandImg.src = imgs.src;
@@ -472,5 +510,9 @@
                 element.scroll({ top: element.scrollHeight, behavior: "smooth"})
             }
     </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initMap&libraries=places&v=weekly"
+      defer
+    ></script>
 </x-layout>
 {{-- @endsection --}}
