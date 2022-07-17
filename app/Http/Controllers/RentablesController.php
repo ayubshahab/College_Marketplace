@@ -39,7 +39,7 @@ class RentablesController extends Controller
         if($request->hasFile('image_uploads'))
         {
             foreach ($request->file('image_uploads') as $file) {
-                $path = $file->store('listings','s3');
+                $path = $file->store('rentables','s3');
                 \Storage::disk('s3')->setVisibility($file, 'public');
                 //$fullURL = \Storage::disk('s3')->url($name); 
                 $data[] = $path; 
@@ -163,7 +163,7 @@ class RentablesController extends Controller
         if($request->hasFile('image_uploads'))
         {
             foreach ($request->file('image_uploads') as $file) {
-                $path = $file->store('listings','s3');
+                $path = $file->store('rentables','s3');
                 \Storage::disk('s3')->setVisibility($file, 'public');
                 //$fullURL = \Storage::disk('s3')->url($name); 
                 $data[] = $path; 

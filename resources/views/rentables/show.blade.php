@@ -238,8 +238,7 @@
      <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 
     <script>
-
-function initMap() {
+        function initMap() {
 
             var mapTwo;
             var geocoder;

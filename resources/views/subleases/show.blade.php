@@ -242,17 +242,58 @@
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
    
-    {{-- <script>
+    <script>
         
         var map = L.map('map-container').setView([51.505, -0.09], 13);
+
+        function initMap() {
+
+            var mapTwo;
+            var geocoder;
+
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(-34.397, 150.644);
+            var mapOptions = {
+                zoom: 15,
+                center: latlng
+            }
+
+            mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+
+            if("{{$leaseItem->latitude}}" === "" || "{{$leaseItem->longitude}}" === "") {
+                var address = "{{$leaseItem->street." ".$leaseItem->city}}";
+                //console.log(address);
+                geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == 'OK') {
+                    mapTwo.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: results[0].geometry.location
+                });
+                marker.setMap(mapTwo);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+            } else {
+                var latlng = new google.maps.LatLng("{{$leaseItem->latitude}}", "{{$leaseItem->langitude}}");
+                //console.log(latlng);
+                var mapOptions = {
+                    zoom: 15,
+                    center: latlng
+                }
+                mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                marker.setMap(mapTwo);
+            }
+        }
 
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");
             expandImg.src = imgs.src;
         }
 
-        var listing_id = "{{$listing->id}}"
-        var listingOwner = "{{$listing->user_id}}";
+        var listing_id = "{{$leaseItem->id}}"
+        var listingOwner = "{{$leaseItem->user_id}}";
         var userLoggedIn = "{{$currentUser ? $currentUser->id : -1}}";
         var receiverSelected = null; //the person whose chat we have open
         $(document).ready(function(){
@@ -323,7 +364,7 @@
                 loadConversation(listingOwner, userLoggedIn);
             }
             function loadConversation(UserSending, UserReceiving ){
-                if("{{$listing->user_id}}" != userLoggedIn){
+                if("{{$leaseItem->user_id}}" != userLoggedIn){
                     var ul = document.getElementById("messages");
                     ul.innerHTML = null;
                     
@@ -470,6 +511,12 @@
         function scrollBottom(element) {
                 element.scroll({ top: element.scrollHeight, behavior: "smooth"})
             }
-    </script> --}}
+    </script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initMap&libraries=places&v=weekly"
+      defer
+    ></script>
+
 </x-layout>
 {{-- @endsection --}}
