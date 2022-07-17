@@ -31,7 +31,7 @@ class Controller extends BaseController
             $latest = Listing::latest()->take(16)->get();
         }
 
-        return view('listings.index', [
+        return view('main.index', [
             'listings'=> $latest,
             'listingsNear' => Listing::latest()->where('status', '!=', 'Sold' )->take(10)->get(),
             'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
@@ -70,7 +70,7 @@ class Controller extends BaseController
                     $totalResults = collect(Listing::latest()->get())->sortByDesc('id')->paginate(16);
                 }
                 
-                return view('listings.search', [
+                return view('main.search', [
                     'listings' => $totalResults
                 ]); 
             }elseif((request('type') ?? false) && request('type') == 'rentable'){
@@ -83,7 +83,7 @@ class Controller extends BaseController
                     $totalResults = Rentable::latest()->paginate(16);
                 }
                 
-                return view('listings.search', [
+                return view('main.search', [
                     'listings' => $totalResults
                 ]); 
             }elseif((request('type') ?? false) && request('type') == 'lease'){
@@ -95,7 +95,7 @@ class Controller extends BaseController
                     $totalResults = Sublease::latest()->paginate(16);
                 }
                 
-                return view('listings.search', [
+                return view('main.search', [
                     'listings' => $totalResults
                 ]); 
 
@@ -110,7 +110,7 @@ class Controller extends BaseController
                     $totalResults = collect(Listing::latest()->get())->merge(Rentable::latest()->get())->merge(Sublease::latest()->get())->sortByDesc('id')->paginate(16);
                 }
                 
-                return view('listings.search', [
+                return view('main.search', [
                     'listings' => $totalResults
                 ]); 
 

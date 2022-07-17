@@ -1,5 +1,6 @@
 @inject('listingProvider', 'App\Http\Controllers\ListingController')
 @inject('rentableProvider', 'App\Http\Controllers\RentablesController')
+@inject('subleaseProvider', 'App\Http\Controllers\SubleaseController')
 @inject('userProvider', 'App\Http\Controllers\UserController')
 
 <x-layout>
@@ -291,7 +292,53 @@
                                                     <p>No matches found. Please stand by as we look for more!</p>
                                                 @endif
                                             @elseif($watchItem->type == 'lease')
-                                                    <h1>Type is lease</h1>
+                                                 @if($matches != null)
+                                                    @foreach($matches as $match)
+                                                        <div class="slides-item" id="slide-1">
+                                                            @php
+                                                                $foundMatch = $subleaseProvider::getSubleaseById($match);
+
+                                                                $imgLinks = null;
+                                                                if(isset($foundMatch->image_uploads)){
+                                                                    $imgLinks = json_decode($foundMatch->image_uploads);
+                                                                    if(is_array($imgLinks)){
+                                                                        $imgLinks = $imgLinks[0];
+                                                                    }
+                                                                }
+
+                                                                $hardLink=['/images/rotunda.jpg', '/images/old-cabell.jpg', '/images/cavalier-horse.jpg'];
+                                                                $link = $hardLink[random_int(0, count($hardLink)-1)];
+                                                            @endphp
+                                                            @if($foundMatch != null)
+                                                                <a href="/subleases/{{$foundMatch->id}}">
+                                                                    <img src={{$foundMatch->image_uploads ? Storage::disk('s3')->url($imgLinks) : asset($link) }}  alt="image doesnt exist">
+                                                                </a>
+                                                                <div class="slidesitem-details">
+                                                                    <h1>{{$foundMatch->sublease_title}}</h1>
+                                                                    <h3>${{$foundMatch->rent}} /Month</h3>
+                                                                </div>
+
+                                                                <div class="remove-recommendation">
+                                                                    <form action="/remove_recommendation" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <input type="hidden" name="watchitem_id" value="{{$watchItem->id}}">
+                                                                        <input type="hidden" name="recommendation_id" value="{{$match}}">
+                                                                        <button type="submit"><i class="fa-solid fa-x"></i></button>
+                                                                    </form>
+                                                                </div>  
+                                                                @if($foundMatch->status =='Available')
+                                                                    <div class="status green">
+                                                                    </div>
+                                                                @else
+                                                                    <div class="status ">
+                                                                    </div>
+                                                                @endif 
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <p>No matches found. Please stand by as we look for more!</p>
+                                                @endif
                                             @endif
                                         </div>  
                                     </div>

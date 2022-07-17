@@ -212,8 +212,11 @@
                                 <p>{{$message}}</p>
                             @enderror
 
-                            {{-- <p class="create-listing-header">Use My Location:</p>
-                            <div onclick="getLocation()">Get Location</div> --}}
+                            <input type="hidden" name="latitude" id ="latitude" value = "{{null}}">
+                            <input type="hidden" name="longitude" id = "longitude" value = "{{null}}">
+
+                            <p class="create-listing-header">Use My Location:</p>
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
                         </section>
 
 
@@ -318,8 +321,20 @@
         }
 
         function showPosition(position) {
-           console.log("Latitude: " + position.coords.latitude + 
-            "<br>Longitude: " + position.coords.longitude);
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            // displayLocation(latitude,longitude);
+            // const reverse = require('reverse-geocode');
+            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
         }
 
         function showError(error) {

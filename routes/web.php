@@ -38,38 +38,42 @@ Route::post('/newsletter', [Controller::class, 'enrollEmail']);
 // Routes for listing items
 Route::get('/listings/create', [ListingController::class, 'create'])->middleware('auth');
 Route::post('/listings', [ListingController::class, 'store'])->middleware('auth');
-Route::put('/listings/{listing}/update', [ListingController::class, 'updateStatus']);
+Route::put('/listings/{listing}/update', [ListingController::class, 'updateStatus'])->middleware('auth');
 Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])->middleware('auth');
 Route::put('/listings/{listing}',[ListingController::class, 'update'])->middleware('auth');
 Route::delete('/listings/{listing}',[ListingController::class, 'destroy'])->middleware('auth');
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
 
-
 // Routes for rentable items
 Route::get('/rentables/create', [RentablesController::class, 'create'])->middleware('auth');
 Route::post('/rentables', [RentablesController::class, 'store'])->middleware('auth');
-Route::put('/rentables/{rentable}/update', [RentablesController::class, 'updateStatus']);
+Route::put('/rentables/{rentable}/update', [RentablesController::class, 'updateStatus'])->middleware('auth');
 Route::get('/rentables/{rentable}/edit', [RentablesController::class, 'edit'])->middleware('auth');
-Route::put('/rentables/{rentable}',[RentablesController::class, 'update'])->middleware('auth');;
+Route::put('/rentables/{rentable}',[RentablesController::class, 'update'])->middleware('auth');
 Route::get('/rentables/{rentable}', [RentablesController::class, 'show']);
 Route::delete('/rentables/{rentable}',[RentablesController::class, 'destroy'])->middleware('auth');
 
 //Routes for Sublease items
 Route::get('/subleases/create', [SubleaseController::class, 'create'])->middleware('auth');
 Route::post('/subleases', [SubleaseController::class, 'store'])->middleware('auth');
+Route::put('/subleases/{sublease}/update', [SubleaseController::class, 'updateStatus'])->middleware('auth');
+Route::get('/subleases/{sublease}/edit', [SubleaseController::class, 'edit'])->middleware('auth');
+Route::put('/subleases/{sublease}',[SubleaseController::class, 'update'])->middleware('auth');;
 Route::get('/subleases/{sublease}', [SubleaseController::class, 'show']);
+Route::delete('/subleases/{sublease}',[SubleaseController::class, 'destroy'])->middleware('auth');
+
+
+
 
 
 //messaging system related routes
 Route::post('/sendmessage', [MessageController::class, 'postMessage'])->middleware('auth');
 Route::get('/messages', [MessageController::class, 'getMessages'])->middleware('auth');
 
-
 //yard sales related routes
 Route::get('/yardsales/create', [YardSaleController::class, 'create'])->middleware('auth');
 Route::post('/yardsales', [YardSaleController::class, 'store'])->middleware('auth');
 Route::get('/yardsales/{yardsale}',[YardSaleController::class,'show']);
-
 
 //user related routes
 //Route::get('/users/loginRegister', [UserController::class, 'create'])->name('login')->middleware('guest');

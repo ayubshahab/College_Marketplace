@@ -375,7 +375,7 @@ li{
 /* loading page end */
 @media(max-width: 480px){
     .listings-parent-container{
-        padding: 20px !important;
+        /* padding: 20px !important; */
     }
 
     .header-cont div h1{

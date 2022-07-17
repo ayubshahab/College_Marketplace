@@ -22,24 +22,24 @@
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
                     <div id="svg_wrap"></div>
-                    <h1>Post A Lease!</h1>
-                    <form class="listingForm" method = "POST" action="/subleases" id="listingForm"
+                    <h1>Update My Lease</h1>
+                    <form class="listingForm" method = "POST" action="/subleases/{{$sublease->id}}" id="listingForm"
                     enctype="multipart/form-data">
                         @csrf
-                        
+                        @method('PUT')
                         <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
                         >
 
                         {{-- card #1 --}}
                         <section class = "listingCard default-card">
                             <p class="create-listing-header">Lease Details</p>
-                            <input type="text" name = "sublease_title" placeholder="Lease Title"  value="{{ old('sublease_title', null) }}" />
+                            <input type="text" name = "sublease_title" placeholder="Lease Title"  value="{{ $sublease->sublease_title }}" />
                             @error('sublease_title')
                                 <p>{{$message}}</p>
                             @enderror
 
                             <p class="create-listing-header">General Location (shamrock, standard, etc)</p>
-                            <input type="text" name = "location" placeholder="General Location" value="{{ old('location', null) }}" />
+                            <input type="text" name = "location" placeholder="General Location" value="{{ $sublease->location}}" />
                             @error('location')
                                 <p>{{$message}}</p>
                             @enderror
@@ -52,7 +52,7 @@
                                 <div class="half" style="width:48%;">
                                     <input type="date" id="datepicker"
                                     name='date_from' 
-                                    placeholder="Available From" value="{{old('date_from',null)}}"/>
+                                    placeholder="Available From" value="{{$sublease->date_from}}"/>
                                     @error('date_from')
                                         <p>{{$message}}</p>
                                     @enderror
@@ -61,7 +61,7 @@
                                 <div class="half" style="width:48%;">
                                     <input type="date" id="datepicker"
                                     name='date_to' 
-                                    placeholder="Available To" value="{{old('date_to',null)}}"/>
+                                    placeholder="Available To" value="{{$sublease->date_to}}"/>
                                     @error('date_to')
                                         <p>{{$message}}</p>
                                     @enderror
@@ -72,15 +72,15 @@
                             <p class="create-listing-header">
                                 Rental Info
                             </p>
-                            <input id="lease_rent" type="number" min="0.00" name = "rent" max="10000.00" step="0.01" placeholder="Rent / Month" value="{{old('rent',null)}}"/>
+                            <input id="lease_rent" type="number" min="0.00" name = "rent" max="10000.00" step="0.01" placeholder="Rent / Month" value="{{$sublease->rent}}"/>
                             @error('rent')
                                 <p>{{$message}}</p>
                             @enderror
                             <div class="condition-box">
                                 <select name="negotiable" id="">
-                                    <option value="Fixed" {{ (old("negotiable") == 'Fixed' ? "selected":"") }}>Rent Fixed</option>
+                                    <option value="Fixed"{{ $sublease->negotiable == 'Fixed' ? "selected":""}}>Rent Fixed</option>
                                     
-                                    <option value="Negotiable" {{ (old("negotiable") == 'Negotiable' ? "selected":"") }}>Rent Negotiable/ OBO (best offer)</option>
+                                    <option value="Negotiable" {{ $sublease->negotiable == 'Negotiable' ? "selected":""}}>Rent Negotiable/ OBO (best offer)</option>
                                 </select>
                                 @error('negotiable')
                                     <p>{{$message}}</p>
@@ -93,17 +93,20 @@
                             <p class="create-listing-header">Condition</p>
                             <div class ="conditionBox">
                                 <select name="condition" id="">
-                                    <option value="New" {{ (old("condition") == 'New' ? "selected":"") }}>New</option>
-                                    <option value="Good" {{ (old("condition") == 'Good' ? "selected":"") }}>Good</option>
-                                    <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
-                                    <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
+                                    <option value="New" {{ $sublease->condition == 'New' ? "selected":""}}>New</option>
+
+                                    <option value="Good" 
+                                    {{ $sublease->condition == 'Good' ? "selected":""}}
+                                    >Good</option>
+                                    <option value="Slightly Used" {{ $sublease->condition == 'Slightly Used' ? "selected":""}}>Slightly Used </option>
+                                    <option value="Used Normal Wear" {{ $sublease->condition == 'Used Normal Wear' ? "selected":""}}>Used Normal Wear </option>
                                 </select>
                                 @error('condition')
                                     <p>{{$message}}</p>
                                 @enderror
                             </div> 
                             
-                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ old('description', null) }}</textarea>
+                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ $sublease->description }}</textarea>
                             @error('description')
                                 <p>{{$message}}</p>
                             @enderror
@@ -118,51 +121,67 @@
 
                             <p class="create-listing-header">Utilities Available</p>
                             <div class ="conditionBox">
-                                <ul class="ks-cboxtags">
+                                {{-- electric, gas, water, trash, internet --}}
+                                @php
+                                    $utilities = explode(", ", $sublease->utilities);
+                                    while(count($utilities)<6)
+                                        array_push($utilities, '')
+                                    
+                                @endphp
+                                 <ul class="ks-cboxtags">
                                     <li>
                                         <input type="checkbox" name="utilities[]" id="checkboxSix" value="Electric" 
-                                        {{ old('utilities.0') == 'Electric' ? 'checked' : '' }}
-                                        {{ old('utilities.1') == 'Electric' ? 'checked' : '' }}
-                                        {{ old('utilities.2') == 'Electric' ? 'checked' : '' }}
-                                        {{ old('utilities.3') == 'Electric' ? 'checked' : '' }}
-                                        {{ old('utilities.4') == 'Electric' ? 'checked' : '' }}>
+                                        {{ $utilities[0] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[1] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[2] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[3] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[4] == 'Electric' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxSix"
                                         >Electric</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="utilities[]" id="checkboxSeven" value="Gas"
-                                        {{ old('utilities.0') == 'Gas' ? 'checked' : '' }}
-                                        {{ old('utilities.1') == 'Gas' ? 'checked' : '' }}
-                                        {{ old('utilities.2') == 'Gas' ? 'checked' : '' }}
-                                        {{ old('utilities.3') == 'Gas' ? 'checked' : '' }}
-                                        {{ old('utilities.4') == 'Gas' ? 'checked' : '' }}>
+                                        {{ $utilities[0]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[1]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[4]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[5]  == 'Gas' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxSeven">Gas</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="utilities[]" id="checkboxEight" value="Water" 
-                                        {{ old('utilities.0') == 'Water' ? 'checked' : '' }}
-                                        {{ old('utilities.1') == 'Water' ? 'checked' : '' }}
-                                        {{ old('utilities.2') == 'Water' ? 'checked' : '' }}
-                                        {{ old('utilities.3') == 'Water' ? 'checked' : '' }}
-                                        {{ old('utilities.4') == 'Water' ? 'checked' : '' }}>
+                                        {{ $utilities[0]  == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[1] == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[4] == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[5] == 'Water' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxEight">Water</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="utilities[]" id="checkboxNine" value="Trash"
-                                        {{ old('utilities.0') == 'Trash' ? 'checked' : '' }}
-                                        {{ old('utilities.1') == 'Trash' ? 'checked' : '' }}
-                                        {{ old('utilities.2') == 'Trash' ? 'checked' : '' }}
-                                        {{ old('utilities.3') == 'Trash' ? 'checked' : '' }}
-                                        {{ old('utilities.4') == 'Trash' ? 'checked' : '' }}>
+                                        {{ $utilities[0]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[1]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[4]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[5]  == 'Trash' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxNine">Trash</label>
                                     </li>
                                     <li>
                                         <input type="checkbox" name="utilities[]" id="checkboxTen" value="Internet"
-                                        {{ old('utilities.0') == 'Internet' ? 'checked' : '' }}
-                                        {{ old('utilities.1') == 'Internet' ? 'checked' : '' }}
-                                        {{ old('utilities.2') == 'Internet' ? 'checked' : '' }}
-                                        {{ old('utilities.3') == 'Internet' ? 'checked' : '' }}
-                                        {{ old('utilities.4') == 'Internet' ? 'checked' : '' }}>
+                                        {{ $utilities[0]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[1]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[4]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[5]  == 'Internet' ? 'checked' : '' }}
+                                        >
                                         <label for="checkboxTen">Internet</label>
                                     </li>
                                 </ul>
@@ -175,30 +194,30 @@
                         {{-- card #3 --}}
                         <section class = "listingCard">
                         <p class="create-listing-header">Location</p>
-                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ $sublease->street}}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('apartment_floor', null) }}"/>
-                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ $sublease->apartment_floor }}"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ $sublease->city }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ old('state', null) }}"/>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ $sublease->state}}"/>
                             @error('state')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ old('country', null) }}" />
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ $sublease->country }}" />
                             @error('country')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ old('postcode', null) }}" />
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ $sublease->postcode }}" />
                             @error('postcode')
                                 <p>{{$message}}</p>
                             @enderror
 
-                            <input type="hidden" name="latitude" id ="latitude" value = "{{null}}">
-                            <input type="hidden" name="longitude" id = "longitude" value = "{{null}}">
+                            <input type="hidden" name="latitude" id ="latitude" value = "{{$sublease->latitude}}">
+                            <input type="hidden" name="longitude" id = "longitude" value = "{{$sublease->longitude}}">
 
                             <p class="create-listing-header">Use My Location:</p>
                             <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
@@ -536,7 +555,7 @@
             }
         }
     </script>
-        <script async
+        <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>

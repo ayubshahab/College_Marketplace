@@ -27,11 +27,13 @@ class RentablesController extends Controller
             'tags'=>'required',
             'description'=>'required',
             'image_uploads'=>'required',
-            'street'=>'required',
-            'city'=>'required',
-            'state'=>'required',
-            'country'=>'required',
-            'postcode'=>'required'
+            'street'=>'required_without:latitude',
+            'city'=>'required_without:latitude',
+            'state'=>'required_without:latitude',
+            'country'=>'required_without:latitude',
+            'postcode'=>'required_without:latitude',
+            'latitude' => 'required_without:street',
+            'longitude' =>'required_without:street'
         ]);
         $formFields['user_id']=auth()->id();
         if($request->hasFile('image_uploads'))
