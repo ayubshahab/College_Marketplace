@@ -267,21 +267,26 @@
                 if (status == 'OK') {
                     mapTwo.setCenter(results[0].geometry.location);
                     var marker = new google.maps.Marker({
-                    mapTwo: mapTwo,
-                    position: results[0].geometry.location
+                        position: results[0].geometry.location,
+                        color: 'red',
                 });
+                //console.log('here');
+                marker.setMap(mapTwo);
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
             });
             } else {
-                var latlng = new google.maps.LatLng("{{$listing->latitude}}", "{{$listing->langitude}}");
+                latlng = new google.maps.LatLng("{{$listing->latitude}}", "{{$listing->langitude}}");
                 //console.log(latlng);
-                var mapOptions = {
-                    zoom: 15,
-                    center: latlng
-                }
-                mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                mapTwo.setCenter(latlng);
+                mapTwo.setZoom(15);
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    color: 'red',
+                });
+                marker.setMap(mapTwo);
+                //console.log('here');
             }
         }
         
