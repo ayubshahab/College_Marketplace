@@ -22,158 +22,91 @@
                     {{-- SOURCE CODE FROM CODE PEN --}}
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
                     <div id="svg_wrap"></div>
-                    <h1>Post A Rental!</h1>
-                    <form class="listingForm" method = "POST" action="/rentables" id="listingForm"
+                    <h1>Update My Lease</h1>
+                    <form class="listingForm" method = "POST" action="/subleases/{{$sublease->id}}" id="listingForm"
                     enctype="multipart/form-data">
                         @csrf
-                        
+                        @method('PUT')
                         <input type="hidden" name="user_id"  value="{{ old('iser_id', '3') }}"
                         >
 
                         {{-- card #1 --}}
                         <section class = "listingCard default-card">
-                            <p class="create-listing-header">Rental Details</p>
-                            <input type="text" name = "rental_title" placeholder="Rental Title"  value="{{ old('rental_title', null) }}" />
-                            @error('rental_title')
+                            <p class="create-listing-header">Lease Details</p>
+                            <input type="text" name = "sublease_title" placeholder="Lease Title"  value="{{ $sublease->sublease_title }}" />
+                            @error('sublease_title')
+                                <p>{{$message}}</p>
+                            @enderror
+
+                            <p class="create-listing-header">General Location (shamrock, standard, etc)</p>
+                            <input type="text" name = "location" placeholder="General Location" value="{{ $sublease->location}}" />
+                            @error('location')
                                 <p>{{$message}}</p>
                             @enderror
                             
-
+                            {{-- lease available date --}}
                             <p class="create-listing-header">
-                                Rental Duration
+                                Lease Duration
                             </p>
-                            <div class="condition-box">
-                                <select name="rental_duration" id="rentalDuration">
-                                    <option value="Hourly" {{ (old("rental_duration") == 'Hourly' ? "selected":"") }}>Hourly</option>
-                                    
-                                    <option value="Daily" {{ (old("rental_duration") == 'Daily' ? "selected":"") }}>Daily</option>
+                            <div class="lease-duration-container">
+                                <div class="half" style="width:48%;">
+                                    <input type="date" id="datepicker"
+                                    name='date_from' 
+                                    placeholder="Available From" value="{{$sublease->date_from}}"/>
+                                    @error('date_from')
+                                        <p>{{$message}}</p>
+                                    @enderror
+                                </div>
 
-                                    <option value="Weekly" {{ (old("rental_duration") == 'Free' ? "selected":"") }}>Weekly</option>
-
-                                    <option value="Monthly" {{ (old("rental_duration") == 'Monthly' ? "selected":"") }}>Monthly</option>
-                                </select>
-                                @error('rental_duration')
-                                    <p>{{$message}}</p>
-                                @enderror
+                                <div class="half" style="width:48%;">
+                                    <input type="date" id="datepicker"
+                                    name='date_to' 
+                                    placeholder="Available To" value="{{$sublease->date_to}}"/>
+                                    @error('date_to')
+                                        <p>{{$message}}</p>
+                                    @enderror
+                                </div>
                             </div>
 
-                            <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="{{ old('rental_charging', null) }}"/>
-                            @error('rental_charging')
-                                <p>{{$message}}</p>
-                            @enderror
 
                             <p class="create-listing-header">
-                                Price Negotiable or Fixed
+                                Rental Info
                             </p>
+                            <input id="lease_rent" type="number" min="0.00" name = "rent" max="10000.00" step="0.01" placeholder="Rent / Month" value="{{$sublease->rent}}"/>
+                            @error('rent')
+                                <p>{{$message}}</p>
+                            @enderror
                             <div class="condition-box">
                                 <select name="negotiable" id="">
-                                    <option value="Fixed" {{ (old("negotiable") == 'Fixed' ? "selected":"") }}>Fixed</option>
+                                    <option value="Fixed"{{ $sublease->negotiable == 'Fixed' ? "selected":""}}>Rent Fixed</option>
                                     
-                                    <option value="Negotiable" {{ (old("negotiable") == 'Negotiable' ? "selected":"") }}>Negotiable/ OBO (best offer)</option>
+                                    <option value="Negotiable" {{ $sublease->negotiable == 'Negotiable' ? "selected":""}}>Rent Negotiable/ OBO (best offer)</option>
                                 </select>
                                 @error('negotiable')
                                     <p>{{$message}}</p>
                                 @enderror
                             </div>
-
-                            <p class="create-listing-header">Condition</p>
-                            <div class ="conditionBox">
-                                <select name="condition" id="">
-                                    <option value="New" {{ (old("condition") == 'New' ? "selected":"") }}>New</option>
-                                    <option value="Good" {{ (old("condition") == 'Good' ? "selected":"") }}>Good</option>
-                                    <option value="Slightly Used" {{ (old("condition") == 'Slightly Used' ? "selected":"") }}>Slightly Used </option>
-                                    <option value="Used Normal Wear" {{ (old("condition") == 'Used Normal Wear' ? "selected":"") }}>Used Normal Wear </option>
-                                </select>
-                                @error('condition')
-                                    <p>{{$message}}</p>
-                                @enderror
-                            </div>
-
-                            <p class="create-listing-header">Categories</p>
-                            <div class ="conditionBox">
-                                <ul class="ks-cboxtags">
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxSix" value="Furniture" 
-                                        {{ old('category.0') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Furniture' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxSix"
-                                        >Furniture</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxSeven" value="Clothes"
-                                        {{ old('category.0') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Clothes' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxSeven">Clothes</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxEight" value="Electronics" 
-                                        {{ old('category.0') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Electronics' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxEight">Electronics</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxNine" value="Kitchen"
-                                        {{ old('category.0') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Kitchen' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxNine">Kitchen</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxTen" value="School Accessories"
-                                        {{ old('category.0') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'School Accessories' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxTen">School Accessories</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxEleven" value="Books"
-                                        {{ old('category.0') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Books' ? 'checked' : '' }}
-                                        {{ old('category.5') == 'Books' ? 'checked' : '' }}
-                                        >
-                                        <label for="checkboxEleven">Books</label>
-                                    </li>
-                                </ul>
-                                @error('category')
-                                    <p>{{$message}}</p>
-                                @enderror
-                            </div>        
                         </section>
 
                         {{-- card #2 --}}
                         <section class = "listingCard">
-                            <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
-                            <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
-                            @error('tags')
-                                <p>{{$message}}</p>
-                            @enderror
-                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ old('description', null) }}</textarea>
+                            <p class="create-listing-header">Condition</p>
+                            <div class ="conditionBox">
+                                <select name="condition" id="">
+                                    <option value="New" {{ $sublease->condition == 'New' ? "selected":""}}>New</option>
+
+                                    <option value="Good" 
+                                    {{ $sublease->condition == 'Good' ? "selected":""}}
+                                    >Good</option>
+                                    <option value="Slightly Used" {{ $sublease->condition == 'Slightly Used' ? "selected":""}}>Slightly Used </option>
+                                    <option value="Used Normal Wear" {{ $sublease->condition == 'Used Normal Wear' ? "selected":""}}>Used Normal Wear </option>
+                                </select>
+                                @error('condition')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div> 
+                            
+                            <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ $sublease->description }}</textarea>
                             @error('description')
                                 <p>{{$message}}</p>
                             @enderror
@@ -185,35 +118,106 @@
                             @error('image_uploads')
                                 <p>{{$message}}</p>
                             @enderror
+
+                            <p class="create-listing-header">Utilities Available</p>
+                            <div class ="conditionBox">
+                                {{-- electric, gas, water, trash, internet --}}
+                                @php
+                                    $utilities = explode(", ", $sublease->utilities);
+                                    while(count($utilities)<6)
+                                        array_push($utilities, '')
+                                    
+                                @endphp
+                                 <ul class="ks-cboxtags">
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxSix" value="Electric" 
+                                        {{ $utilities[0] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[1] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[2] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[3] == 'Electric' ? 'checked' : '' }}
+                                        {{ $utilities[4] == 'Electric' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxSix"
+                                        >Electric</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxSeven" value="Gas"
+                                        {{ $utilities[0]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[1]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[4]  == 'Gas' ? 'checked' : '' }}
+                                        {{ $utilities[5]  == 'Gas' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxSeven">Gas</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxEight" value="Water" 
+                                        {{ $utilities[0]  == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[1] == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[4] == 'Water' ? 'checked' : '' }}
+                                        {{ $utilities[5] == 'Water' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxEight">Water</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxNine" value="Trash"
+                                        {{ $utilities[0]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[1]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[4]  == 'Trash' ? 'checked' : '' }}
+                                        {{ $utilities[5]  == 'Trash' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxNine">Trash</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxTen" value="Internet"
+                                        {{ $utilities[0]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[1]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[2]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[3]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[4]  == 'Internet' ? 'checked' : '' }}
+                                        {{ $utilities[5]  == 'Internet' ? 'checked' : '' }}
+                                        >
+                                        <label for="checkboxTen">Internet</label>
+                                    </li>
+                                </ul>
+                                @error('utilities')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>  
                         </section>
 
                         {{-- card #3 --}}
                         <section class = "listingCard">
                         <p class="create-listing-header">Location</p>
-                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ $sublease->street}}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
-                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ $sublease->apartment_floor }}"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ $sublease->city }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ old('state', null) }}"/>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ $sublease->state}}"/>
                             @error('state')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ old('country', null) }}" />
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ $sublease->country }}" />
                             @error('country')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ old('postcode', null) }}" />
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ $sublease->postcode }}" />
                             @error('postcode')
                                 <p>{{$message}}</p>
                             @enderror
 
-                            <input type="hidden" name="latitude" id ="latitude" value = "{{null}}">
-                            <input type="hidden" name="longitude" id = "longitude" value = "{{null}}">
+                            <input type="hidden" name="latitude" id ="latitude" value = "{{$sublease->latitude}}">
+                            <input type="hidden" name="longitude" id = "longitude" value = "{{$sublease->longitude}}">
 
                             <p class="create-listing-header">Use My Location:</p>
                             <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
@@ -312,6 +316,7 @@
             address2Field.focus();
         }
 
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -359,26 +364,27 @@
         // script to change between view cards for create listing
         $( document ).ready(function() {
 
-            $("#rental_charging").attr("placeholder", "Rental Price per Hour");
+            $("#rental_charging").attr("placeholder", "Rental Price per hour");
             $('#rentalDuration').change(function(){
                 switch ($(this).val()){
                     case 'Hourly':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Hour");
+                        $("#rental_charging").attr("placeholder", "Rental Price per hour");
                         break;
                     case 'Daily':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Day");
+                        $("#rental_charging").attr("placeholder", "Rental Price per day");
                         break;
                     case 'Weekly':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Week");
+                        $("#rental_charging").attr("placeholder", "Rental Price per week");
                         break;
                     case 'Monthly':
-                        $("#rental_charging").attr("placeholder", "Rental Price per Month");
+                        $("#rental_charging").attr("placeholder", "Rental Price per month");
                         break;
                 }
             })
 
             var base_color = "black";
-            var active_color = "#db6657";
+            // var active_color = "rgb(237, 40, 70)";
+            var active_color = "#cc5500";
 
             var child = 1;
             var length = $("section").length - 1;

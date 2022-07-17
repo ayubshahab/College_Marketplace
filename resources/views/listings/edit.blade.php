@@ -78,7 +78,7 @@
 
                             <p class="create-listing-header">Categories</p>
                             <div class ="conditionBox">
-                                 @php
+                                @php
                                     $categories = explode(", ", $listing->category);
                                     while(count($categories)<6)
                                         array_push($categories, '')

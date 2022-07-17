@@ -76,7 +76,7 @@ class UserController extends Controller
         foreach($userWatchItems as $watchItem){
             $watchTags = explode(", ", $watchItem->key_tags);
             if($watchItem->type == "listing"){
-                $string = "Select * from listings as l where ";
+                $string = "Select * from listings as l where l.status = 'Available' AND ";
                 $string = $string . "(" ;
                 foreach($watchTags as $value){
                     $string = $string . " (" ;
@@ -119,7 +119,7 @@ class UserController extends Controller
                 }
                 $watchItem->save();
             }elseif($watchItem->type == 'rentable'){
-                $string = "Select * from rentables as r where ";
+                $string = "Select * from rentables as r where r.status = 'Available' AND";
                 $string = $string . "(" ;
                 foreach($watchTags as $value){
                     $string = $string . " (" ;
@@ -160,7 +160,46 @@ class UserController extends Controller
                 }
                 $watchItem->save();
             }elseif($watchItem->type == 'lease'){
+                $string = "Select * from subleases as s where s.status = 'Available' AND ";
+                $string = $string . "(" ;
+                foreach($watchTags as $value){
+                    $string = $string . " (" ;
+                    $string = $string . "s.sublease_title LIKE '%" . $value . "%' OR ";
+                    $string = $string . "s.location LIKE '%" . $value . "%' OR ";
+                    $string = $string . "s.negotiable LIKE '%" . $value . "%' OR ";
+                    $string = $string . "s.condition LIKE '%" . $value . "%' OR ";
+                    $string = $string . "s.utilities LIKE '%" . $value . "%' OR ";
+                    $string = $string . "s.description LIKE '%" . $value . "%' OR ";
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                    $string = $string . " AND ";
+                }
 
+                if($watchItem->dont_recommend != null and $watchItem != ""){
+                    $dontRecommendArray = explode(", ", $watchItem->dont_recommend);
+                    $string = $string . "(" ;
+                    foreach($dontRecommendArray as $recommendation){
+                        $string = $string . "s.id != " . $recommendation . " AND ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ") AND ";
+                }
+
+                $string = substr($string, 0, -4);
+                $string = $string . ") limit 10";
+                // dd($string);
+                $listingQuery =DB::select($string);
+
+                $matchesFound = array();
+                foreach($listingQuery as $match){
+                    array_push($matchesFound, $match->id);
+                }
+                if(!empty($matchesFound)){
+                    $watchItem->matches_found = implode(', ', $matchesFound);
+                }else{
+                    $watchItem->matches_found = NULL;
+                }
+                $watchItem->save();
             }   
         }
         return;
@@ -225,7 +264,15 @@ class UserController extends Controller
             }
             $currentUser->rentableFavorites = implode(', ', $favorites);
         }else{ //if favorite type is lease
-
+            if($currentUser->leaseFavorites != null){
+                $favorites = explode(", ", $currentUser->leaseFavorites);
+                if(!in_array($request->id, $favorites)){
+                    array_push($favorites, $request->id);
+                }
+            }else{
+                $favorites = array($request->id);
+            }
+            $currentUser->leaseFavorites = implode(', ', $favorites);
         }
         // array_push($listing->id, $favorites);
         $currentUser->save();
@@ -257,7 +304,15 @@ class UserController extends Controller
             }
             $currentUser->rentableFavorites = implode(', ', $favorites);
         }else{
-
+            if($currentUser->leaseFavorites != null){
+                $favorites = explode(", ", $currentUser->leaseFavorites);
+                if(in_array($request->id, $favorites)){
+                    if (($key = array_search($request->id, $favorites)) !== false) {
+                        unset($favorites[$key]);
+                    }
+                }
+            }
+            $currentUser->leaseFavorites = implode(', ', $favorites);
         }
         $currentUser->save();
         return back()->with('message', "Removed from Favorites!");

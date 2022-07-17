@@ -1,19 +1,11 @@
+{{-- @extends('layout') --}}
 
+{{-- @section('content') --}}
 
-
-
-
+{{-- css for individual user listing --}}
 <link rel="stylesheet" type="text/css" href="/css/listing.css">
 
-<?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.layout','data' => []] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
-<?php $component->withName('layout'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
-<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
+<x-layout>
     <section class = "product-details-container">
         <div class = "card-wrapper-selected">
             <div class = "card-selected">
@@ -24,251 +16,233 @@
                 </div> 
                 <div class = "track">
                     <h5>Home > Clothes > Pants > Ripped Jeans</h5>
-                    <?php if($listing->status =='Available'): ?>
+                    @if($leaseItem->status =='Available')
                         <div class="stat-container">
                             <div class="stat green">
                             </div>
-                            <h4><?php echo e($listing->status); ?></h4>
+                            <h4>{{$leaseItem->status}}</h4>
                         </div>
-                    <?php elseif($listing->status=='Pending'): ?>
-                        <div class="stat-container">
-                            <div class="stat yellow">
-                            </div>
-                            <h4><?php echo e($listing->status); ?></h4>
-                        </div>
-                    <?php else: ?>
+                    {{-- the else ortion of the if is for when status is rented --}}
+                    @else 
                         <div class="stat-container">
                             <div class="stat">
                             </div>
-                            <h4><?php echo e($listing->status); ?></h4>
+                            <h4>{{$leaseItem->status}}</h4>
                         </div>
-                    <?php endif; ?> 
+                    @endif 
                 </div>
                 <div class="selected-row">
                     <!-- card left -->
                     <div class = "product-imgs">
                         <div class = "img-display">
-                            <?php
-                                if(isset($listing->image_uploads)){
+                            @php
+                                if(isset($leaseItem->image_uploads)){
                                     //decode the json object
-                                    $imgLinks = json_decode($listing->image_uploads);
+                                    $imgLinks = json_decode($leaseItem->image_uploads);
                                     $titleImage = null;
                                     if(is_array($imgLinks)){
                                         $titleImage = $imgLinks[0];
                                     }
                                 }
-                            ?>
-                            <img src=<?php echo e($listing->image_uploads ? Storage::disk('s3')->url($titleImage) : asset('/images/rotunda.jpg')); ?> id = "expandedImg" alt="image doesnt exist">
+                            @endphp
+                            <img src={{$leaseItem->image_uploads ? Storage::disk('s3')->url($titleImage) : asset('/images/rotunda.jpg')}} id = "expandedImg" alt="image doesnt exist">
                         </div>
                         <div class = "img-showcase">
-                            <?php if(is_array(json_decode($listing->image_uploads))): ?>
-                                <?php $__currentLoopData = json_decode($listing->image_uploads); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <img src=<?php echo e($listing->image_uploads ? Storage::disk('s3')->url($link) : asset('/images/rotunda.jpg')); ?> alt = "shoe image" onclick="myFunction(this);">
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <?php endif; ?> 
+                            @if(is_array(json_decode($leaseItem->image_uploads)))
+                                @foreach(json_decode($leaseItem->image_uploads) as $link)
+                                    <img src={{$leaseItem->image_uploads ? Storage::disk('s3')->url($link) : asset('/images/rotunda.jpg')}} alt = "shoe image" onclick="myFunction(this);">
+                                @endforeach
+                            @endif 
                         </div>
                     </div>
                     <!-- card right -->
                     
                     <div class = "product-content">
-                        
+                        {{-- product title --}}
                         <div class = "product-header show-top">
                             <div class="name-status">
-                                <h1><?php echo e($listing->item_name); ?></h1> 
+                                <h1>{{$leaseItem->sublease_title}}</h1> 
                             </div>
                             <h3> 
-                                <span>$<?php echo e($listing->price); ?></span> | <?php echo e($listing->city); ?>, <?php echo e($listing->state); ?>
-
+                                <span>${{$leaseItem->rent}}</span> | {{$leaseItem->location}}
                             </h3>    
                         </div>
 
-                        
-                        <div class = "product-details show-top">
-                            <h4>Item Negotiable/Free/Fixed: 
-                                <span><?php echo e($listing->negotiable); ?></span>
+                        {{-- dates available --}}
+                        <div class = "product-details show-top" style="display:flex;flex-direction:row;gap:10px;">
+                            <h4>From: 
+                                <span>{{$leaseItem->date_from}}</span>
                             </h4>
-                            <h4>Condition: 
-                                <span><?php echo e($listing->condition); ?></span>
+                            <h4>To: 
+                                <span>{{$leaseItem->date_to}}</span>
                             </h4>
                         </div>
-                        
+
+                        {{-- price and other info --}}
+                        <div class = "product-details show-top">
+                            <h4>Rent Negotiable/Fixed: 
+                                <span>{{$leaseItem->negotiable}}</span>
+                            </h4>
+                            <h4>Condition: 
+                                <span>{{$leaseItem->condition}}</span>
+                            </h4>
+                        </div>
+
                         <div class = "product-categories show-top">
-                            <?php
-                                $categories = explode(", ", $listing->category);
-                            ?>
+                            @php
+                                $utilities = explode(", ", $leaseItem->utilities);
+                            @endphp
                             <div class="categories">
-                                <h4 class="spacer">Categories:</h4>
-                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <a href="/shop/all?type=all&category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <h4 class="spacer">Utilities Included:</h4>
+                                @foreach($utilities as $utility)
+                                    <a href="/shop/all?type=lease&utilities={{$utility}}">{{$utility}}</a>
+                                @endforeach
                             </div> 
                         </div>  
 
                         <div class = "product-description show-top">
                             <h4>Item Description:</h4>
-                            <p><?php echo e($listing->description); ?></p>
-                        </div>
-
-                        <div class = "tags-container show-top">
-                            <?php
-                                $tags = explode(", ", $listing->tags);
-                            ?>
-                            <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.listing-tags','data' => ['tags' => $tags]] + (isset($attributes) ? (array) $attributes->getIterator() : [])); ?>
-<?php $component->withName('listing-tags'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
-<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['tags' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($tags)]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
-<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
-<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
-<?php endif; ?>
+                            <p>{{$leaseItem->description}}</p>
                         </div>
 
                         <div class="product-buttons">
                             <ul>
                                 <li>
-                                    <?php if($currentUser != null and $currentUser->favorites != null and in_array($listing->id, explode(", " , $currentUser->favorites))): ?>
+                                    @if($currentUser != null and $currentUser->leaseFavorites != null and in_array($leaseItem->id, explode(", " , $currentUser->leaseFavorites)))
                                         <form action="/users/removefavorite" method="GET">
-                                            <?php echo csrf_field(); ?>
-                                            <input type="hidden" name="type" value="listing">
-                                            <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
+                                            @csrf
+                                            <input type="hidden" name="type" value="sublease">
+                                            <input type="hidden" name="id" value="{{$leaseItem->id}}">
                                             <button><i class="fa-solid fa-heart saved"></i></button>
                                         </form>
-                                    <?php else: ?>
+                                    @else
                                         <form action="/users/addfavorite" method="GET">
-                                            <?php echo csrf_field(); ?>
-                                            <input type="hidden" name="type" value="listing">
-                                            <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
+                                            @csrf
+                                            <input type="hidden" name="type" value="sublease">
+                                            <input type="hidden" name="id" value="{{$leaseItem->id}}">
                                             <button><i class="fa-solid fa-heart bouncy"></i></button>
                                         </form>
-                                    <?php endif; ?>                                
+                                    @endif                                
                                 </li>
-                                <?php if($currentUser != null and $listing->user_id == $currentUser->id): ?>
+                                @if($currentUser != null and $leaseItem->user_id == $currentUser->id)
                                     <li>
-                                        <form method="POST" action="/listings/<?php echo e($listing->id); ?>/update">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('PUT'); ?>
+                                        <form method="POST" action="/subleases/{{$leaseItem->id}}/update">
+                                            @csrf
+                                            @method('PUT')
                                             <select name="status" id="status" style = " font-size: 17px; text-align:center;" onchange="this.form.submit()">
                                                 <option style = "text-align:center;">Status</option>
                                                 <option style = "text-align:center;" value="Available">Available</option>
-                                                <option style = "text-align:center;" value="Pending">Pending</option>
-                                                <option style = "text-align:center;" value="Sold">Sold</option>  
+                                                <option style = "text-align:center;" value="Leased">Leased</option> 
                                             </select>
                                         </form>
                                     </li>
                                     <li>
-                                        <form action="/listings/<?php echo e($listing->id); ?>/edit" method = "GET">
-                                            <?php echo csrf_field(); ?>
-                                            <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
+                                        <form action="/subleases/{{$leaseItem->id}}/edit" method = "GET">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{$leaseItem->id}}">
                                             <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                         </form>
                                     </li>
                                     <li>
-                                        <form method="POST" action="/listings/<?php echo e($listing->id); ?>">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
+                                        <form method="POST" action="/subleases/{{$leaseItem->id}}">
+                                            @csrf
+                                            @method('DELETE')
                                             <button><i class="fa fa-trash" ></i></button>
                                         </form>
                                     </li>
-                                <?php endif; ?>
+                                @endif
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            
+            {{-- user chat and map area --}}
             <div class="map-chat-container">
                 <div class="map-container" id = "map-container">
-                    
+                    {{-- <h1>Maps feature</h1> --}}
                 </div>
                 <div class="chat-container">
-                    
-                    <?php if($currentUser != null and $listing->user_id == $currentUser->id): ?>
+                    {{-- only want to go through list of users & the messages from each user if the current listing is mine --}}
+                    {{-- @if($currentUser != null and $listing->user_id == $currentUser->id)
                         <div class="user-wrapper">
                             <ul class="users">
-                                <?php if(count($allUsers) >= 1): ?>
-                                    <?php $__currentLoopData = $allUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <li class="user" id="<?php echo e($user->id); ?>">
-                                            
-                                            <?php if($user->unread): ?>
-                                                <span class="pending"><?php echo e($user->unread); ?></span>
-                                            <?php endif; ?>
+                                @if(count($allUsers) >= 1)
+                                    @foreach($allUsers as $user)
+                                        <li class="user" id="{{ $user->id }}">
+                                            will show unread count notification
+                                            @if($user->unread)
+                                                <span class="pending">{{ $user->unread }}</span>
+                                            @endif
 
                                             
                                             <div class="media-left">
-                                                <img src="<?php echo e($user->avatar); ?>" alt="" class="media-object">
+                                                <img src="{{ $user->avatar }}" alt="" class="media-object">
                                             </div>
 
                                             <div class="media-body">
-                                                <p class="name"><?php echo e($user->first_name); ?> <?php echo e($user->last_name); ?> | ID: <?php echo e($user->id); ?> </p>
-                                                <p class='email'><?php echo e($user ->email); ?> </p>   
+                                                <p class="name">{{ $user->first_name }} {{$user->last_name }} | ID: {{$user->id}} </p>
+                                                <p class='email'>{{$user ->email}} </p>   
                                             </div>
                                         </li>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                <?php else: ?>
+                                    @endforeach
+                                @else
                                     <li class="no-messages"><span>You have no messages</span></li>
-                                <?php endif; ?>
+                                @endif
                             </ul>
                         </div>
-                    <?php endif; ?>
+                    @endif --}}
 
-                    
-                    <div id="scroll-to-bottom" class="messages-container active">
-                        <?php if($currentUser != null and $listing->user_id == $currentUser->id): ?>
+                    {{-- the messages container should be default active, and only inactive the current listing is the user's own --}}
+                    {{-- <div id="scroll-to-bottom" class="messages-container active">
+                        @if($currentUser != null and $listing->user_id == $currentUser->id)
                             <a class="message-back">
                                 <i class="fa-solid fa-arrow-left"></i> Back
                             </a>
-                        <?php else: ?>
+                        @else
                             <a class="back-placeholder">
-                                Chat with <?php echo e($listingOwner->first_name); ?> <?php echo e($listingOwner->last_name); ?>
-
+                                Chat with {{$listingOwner->first_name}} {{$listingOwner->last_name}}
                             </a>
-                        <?php endif; ?>
+                        @endif
                        
                         <ul class="messages" id='messages'>
-                            <?php if(auth()->guest()): ?>
+                            @if(auth()->guest())
                                 <li class="message clearfix">
                                     <div class="sent">
                                         <p>Please log in to begin chat</p>
                                         <p class='date'>-System</p>
                                     </div>
                                 </li>
-                            <?php endif; ?>
+                            @endif
                             
                         </ul>
                         <div id = "input-text" class=.input-text>
                             <input type="text" name="message" placeholder="Message Seller" class="submit">
                         </div>
-                    </div> 
+                    </div>  --}}
                 </div>
             </div> 
         </div>
     </section>
 
-    
+    {{-- carousel section --}}
     <section class = "listings-parent-container">
-        
-        
-         <?php echo $__env->make('partials._listingCarousel', ['listings' => $listings, 'message' => 'Related Items', 'carouselClass'=>'my-slider','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        {{-- carousel for subleases --}}
+        @include('partials._subleaseCarousel',
+        ['subleases'=> $subleaseQuery, 'message' => 'Places For Leasing' , 'carouselClass' => 'slider3',
+        'carouselControls' => 'controls3', 'carouselP' =>' previous previous3', 'carouselN' => 'next next3'])
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    
 
-    
+    {{-- for pusher real time messages --}}
     <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
    
-    <script>
+    {{-- <script>
         
         var map = L.map('map-container').setView([51.505, -0.09], 13);
 
@@ -277,9 +251,9 @@
             expandImg.src = imgs.src;
         }
 
-        var listing_id = "<?php echo e($listing->id); ?>"
-        var listingOwner = "<?php echo e($listing->user_id); ?>";
-        var userLoggedIn = "<?php echo e($currentUser ? $currentUser->id : -1); ?>";
+        var listing_id = "{{$listing->id}}"
+        var listingOwner = "{{$listing->user_id}}";
+        var userLoggedIn = "{{$currentUser ? $currentUser->id : -1}}";
         var receiverSelected = null; //the person whose chat we have open
         $(document).ready(function(){
             $.ajaxSetup({
@@ -345,11 +319,11 @@
             });
             
             // if the listing is not mine, load all messages from the listing owner, to me the current user logged in
-            if("<?php echo e(!auth()->guest()); ?>"){
+            if("{{!auth()->guest()}}"){
                 loadConversation(listingOwner, userLoggedIn);
             }
             function loadConversation(UserSending, UserReceiving ){
-                if("<?php echo e($listing->user_id); ?>" != userLoggedIn){
+                if("{{$listing->user_id}}" != userLoggedIn){
                     var ul = document.getElementById("messages");
                     ul.innerHTML = null;
                     
@@ -378,7 +352,7 @@
                                     message.innerHTML = data[i].message;
                                     div.appendChild(message);
                                     var date = document.createElement('p');
-                                    date.innerHTML = "<?php echo e(date('d M y, h:i a', strtotime(" + data[i].created_at + "))); ?>";
+                                    date.innerHTML = "{{date('d M y, h:i a', strtotime(" + data[i].created_at + "))}}";
                                     date.className='date';
                                     div.appendChild(date);
 
@@ -430,7 +404,7 @@
                                 message.innerHTML = data[i].message;
                                 div.appendChild(message);
                                 var date = document.createElement('p');
-                                date.innerHTML = "<?php echo e(date('d M y, h:i a', strtotime(" + data[i].created_at + "))); ?>";
+                                date.innerHTML = "{{date('d M y, h:i a', strtotime(" + data[i].created_at + "))}}";
                                 date.className='date';
                                 div.appendChild(date);
 
@@ -449,7 +423,7 @@
             // take to take in to account two different scenarios
             //1) if the listing is not mine, i wanna be able to message the listing owner
             //2) if the listing is mine, select a specifc user, then get their id and sent them the message
-            if("<?php echo e(!auth()->guest()); ?>"){
+            if("{{!auth()->guest()}}"){
                 $(document).on('keyup', 'input', function(e){
                     var msg = $(this).val();
                     var datastr = null;
@@ -496,11 +470,6 @@
         function scrollBottom(element) {
                 element.scroll({ top: element.scrollHeight, behavior: "smooth"})
             }
-    </script>
- <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
-<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
-<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
-<?php endif; ?>
-<?php /**PATH C:\xampp\htdocs\College_Marketplace\resources\views/listings/show.blade.php ENDPATH**/ ?>
+    </script> --}}
+</x-layout>
+{{-- @endsection --}}

@@ -145,6 +145,7 @@
                                             <input type="hidden" name="id" value="{{$listing->id}}">
                                             <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                         </form>
+                                    </li>
                                     <li>
                                         <form method="POST" action="/listings/{{$listing->id}}">
                                             @csrf

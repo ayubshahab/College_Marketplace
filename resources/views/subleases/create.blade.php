@@ -4,8 +4,18 @@
     <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
+                <div class="back-button">
+                    <a href="javascript:history.back()" class="button1 b-button">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </a>
+                </div> 
+
                 <div class="info">
-                    
+                    <h1>Lorem ipsum dolor sit amet consectetur.</h1>
+
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eum tempore nam consectetur, possimus dolorum quidem tempora et laboriosam est deleniti sunt modi, provident quasi!</p>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate temporibus ab excepturi doloremque cumque.</p>
                 </div>
                 <div class = "listingFormContainer">
 
@@ -13,7 +23,7 @@
                     {{-- LINK: https://codepen.io/webbarks/pen/QWjwWNV --}}
                     <div id="svg_wrap"></div>
                     <h1>Post A Lease!</h1>
-                    <form class="listingForm" method = "POST" action="/rentables" id="listingForm"
+                    <form class="listingForm" method = "POST" action="/subleases" id="listingForm"
                     enctype="multipart/form-data">
                         @csrf
                         
@@ -21,58 +31,65 @@
                         >
 
                         {{-- card #1 --}}
-                        <section class = "listingCard">
-                            <p class="create-listing-header">Rental Details</p>
-                            <input type="text" name = "rental_title" placeholder="Rental Title"  value="{{ old('rental_title', null) }}" />
-                            @error('rental_title')
+                        <section class = "listingCard default-card">
+                            <p class="create-listing-header">Lease Details</p>
+                            <input type="text" name = "sublease_title" placeholder="Lease Title"  value="{{ old('sublease_title', null) }}" />
+                            @error('sublease_title')
+                                <p>{{$message}}</p>
+                            @enderror
+
+                            <p class="create-listing-header">General Location (shamrock, standard, etc)</p>
+                            <input type="text" name = "location" placeholder="General Location" value="{{ old('location', null) }}" />
+                            @error('location')
                                 <p>{{$message}}</p>
                             @enderror
                             
-
+                            {{-- lease available date --}}
                             <p class="create-listing-header">
-                                Rental Duration
+                                Lease Duration
                             </p>
-                            <div class="condition-box">
-                                <select name="rental_duration" id="rentalDuration">
-                                    <option value="Hourly" {{ (old("rental_duration") == 'Hourly' ? "selected":"") }}>Hourly</option>
-                                    
-                                    <option value="Daily" {{ (old("rental_duration") == 'Daily' ? "selected":"") }}>Daily</option>
+                            <div class="lease-duration-container">
+                                <div class="half" style="width:48%;">
+                                    <input type="date" id="datepicker"
+                                    name='date_from' 
+                                    placeholder="Available From" value="{{old('date_from',null)}}"/>
+                                    @error('date_from')
+                                        <p>{{$message}}</p>
+                                    @enderror
+                                </div>
 
-                                    <option value="Weekly" {{ (old("rental_duration") == 'Free' ? "selected":"") }}>Weekly</option>
-
-                                    <option value="Monthly" {{ (old("rental_duration") == 'Monthly' ? "selected":"") }}>Monthly</option>
-                                </select>
-                                @error('rental_duration')
-                                    <p>{{$message}}</p>
-                                @enderror
-                                {{-- <ul class="ks-cboxtags">
-                                    <li>
-                                        
-                                        <label for="checkboxOne">
-                                            
-                                            <input type="hidden" id="checkboxOne" name = "negotiable" id ="check" value="0">
-                                            <input type="checkbox" id="checkboxOne" name = "negotiable" id ="check" class = "negotiable" value="{{ old('negotiable', 1) }}">    
-                                        Price Negotiable/ OBO</label>
-                                        @error('negotiable')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                    <li>
-                                        <input type="hidden" id="checkboxEleven" name = "free" id ="check" value="0">
-                                        <input type="checkbox" id="checkboxEleven" name = "free" id ="check" value="{{ old('free', "1") }}">
-                                        <label for="checkboxEleven">Free</label>
-                                        @error('free')
-                                            <p>{{$message}}</p>
-                                        @enderror
-                                    </li>
-                                </ul> --}}
+                                <div class="half" style="width:48%;">
+                                    <input type="date" id="datepicker"
+                                    name='date_to' 
+                                    placeholder="Available To" value="{{old('date_to',null)}}"/>
+                                    @error('date_to')
+                                        <p>{{$message}}</p>
+                                    @enderror
+                                </div>
                             </div>
 
-                            <input id="rental_charging" type="number" min="0.00" name = "rental_charging" max="10000.00" step="0.01" placeholder="Rental price per "  value="{{ old('rental_charging', null) }}"/>
-                            @error('rental_charging')
+
+                            <p class="create-listing-header">
+                                Rental Info
+                            </p>
+                            <input id="lease_rent" type="number" min="0.00" name = "rent" max="10000.00" step="0.01" placeholder="Rent / Month" value="{{old('rent',null)}}"/>
+                            @error('rent')
                                 <p>{{$message}}</p>
                             @enderror
+                            <div class="condition-box">
+                                <select name="negotiable" id="">
+                                    <option value="Fixed" {{ (old("negotiable") == 'Fixed' ? "selected":"") }}>Rent Fixed</option>
+                                    
+                                    <option value="Negotiable" {{ (old("negotiable") == 'Negotiable' ? "selected":"") }}>Rent Negotiable/ OBO (best offer)</option>
+                                </select>
+                                @error('negotiable')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>
+                        </section>
 
+                        {{-- card #2 --}}
+                        <section class = "listingCard">
                             <p class="create-listing-header">Condition</p>
                             <div class ="conditionBox">
                                 <select name="condition" id="">
@@ -84,71 +101,8 @@
                                 @error('condition')
                                     <p>{{$message}}</p>
                                 @enderror
-                            </div>
-
-                            <p class="create-listing-header">Categories</p>
-                            <div class ="conditionBox">
-                                <ul class="ks-cboxtags">
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxSix" value="Furniture" 
-                                        {{ old('category.0') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Furniture' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Furniture' ? 'checked' : '' }}>
-                                        <label for="checkboxSix"
-                                        >Furniture</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxSeven" value="Clothes"
-                                        {{ old('category.0') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Clothes' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Clothes' ? 'checked' : '' }}>
-                                        <label for="checkboxSeven">Clothes</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxEight" value="Electronics" 
-                                        {{ old('category.0') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Electronics' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Electronics' ? 'checked' : '' }}>
-                                        <label for="checkboxEight">Electronics</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxNine" value="Kitchen"
-                                        {{ old('category.0') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'Kitchen' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'Kitchen' ? 'checked' : '' }}>
-                                        <label for="checkboxNine">Kitchen</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="category[]" id="checkboxTen" value="School Accessories"
-                                        {{ old('category.0') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.1') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.2') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.3') == 'School Accessories' ? 'checked' : '' }}
-                                        {{ old('category.4') == 'School Accessories' ? 'checked' : '' }}>
-                                        <label for="checkboxTen">School Accessories</label>
-                                    </li>
-                                </ul>
-                                @error('category')
-                                    <p>{{$message}}</p>
-                                @enderror
-                            </div>        
-                        </section>
-
-                        {{-- card #2 --}}
-                        <section class = "listingCard">
-                            <p class="create-listing-header">Sub-Categories/ Tags (comma seperated)</p>
-                            <input name = "tags" type="text" placeholder="Tags" value="{{ old('tags', null) }}"/>
-                            @error('tags')
-                                <p>{{$message}}</p>
-                            @enderror
+                            </div> 
+                            
                             <textarea name="description" placeholder="Description" rows="3" style="resize: none;">{{ old('description', null) }}</textarea>
                             @error('description')
                                 <p>{{$message}}</p>
@@ -161,6 +115,61 @@
                             @error('image_uploads')
                                 <p>{{$message}}</p>
                             @enderror
+
+                            <p class="create-listing-header">Utilities Available</p>
+                            <div class ="conditionBox">
+                                <ul class="ks-cboxtags">
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxSix" value="Electric" 
+                                        {{ old('utilities.0') == 'Electric' ? 'checked' : '' }}
+                                        {{ old('utilities.1') == 'Electric' ? 'checked' : '' }}
+                                        {{ old('utilities.2') == 'Electric' ? 'checked' : '' }}
+                                        {{ old('utilities.3') == 'Electric' ? 'checked' : '' }}
+                                        {{ old('utilities.4') == 'Electric' ? 'checked' : '' }}>
+                                        <label for="checkboxSix"
+                                        >Electric</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxSeven" value="Gas"
+                                        {{ old('utilities.0') == 'Gas' ? 'checked' : '' }}
+                                        {{ old('utilities.1') == 'Gas' ? 'checked' : '' }}
+                                        {{ old('utilities.2') == 'Gas' ? 'checked' : '' }}
+                                        {{ old('utilities.3') == 'Gas' ? 'checked' : '' }}
+                                        {{ old('utilities.4') == 'Gas' ? 'checked' : '' }}>
+                                        <label for="checkboxSeven">Gas</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxEight" value="Water" 
+                                        {{ old('utilities.0') == 'Water' ? 'checked' : '' }}
+                                        {{ old('utilities.1') == 'Water' ? 'checked' : '' }}
+                                        {{ old('utilities.2') == 'Water' ? 'checked' : '' }}
+                                        {{ old('utilities.3') == 'Water' ? 'checked' : '' }}
+                                        {{ old('utilities.4') == 'Water' ? 'checked' : '' }}>
+                                        <label for="checkboxEight">Water</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxNine" value="Trash"
+                                        {{ old('utilities.0') == 'Trash' ? 'checked' : '' }}
+                                        {{ old('utilities.1') == 'Trash' ? 'checked' : '' }}
+                                        {{ old('utilities.2') == 'Trash' ? 'checked' : '' }}
+                                        {{ old('utilities.3') == 'Trash' ? 'checked' : '' }}
+                                        {{ old('utilities.4') == 'Trash' ? 'checked' : '' }}>
+                                        <label for="checkboxNine">Trash</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" name="utilities[]" id="checkboxTen" value="Internet"
+                                        {{ old('utilities.0') == 'Internet' ? 'checked' : '' }}
+                                        {{ old('utilities.1') == 'Internet' ? 'checked' : '' }}
+                                        {{ old('utilities.2') == 'Internet' ? 'checked' : '' }}
+                                        {{ old('utilities.3') == 'Internet' ? 'checked' : '' }}
+                                        {{ old('utilities.4') == 'Internet' ? 'checked' : '' }}>
+                                        <label for="checkboxTen">Internet</label>
+                                    </li>
+                                </ul>
+                                @error('utilities')
+                                    <p>{{$message}}</p>
+                                @enderror
+                            </div>  
                         </section>
 
                         {{-- card #3 --}}
@@ -170,7 +179,7 @@
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('apartment_floor', null) }}"/>
                             <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
@@ -187,8 +196,12 @@
                             @error('postcode')
                                 <p>{{$message}}</p>
                             @enderror
-                            {{-- <p class="create-listing-header">Use My Location:</p>
-                            <div onclick="getLocation()">Get Location</div> --}}
+
+                            <input type="hidden" name="latitude" id ="latitude" value = "{{null}}">
+                            <input type="hidden" name="longitude" id = "longitude" value = "{{null}}">
+
+                            <p class="create-listing-header">Use My Location:</p>
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
                         </section>
 
 
@@ -294,8 +307,20 @@
         }
 
         function showPosition(position) {
-           console.log("Latitude: " + position.coords.latitude + 
-            "<br>Longitude: " + position.coords.longitude);
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            // displayLocation(latitude,longitude);
+            // const reverse = require('reverse-geocode');
+            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
         }
 
         function showError(error) {
@@ -338,7 +363,7 @@
                 }
             })
 
-            var base_color = "rgb(230,230,230)";
+            var base_color = "black";
             // var active_color = "rgb(237, 40, 70)";
             var active_color = "#cc5500";
 
@@ -428,6 +453,8 @@
                 var currentSection = $("section:nth-of-type(" + child + ")");
                 currentSection.fadeIn();
                 currentSection.css('transform','translateX(0)');
+                currentSection.css('display', 'flex');
+                currentSection.css('flex-direction', 'column');
                 currentSection.prevAll('section').css('transform','translateX(-100px)');
                 currentSection.nextAll('section').css('transform','translateX(100px)');
                 $('section').not(currentSection).hide();

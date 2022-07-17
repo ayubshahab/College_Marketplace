@@ -135,6 +135,13 @@ input, select, textarea, .preview {
 	/* color: #92EBC4; */
 }
 
+input:hover, select:hover, textarea:hover, .preview:hover {
+	cursor:pointer;
+}
+
+.preview{
+	font-weight:400;
+}
 /* header of multi-step form */
 #svg_form_time {
   height: 15px;
@@ -253,6 +260,15 @@ ul.ks-cboxtags li input[type="checkbox"] {
 	background-color: var(--red-accent-color);
 }
 
+/* sublease styling */
+.lease-duration-container{
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	height: fit-content;
+	/* gap: 10px; */
+	justify-content: space-between;
+}
 @media(max-width: 1000px){
 	.listingCard{
 		width: 80%;
@@ -304,5 +320,16 @@ ul.ks-cboxtags li input[type="checkbox"] {
 
 	.info p{
 		font-size:15px;
+	}
+}
+
+@media(max-width: 450px){
+	.lease-duration-container{
+		flex-direction: column;
+		gap:0;
+	}
+
+	.lease-duration-container .half{
+		width: 100% !important;
 	}
 }
