@@ -78,6 +78,9 @@
 
                         
                         <div class = "product-details show-top">
+                            <h4>Item Negotiable or Fixed: 
+                                <span><?php echo e($rentable->negotiable); ?></span>
+                            </h4>
                             <h4>Condition: 
                                 <span><?php echo e($rentable->condition); ?></span>
                             </h4>
@@ -90,7 +93,7 @@
                             <div class="categories">
                                 <h4 class="spacer">Categories:</h4>
                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <a href="/category?category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
+                                    <a href="/shop/all?type=all&category=<?php echo e($category); ?>"><?php echo e($category); ?></a>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div> 
                         </div>  
@@ -125,9 +128,19 @@
                             <ul>
                                 <li>
                                     <?php if($currentUser != null and $currentUser->rentableFavorites != null and in_array($rentable->id, explode(", " , $currentUser->rentableFavorites))): ?>
-                                        <a href="/users/removefavorite?type=rentable&id=<?php echo e($rentable->id); ?>"><i class="fa-solid fa-heart saved"></i></a>
+                                        <form action="/users/removefavorite" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="type" value="rentable">
+                                            <input type="hidden" name="id" value=<?php echo e($rentable->id); ?>>
+                                            <button><i class="fa-solid fa-heart saved"></i></button>
+                                        </form>
                                     <?php else: ?>
-                                        <a href="/users/addfavorite?type=rentable&id=<?php echo e($rentable->id); ?>"><i class="fa-solid fa-heart bouncy"></i></a>
+                                        <form action="/users/addfavorite" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="type" value="rentable">
+                                            <input type="hidden" name="id" value="<?php echo e($rentable->id); ?>">
+                                            <button><i class="fa-solid fa-heart bouncy"></i></button>
+                                        </form>
                                     <?php endif; ?>
                                 </li>
                                 
@@ -143,7 +156,12 @@
                                             </select>
                                         </form>
                                     </li>
-                                    <li><a href="/rentables/<?php echo e($rentable->id); ?>/edit"><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+                                    <li>
+                                        <form action="/rentables/<?php echo e($rentable->id); ?>/edit" method="GET">
+                                            <?php echo csrf_field(); ?>
+                                            <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        </form>
+                                    </li>
                                     <li>
                                         <form method="POST" action="/rentables/<?php echo e($rentable->id); ?>">
                                             <?php echo csrf_field(); ?>
@@ -160,7 +178,7 @@
 
             
             <div class="map-chat-container">
-                <div class="map-container">
+                <div class="map-container" id="map-container">
                     <h1>Maps feature</h1>
                 </div>
                 <div class="chat-container">
@@ -233,8 +251,9 @@
     
     <section class = "listings-parent-container">
         
-        
-         <?php echo $__env->make('partials._rentablesCarousel', ['rentables' => $rentables, 'message' => 'Related Items', 'carouselClass'=>'','carouselControls' => 'controls', 'carouselP' =>'previous previous1', 'carouselN' => 'next next1'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('partials._rentablesCarousel',
+        ['rentables'=> $rentables, 'message' => 'Items For Rent' , 'carouselClass' => 'slider2',
+        'carouselControls' => 'controls2', 'carouselP' =>' previous previous2', 'carouselN' => 'next next2'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    
@@ -243,6 +262,47 @@
      <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 
     <script>
+
+function initMap() {
+
+            var mapTwo;
+            var geocoder;
+
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(-34.397, 150.644);
+            var mapOptions = {
+                zoom: 15,
+                center: latlng
+            }
+
+            mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+
+            if("<?php echo e($rentable->latitude); ?>" === "" || "<?php echo e($rentable->longitude); ?>" === "") {
+                var address = "<?php echo e($rentable->street." ".$rentable->city); ?>";
+                //console.log(address);
+                geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == 'OK') {
+                    mapTwo.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: results[0].geometry.location
+                });
+                marker.setMap(mapTwo);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+            } else {
+                var latlng = new google.maps.LatLng("<?php echo e($rentable->latitude); ?>", "<?php echo e($rentable->langitude); ?>");
+                //console.log(latlng);
+                var mapOptions = {
+                    zoom: 15,
+                    center: latlng
+                }
+                mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                marker.setMap(mapTwo);
+            }
+        }
 
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");
@@ -467,6 +527,12 @@
                 element.scroll({ top: element.scrollHeight, behavior: "smooth"})
             }
     </script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initMap&libraries=places&v=weekly"
+      defer
+    ></script>
+
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>

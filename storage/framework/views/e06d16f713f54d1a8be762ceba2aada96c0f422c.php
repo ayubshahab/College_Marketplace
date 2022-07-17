@@ -354,7 +354,11 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-                            
+                            <input type="hidden" name="latitude" id ="latitude" value = "<?php echo e(null); ?>">
+                            <input type="hidden" name="longitude" id = "longitude" value = "<?php echo e(null); ?>">
+
+                            <p class="create-listing-header">Use My Location:</p>
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">Get Location</h6>
                         </section>
 
 
@@ -459,8 +463,20 @@ unset($__errorArgs, $__bag); ?>
         }
 
         function showPosition(position) {
-           console.log("Latitude: " + position.coords.latitude + 
-            "<br>Longitude: " + position.coords.longitude);
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            // displayLocation(latitude,longitude);
+            // const reverse = require('reverse-geocode');
+            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
         }
 
         function showError(error) {
@@ -675,7 +691,7 @@ unset($__errorArgs, $__bag); ?>
             }
         }
     </script>
-        <script
+        <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>

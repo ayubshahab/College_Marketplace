@@ -155,7 +155,7 @@
 
             {{-- user chat and map area --}}
             <div class="map-chat-container">
-                <div class="map-container">
+                <div class="map-container" id="map-container">
                     <h1>Maps feature</h1>
                 </div>
                 <div class="chat-container">
@@ -238,6 +238,47 @@
      <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 
     <script>
+
+function initMap() {
+
+            var mapTwo;
+            var geocoder;
+
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(-34.397, 150.644);
+            var mapOptions = {
+                zoom: 15,
+                center: latlng
+            }
+
+            mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+
+            if("{{$rentable->latitude}}" === "" || "{{$rentable->longitude}}" === "") {
+                var address = "{{$rentable->street." ".$rentable->city}}";
+                //console.log(address);
+                geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == 'OK') {
+                    mapTwo.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: results[0].geometry.location
+                });
+                marker.setMap(mapTwo);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+            } else {
+                var latlng = new google.maps.LatLng("{{$rentable->latitude}}", "{{$rentable->langitude}}");
+                //console.log(latlng);
+                var mapOptions = {
+                    zoom: 15,
+                    center: latlng
+                }
+                mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                marker.setMap(mapTwo);
+            }
+        }
 
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");
@@ -462,5 +503,11 @@
                 element.scroll({ top: element.scrollHeight, behavior: "smooth"})
             }
     </script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initMap&libraries=places&v=weekly"
+      defer
+    ></script>
+
 </x-layout>
 {{-- @endsection --}}

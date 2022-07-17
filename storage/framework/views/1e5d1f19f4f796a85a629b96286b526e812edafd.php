@@ -168,6 +168,7 @@
                                             <input type="hidden" name="id" value="<?php echo e($listing->id); ?>">
                                             <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                         </form>
+                                    </li>
                                     <li>
                                         <form method="POST" action="/listings/<?php echo e($listing->id); ?>">
                                             <?php echo csrf_field(); ?>
@@ -294,6 +295,7 @@
                     mapTwo: mapTwo,
                     position: results[0].geometry.location
                 });
+                marker.setMap(mapTwo);
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
@@ -306,6 +308,7 @@
                     center: latlng
                 }
                 mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                marker.setMap(mapTwo);
             }
         }
         
