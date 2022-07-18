@@ -166,7 +166,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                     
-                                    <input type="submit">
+                                    <input type="submit" value="Update">
                                 </form>
                             </div>
                         </div>

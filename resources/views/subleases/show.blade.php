@@ -144,11 +144,9 @@
                                         </form>
                                     </li>
                                     <li>
-                                        <form method="POST" action="/subleases/{{$leaseItem->id}}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button><i class="fa fa-trash" ></i></button>
-                                        </form>
+                                        <span id="delete-modal-trigger">
+                                            <i class="fa fa-trash" ></i>
+                                        </span>
                                     </li>
                                 @endif
                             </ul>
@@ -223,6 +221,22 @@
                 </div>
             </div> 
         </div>
+        <div class="modal" id="delete-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1>Delete Listing</h1>
+                <p>Are you sure you want to delete this listing?</p>
+
+                <div class="clearfix">
+                    <input type="button" class="button1" class="cancelbtn" id="cancelbtn" value="Cancel" />
+                    <form method="POST" action="/subleases/{{$leaseItem->id}}">
+                        @csrf
+                        @method('DELETE')
+                        <input type="submit" class="deletebtn button1" value="Delete"/>
+                    </form>
+                </div>
+            </div>
+        </div>
     </section>
 
     {{-- carousel section --}}
@@ -244,12 +258,16 @@
    
     <script>
         
-        var map = L.map('map-container').setView([51.505, -0.09], 13);
-
+        function isEmpty(input){
+            if(input === '' || input === null || input === undefined || input == null){
+                return true;
+            }return false;
+        }                
         function initMap() {
-
             var mapTwo;
             var geocoder;
+            var listingLat = "{{$leaseItem->latitude}}";
+            var listingLong = "{{$leaseItem->longitude}}";
 
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -259,24 +277,28 @@
             }
 
             mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                console.log(listingLat, listingLong);
 
-            if("{{$leaseItem->latitude}}" === "" || "{{$leaseItem->longitude}}" === "") {
+            if(!isEmpty("{{$leaseItem->street}}")  && !isEmpty("{{$leaseItem->state}}")) {
+                console.log('top if');
                 var address = "{{$leaseItem->street." ".$leaseItem->city}}";
                 //console.log(address);
                 geocoder.geocode( { 'address': address}, function(results, status) {
-                if (status == 'OK') {
-                    mapTwo.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                    mapTwo: mapTwo,
-                    position: results[0].geometry.location
+                    if (status == 'OK') {
+                        mapTwo.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                        mapTwo: mapTwo,
+                        position: results[0].geometry.location
+                    });
+                    marker.setMap(mapTwo);
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
                 });
-                marker.setMap(mapTwo);
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
             } else {
-                var latlng = new google.maps.LatLng("{{$leaseItem->latitude}}", "{{$leaseItem->langitude}}");
+                console.log('bottom if');
+                console.log("{{$leaseItem->latitude}}", "{{$leaseItem->longitude}}");
+                var latlng = new google.maps.LatLng("{{$leaseItem->latitude}}", "{{$leaseItem->longitude}}");
                 //console.log(latlng);
                 var mapOptions = {
                     zoom: 15,
@@ -509,8 +531,28 @@
             scrollBottom(scroll_to_bottom);
         }
         function scrollBottom(element) {
-                element.scroll({ top: element.scrollHeight, behavior: "smooth"})
+            element.scroll({ top: element.scrollHeight, behavior: "smooth"})
+        }
+
+        //delete modal
+        var deleteModal = document.getElementById("delete-modal");
+        var deleteButton = document.getElementById("delete-modal-trigger");
+        var deleteSpan = document.getElementsByClassName("close")[0];
+        var cancelBtn = document.getElementById('cancelbtn');
+        deleteButton.onclick = function() {
+            deleteModal.style.display = "grid";
+        }
+        deleteSpan.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        cancelBtn.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
             }
+        }
     </script>
 
     <script

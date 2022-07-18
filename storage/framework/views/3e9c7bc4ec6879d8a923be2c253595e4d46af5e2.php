@@ -283,7 +283,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e(old('street', null)); ?>"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e(old('apartment_floor', null)); ?>"/>
                             <input type="text" id = "city" name = "city" placeholder="City*"  value="<?php echo e(old('city', null)); ?>"/>
                             <?php $__errorArgs = ['city'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -448,10 +448,6 @@ unset($__errorArgs, $__bag); ?>
             console.log("Latitude: " + latitude + 
             "<br>Longitude: " + longitude);
 
-            // displayLocation(latitude,longitude);
-            // const reverse = require('reverse-geocode');
-            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
-
             var test = document.getElementById("location");
             test.innerHTML =" Latitude: " + latitude + 
             " Longitude: " + longitude;
@@ -480,25 +476,6 @@ unset($__errorArgs, $__bag); ?>
             enableHighAccuracy: true,
             timeout: 1000,
             maximumAge: 0
-        };
-
-        function displayLocation(latitude,longitude){
-            var request = new XMLHttpRequest();
-
-            var method = 'GET';
-            var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true';
-            var async = true;
-
-            request.open(method, url, async);
-            request.onreadystatechange = function(){
-                if(request.readyState == 4 && request.status == 200){
-                    var data = JSON.parse(request.responseText);
-                    var address = data.results[0];
-                    console.log(address.formatted_address);
-                    // document.write(address.formatted_address);
-                }
-            };
-            request.send();
         };
 
         // source code from code pen
@@ -680,7 +657,7 @@ unset($__errorArgs, $__bag); ?>
         }
 
     </script>
-    <script
+    <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>

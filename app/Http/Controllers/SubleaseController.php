@@ -19,8 +19,8 @@ class SubleaseController extends Controller
             'user_id'=>'required',
             'sublease_title'=>'required',
             'location'=>'required',
-            'date_from'=>'required',
-            'date_to'=>'required',
+            'date_from'=>'required|date',
+            'date_to'=>'required|date|after:date_from',
             'rent'=>'required',
             'negotiable'=> 'required',
             'condition'=>'required',
@@ -33,7 +33,8 @@ class SubleaseController extends Controller
             'country'=>'required_without:latitude',
             'postcode'=>'required_without:latitude',
             'latitude' => 'required_without:street',
-            'longitude' =>'required_without:street'
+            'longitude' =>'required_without:street',
+            'apartment_floor'=>'nullable'
         ]);
         $formFields['user_id']=auth()->id();
         if($request->hasFile('image_uploads'))
@@ -46,6 +47,7 @@ class SubleaseController extends Controller
             $formFields['image_uploads']=json_encode($data);
         }
         $formFields['utilities']=implode(", " ,$formFields['utilities']);
+        // dd($formFields);
         $newSublease=Sublease::create($formFields);
         return redirect('/subleases/'.$newSublease->id)->with('message', 'Lease Created Successfully!');
     }
@@ -149,8 +151,8 @@ class SubleaseController extends Controller
             'user_id'=>'required',
             'sublease_title'=>'required',
             'location'=>'required',
-            'date_from'=>'required',
-            'date_to'=>'required',
+            'date_from'=>'required|date',
+            'date_to'=>'required|date|after:date_from',
             'rent'=>'required',
             'negotiable'=> 'required',
             'condition'=>'required',
@@ -162,7 +164,8 @@ class SubleaseController extends Controller
             'country'=>'required_without:latitude',
             'postcode'=>'required_without:latitude',
             'latitude' => 'required_without:street',
-            'longitude' =>'required_without:street'
+            'longitude' =>'required_without:street',
+            'apartment_floor'=>'nullable'
         ]);
 
         $formFields['user_id']=auth()->id();
@@ -178,8 +181,6 @@ class SubleaseController extends Controller
             $formFields['image_uploads']=json_encode($data);
         }
         $formFields['utilities']=implode(", " ,$formFields['utilities']);
-        // dd($rentable);
-        // dd($formFields);
         $sublease->update($formFields);
         return redirect('/subleases/'.$sublease->id)->with('message', 'Lease Item Updated Successfully!');
     }

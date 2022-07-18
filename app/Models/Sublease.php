@@ -31,7 +31,10 @@ class Sublease extends Model
         'state',
         'country',
         'postcode',
-        'status' //either rented or available
+        'status', //either rented or available
+        'latitude',
+        'longitude',
+        'apartment_floor'
     ];
 
     // this rentable belongs to a certain user
