@@ -727,7 +727,6 @@ input[type=text]::placeholder {
         height: 100%;
         /* background-color: darkgreen; */
     }   
-
 }
 
 @media(max-width: 900px){

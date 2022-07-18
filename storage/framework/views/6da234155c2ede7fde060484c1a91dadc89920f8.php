@@ -169,11 +169,10 @@
                                             <button><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                         </form>
                                     </li>
-                                    <li >
+                                    <li>
                                         <span id="delete-modal-trigger">
                                             <i class="fa fa-trash" ></i>
                                         </span>
-                                        
                                     </li>
                                 <?php endif; ?>
                             </ul>
