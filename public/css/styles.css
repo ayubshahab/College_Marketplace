@@ -378,9 +378,9 @@ li{
 
 /* loading page end */
 @media(max-width: 480px){
-    .listings-parent-container{
-        /* padding: 20px !important; */
-    }
+    /* .listings-parent-container{
+        padding: 20px !important;
+    } */
 
     .header-cont div h1{
         font-size: 32px;

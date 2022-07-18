@@ -1,7 +1,7 @@
 <x-layout>
     <link rel="stylesheet" types = "text/css" href="/css/createListing.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
+    <div class="listings-parent-container crud" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
 
