@@ -20,10 +20,13 @@ class Listing extends Model
         'description',
         'image_uploads',
         'street',
+        'apartment_floor',
         'city',
         'state',
         'country',
-        'postcode'
+        'postcode',
+        'latitude',
+        'longitude'
     ];
     public function scopeFilter($query, array $filters){
         // dd($filters); -> have the keys

@@ -24,7 +24,10 @@ class Rentable extends Model
         'state',
         'country',
         'postcode',
-        'status' //either rented or available
+        'status', //either rented or available,
+        'apartment_floor',
+        'latitude',
+        'longitude'
     ];
 
     // this rentable belongs to a certain user

@@ -116,7 +116,7 @@
                                         <p>{{$message}}</p>
                                     @enderror
                                     
-                                    <input type="submit">
+                                    <input type="submit" value="Update">
                                 </form>
                             </div>
                         </div>

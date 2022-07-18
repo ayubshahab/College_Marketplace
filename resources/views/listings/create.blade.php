@@ -176,7 +176,7 @@
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('apartment_floor', null) }}"/>
                             <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
@@ -313,10 +313,6 @@
             console.log("Latitude: " + latitude + 
             "<br>Longitude: " + longitude);
 
-            // displayLocation(latitude,longitude);
-            // const reverse = require('reverse-geocode');
-            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
-
             var test = document.getElementById("location");
             test.innerHTML =" Latitude: " + latitude + 
             " Longitude: " + longitude;
@@ -345,25 +341,6 @@
             enableHighAccuracy: true,
             timeout: 1000,
             maximumAge: 0
-        };
-
-        function displayLocation(latitude,longitude){
-            var request = new XMLHttpRequest();
-
-            var method = 'GET';
-            var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true';
-            var async = true;
-
-            request.open(method, url, async);
-            request.onreadystatechange = function(){
-                if(request.readyState == 4 && request.status == 200){
-                    var data = JSON.parse(request.responseText);
-                    var address = data.results[0];
-                    console.log(address.formatted_address);
-                    // document.write(address.formatted_address);
-                }
-            };
-            request.send();
         };
 
         // source code from code pen

@@ -116,7 +116,7 @@ unset($__errorArgs, $__bag); ?>
 
                             <p class="create-listing-header">Categories</p>
                             <div class ="conditionBox">
-                                 <?php
+                                <?php
                                     $categories = explode(", ", $listing->category);
                                     while(count($categories)<6)
                                         array_push($categories, '')
@@ -295,8 +295,8 @@ unset($__errorArgs, $__bag); ?>
 
                         
                         <section class = "listingCard">
-                            <p class="create-listing-header">Address:</p>
-                            <input type="text" name="street" placeholder="Street, nbr"  value="<?php echo e($listing->street); ?>"/>
+                            <p class="create-listing-header">Location</p>
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="<?php echo e($listing->street); ?>"/>
                             <?php $__errorArgs = ['street'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -307,7 +307,8 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "city" placeholder="City"  value="<?php echo e($listing->city); ?>"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e($listing->apartment_floor); ?>"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="<?php echo e($listing->city); ?>"/>
                             <?php $__errorArgs = ['city'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -318,7 +319,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "state" placeholder="State"  value="<?php echo e($listing->state); ?>"/>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="<?php echo e($listing->state); ?>"/>
                             <?php $__errorArgs = ['state'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -329,7 +330,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "country" placeholder="Country"  value="<?php echo e($listing->country); ?>" />
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="<?php echo e($listing->country); ?>" />
                             <?php $__errorArgs = ['country'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -340,7 +341,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" name = "postcode"placeholder="Postcode"  value="<?php echo e($listing->postcode); ?>" />
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="<?php echo e($listing->postcode); ?>" />
                             <?php $__errorArgs = ['postcode'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -352,8 +353,18 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
+                            <input type="hidden" name="latitude" id ="latitude" value = "<?php echo e($listing->latitude); ?>">
+                            <input type="hidden" name="longitude" id = "longitude" value = "<?php echo e($listing->longitude); ?>">
+
                             <p class="create-listing-header">Use My Location:</p>
-                            
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">
+                                <?php if($listing->latitude != null and $listing->longitude != null): ?>
+                                    Latitude: <?php echo e($listing->latitude); ?> Longitude: <?php echo e($listing->longitude); ?>
+
+                                <?php else: ?>
+                                    Get My Location
+                                <?php endif; ?>
+                            </h6>
                         </section>
 
 
@@ -557,7 +568,132 @@ unset($__errorArgs, $__bag); ?>
             }
         }
 
+        function initAutocomplete() {
+            address1Field = document.getElementById("street");
+            address2Field = document.getElementById("streetTwo");
+            postalField = document.getElementById("postcode");
+
+            // Create the autocomplete object, restricting the search predictions to
+            // addresses in the US and Canada.
+            autocomplete = new google.maps.places.Autocomplete(address1Field, {
+            componentRestrictions: { country: ["us"] },
+            fields: ["address_components", "geometry"],
+            types: ["address"],
+            });
+            address1Field.focus();
+
+            // When the user selects an address from the drop-down, populate the
+            // address fields in the form.
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+        function fillInAddress() {
+            // Get the place details from the autocomplete object.
+            const place = autocomplete.getPlace();
+            let address1 = "";
+            let postcode = "";
+
+            // Get each component of the address from the place details,
+            // and then fill-in the corresponding field on the form.
+            // place.address_components are google.maps.GeocoderAddressComponent objects
+            // which are documented at http://goo.gle/3l5i5Mr
+            for (const component of place.address_components) {
+                // @ts-ignore remove once typings fixed
+                const componentType = component.types[0];
+
+                switch (componentType) {
+                    case "street_number": {
+                    address1 = `${component.long_name} ${address1}`;
+                    break;
+                }
+                case "route": {
+                    address1 = `${address1}${component.long_name} `;
+                    break;
+                }
+                case "postal_code": {
+                    postcode = `${component.long_name}${postcode}`;
+                    break;
+                }
+
+                case "postal_code_suffix": {
+                    postcode = `${postcode}-${component.long_name}`;
+                    break;
+                }
+
+                case "locality":
+                    (document.getElementById("city")).value =
+                    component.long_name;
+                    break;
+
+                case "administrative_area_level_1": {
+                    (document.getElementById("state")).value =
+                    component.short_name;
+                    break;
+                }
+
+                case "country":
+                    (document.getElementById("country")).value =
+                    component.long_name;
+                    break;
+                }
+            }
+            address1Field.value = address1;
+            postalField.value = postcode;
+
+            // After filling the form with address components from the Autocomplete
+            // prediction, set cursor focus on the second address line to encourage
+            // entry of subpremise information such as apartment, unit, or floor number.
+            address2Field.focus();
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, options);
+            } else { 
+                console.log("location not supported")
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log("User denied the request for Geolocation.");
+                break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Location information is unavailable.");
+                break;
+                case error.TIMEOUT:
+                    console.log( "The request to get user location timed out.");
+                break;
+                case error.UNKNOWN_ERROR:
+                    console.log( "An unknown error occurred.");
+                break;
+            }
+        }
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 1000,
+            maximumAge: 0
+        };
     </script>
+    <script async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
+      defer
+    ></script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>

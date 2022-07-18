@@ -189,12 +189,12 @@
 
                         {{-- card #3 --}}
                         <section class = "listingCard">
-                        <p class="create-listing-header">Location</p>
+                            <p class="create-listing-header">Location</p>
                             <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ old('street', null) }}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('apartment_floor', null) }}"/>
                             <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
