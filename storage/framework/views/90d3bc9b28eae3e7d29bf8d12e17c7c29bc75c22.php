@@ -296,7 +296,7 @@ unset($__errorArgs, $__bag); ?>
 
                         
                         <section class = "listingCard">
-                        <p class="create-listing-header">Location</p>
+                            <p class="create-listing-header">Location</p>
                             <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="<?php echo e(old('street', null)); ?>"/>
                             <?php $__errorArgs = ['street'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -308,7 +308,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e(old('street', null)); ?>"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="<?php echo e(old('apartment_floor', null)); ?>"/>
                             <input type="text" id = "city" name = "city" placeholder="City*"  value="<?php echo e(old('city', null)); ?>"/>
                             <?php $__errorArgs = ['city'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -691,7 +691,7 @@ unset($__errorArgs, $__bag); ?>
             }
         }
     </script>
-        <script
+        <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>

@@ -33,7 +33,8 @@ class RentablesController extends Controller
             'country'=>'required_without:latitude',
             'postcode'=>'required_without:latitude',
             'latitude' => 'required_without:street',
-            'longitude' =>'required_without:street'
+            'longitude' =>'required_without:street',
+            'apartment_floor'=>'nullable'
         ]);
         $formFields['user_id']=auth()->id();
         if($request->hasFile('image_uploads'))
@@ -151,11 +152,14 @@ class RentablesController extends Controller
             'category'=>'required',
             'tags'=>'required',
             'description'=>'required',
-            'street'=>'required',
-            'city'=>'required',
-            'state'=>'required',
-            'country'=>'required',
-            'postcode'=>'required'
+            'street'=>'required_without:latitude',
+            'city'=>'required_without:latitude',
+            'state'=>'required_without:latitude',
+            'country'=>'required_without:latitude',
+            'postcode'=>'required_without:latitude',
+            'latitude' => 'required_without:street',
+            'longitude' =>'required_without:street',
+            'apartment_floor'=>'nullable'
         ]);
 
         $formFields['user_id']=auth()->id();

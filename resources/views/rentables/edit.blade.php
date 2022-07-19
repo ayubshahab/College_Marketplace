@@ -1,7 +1,7 @@
 <x-layout>
     <link rel="stylesheet" types = "text/css" href="/css/createListing.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
+    <div class="listings-parent-container crud" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
                 <div class="back-button">
@@ -209,30 +209,40 @@
 
                         {{-- card #3 --}}
                         <section class = "listingCard">
-                            <p class="create-listing-header">Address:</p>
-                            <input type="text" name="street" placeholder="Street, nbr"  value="{{ $rentable->street}}"/>
+                            <p class="create-listing-header">Location</p>
+                            <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ $rentable->street}}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "city" placeholder="City"  value="{{$rentable->city }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ $rentable->apartment_floor}}"/>
+                            <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ $rentable->city }}"/>
                             @error('city')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "state" placeholder="State"  value="{{ $rentable->state}}"/>
+                            <input type="text" id = "state" name = "state" placeholder="State*"  value="{{ $rentable->state}}"/>
                             @error('state')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "country" placeholder="Country"  value="{{$rentable->country }}" />
+                            <input type="text" id = "country" name = "country" placeholder="Country*"  value="{{ $rentable->country}}" />
                             @error('country')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" name = "postcode" placeholder="Postcode"  value="{{$rentable->postcode }}" />
+                            <input type="text" id = "postcode" name = "postcode"placeholder="Postcode*"  value="{{ $rentable->postcode }}" />
                             @error('postcode')
                                 <p>{{$message}}</p>
                             @enderror
 
-                            {{-- <p class="create-listing-header">Use My Location:</p>
-                            <div onclick="getLocation()">Get Location</div> --}}
+                            <input type="hidden" name="latitude" id ="latitude" value = "{{$rentable->latitude}}">
+                            <input type="hidden" name="longitude" id = "longitude" value = "{{$rentable->longitude}}">
+
+                            <p class="create-listing-header">Use My Location:</p>
+                            <h6 onclick="getLocation()" class = "preview" id="location" style="font-size:1em;">
+                                @if($rentable->latitude != null and $rentable->longitude != null)
+                                    Latitude: {{$rentable->latitude}} Longitude: {{$rentable->longitude}}
+                                @else
+                                    Get My Location
+                                @endif
+                            </h6>
                         </section>
 
 
@@ -474,6 +484,126 @@
                 return (number/1024).toFixed(1) + 'KB';
             } else if(number >= 1048576) {
                 return (number/1048576).toFixed(1) + 'MB';
+            }
+        }
+
+        function initAutocomplete() {
+            address1Field = document.getElementById("street");
+            address2Field = document.getElementById("streetTwo");
+            postalField = document.getElementById("postcode");
+
+            // Create the autocomplete object, restricting the search predictions to
+            // addresses in the US and Canada.
+            autocomplete = new google.maps.places.Autocomplete(address1Field, {
+            componentRestrictions: { country: ["us"] },
+            fields: ["address_components", "geometry"],
+            types: ["address"],
+            });
+            address1Field.focus();
+
+            // When the user selects an address from the drop-down, populate the
+            // address fields in the form.
+            autocomplete.addListener("place_changed", fillInAddress);
+        }
+
+        function fillInAddress() {
+            // Get the place details from the autocomplete object.
+            const place = autocomplete.getPlace();
+            let address1 = "";
+            let postcode = "";
+
+            // Get each component of the address from the place details,
+            // and then fill-in the corresponding field on the form.
+            // place.address_components are google.maps.GeocoderAddressComponent objects
+            // which are documented at http://goo.gle/3l5i5Mr
+            for (const component of place.address_components) {
+                // @ts-ignore remove once typings fixed
+                const componentType = component.types[0];
+
+                switch (componentType) {
+                    case "street_number": {
+                    address1 = `${component.long_name} ${address1}`;
+                    break;
+                }
+                case "route": {
+                    address1 = `${address1}${component.long_name} `;
+                    break;
+                }
+                case "postal_code": {
+                    postcode = `${component.long_name}${postcode}`;
+                    break;
+                }
+
+                case "postal_code_suffix": {
+                    postcode = `${postcode}-${component.long_name}`;
+                    break;
+                }
+
+                case "locality":
+                    (document.getElementById("city")).value =
+                    component.long_name;
+                    break;
+
+                case "administrative_area_level_1": {
+                    (document.getElementById("state")).value =
+                    component.short_name;
+                    break;
+                }
+
+                case "country":
+                    (document.getElementById("country")).value =
+                    component.long_name;
+                    break;
+                }
+            }
+            address1Field.value = address1;
+            postalField.value = postcode;
+
+            // After filling the form with address components from the Autocomplete
+            // prediction, set cursor focus on the second address line to encourage
+            // entry of subpremise information such as apartment, unit, or floor number.
+            address2Field.focus();
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else { 
+                console.log("location not supported")
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude =  position.coords.longitude;
+            console.log("Latitude: " + latitude + 
+            "<br>Longitude: " + longitude);
+
+            // displayLocation(latitude,longitude);
+            // const reverse = require('reverse-geocode');
+            // console.log(reverse.lookup(37.8072792, -122.4780652, 'us'));
+
+            var test = document.getElementById("location");
+            test.innerHTML =" Latitude: " + latitude + 
+            " Longitude: " + longitude;
+            document.getElementById('latitude').value=latitude;
+            document.getElementById('longitude').value=longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log("User denied the request for Geolocation.");
+                break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Location information is unavailable.");
+                break;
+                case error.TIMEOUT:
+                    console.log( "The request to get user location timed out.");
+                break;
+                case error.UNKNOWN_ERROR:
+                    console.log( "An unknown error occurred.");
+                break;
             }
         }
 

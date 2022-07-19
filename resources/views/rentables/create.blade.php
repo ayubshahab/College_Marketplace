@@ -1,7 +1,7 @@
 <x-layout>
     <link rel="stylesheet" types = "text/css" href="/css/createListing.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
+    <div class="listings-parent-container crud" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
                 <div class="back-button">
@@ -189,12 +189,12 @@
 
                         {{-- card #3 --}}
                         <section class = "listingCard">
-                        <p class="create-listing-header">Location</p>
+                            <p class="create-listing-header">Location</p>
                             <input type="text" id = "street" name="street" placeholder="Enter a Location*"  value="{{ old('street', null) }}"/>
                             @error('street')
                                 <p>{{$message}}</p>
                             @enderror
-                            <input type="text" id = "streetTwo" name="streetTwo" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('street', null) }}"/>
+                            <input type="text" id = "apartment_floor" name="apartment_floor" placeholder="Apartment, unit, suite, or floor #"  value="{{ old('apartment_floor', null) }}"/>
                             <input type="text" id = "city" name = "city" placeholder="City*"  value="{{ old('city', null) }}"/>
                             @error('city')
                                 <p>{{$message}}</p>

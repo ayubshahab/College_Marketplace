@@ -43,6 +43,7 @@
                     <li><a href="/shop/all?type=rentable">For Rent</a></li>
                     <li><a href="/shop/all?type=lease">For Lease</a></li>
                     <li><a href="/shop/all?type=listing">For Sale</a></li>
+                    <li><a href="/shop/all?type=all">All Items</a></li>
                     </ul>
                 </li>
 

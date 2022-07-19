@@ -207,12 +207,12 @@ li{
 .button1 {
     display: inline-block;
     padding: 0.5em 1.2em;
-    margin: 0 0.5em 0.5em 0;
+    /* margin: 0 0.5em 0.5em 0; */
     border-radius: 0.12em;
     box-sizing: border-box;
     text-decoration: none;
     background: linear-gradient(180deg, #F76F62 0%, #E84848 100%);
-    box-shadow: 0px 4px 24px rgb(244 99 67 / 32%);
+    /* box-shadow: 0px 4px 24px rgb(244 99 67 / 32%); */
     font-weight: 300;
     color: #ffffff;
     text-align: center;
@@ -370,13 +370,17 @@ li{
     .header-cont div p{
         font-size: 20px;
     }
+
+    .main-listings-container{
+        padding: 0;
+    }
 }
 
 /* loading page end */
 @media(max-width: 480px){
-    .listings-parent-container{
-        /* padding: 20px !important; */
-    }
+    /* .listings-parent-container{
+        padding: 20px !important;
+    } */
 
     .header-cont div h1{
         font-size: 32px;
