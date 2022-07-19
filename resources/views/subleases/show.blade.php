@@ -269,7 +269,7 @@
                     var marker = new google.maps.Marker({
                     mapTwo: mapTwo,
                     position: results[0].geometry.location
-                });
+                    });
                 marker.setMap(mapTwo);
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
@@ -283,6 +283,10 @@
                     center: latlng
                 }
                 mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: latlng
+                });
                 marker.setMap(mapTwo);
             }
         }
