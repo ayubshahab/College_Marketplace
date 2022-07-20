@@ -170,11 +170,9 @@
                                         </form>
                                     </li>
                                     <li>
-                                        <form method="POST" action="/listings/<?php echo e($listing->id); ?>">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
-                                            <button><i class="fa fa-trash" ></i></button>
-                                        </form>
+                                        <span id="delete-modal-trigger">
+                                            <i class="fa fa-trash" ></i>
+                                        </span>
                                     </li>
                                 <?php endif; ?>
                             </ul>
@@ -188,6 +186,7 @@
                 <div class="map-container" id = "map-container">
                     
                 </div>
+                
                 <div class="chat-container">
                     
                     <?php if($currentUser != null and $listing->user_id == $currentUser->id): ?>
@@ -250,8 +249,24 @@
                 </div>
             </div> 
         </div>
-    </section>
+        <div class="modal" id="delete-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1>Delete Listing</h1>
+                <p>Are you sure you want to delete this listing?</p>
 
+                <div class="clearfix">
+                    <input type="button" class="button1" class="cancelbtn" id="cancelbtn" value="Cancel" />
+                    <form method="POST" action="/listings/<?php echo e($listing->id); ?>">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('DELETE'); ?>
+                        <input type="submit" class="deletebtn button1" value="Delete"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     
     <section class = "listings-parent-container">
         
@@ -269,12 +284,16 @@
     crossorigin=""></script>
    
     <script>
-        
-        var map = L.map('map-container').setView([51.505, -0.09], 13);
-                
-        function initMap() {
+        function isEmpty(input){
+            if(input === '' || input === null || input === undefined || input == null){
+                return true;
+            }return false;
+        }                
+        /*function initMap() {
             var mapTwo;
             var geocoder;
+            var listingLat = "<?php echo e($listing->latitude); ?>";
+            var listingLong = "<?php echo e($listing->longitude); ?>";
 
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -284,34 +303,64 @@
             }
 
             mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                console.log(listingLat, listingLong);
 
-            if("<?php echo e($listing->latitude); ?>" === "" || "<?php echo e($listing->longitude); ?>" === "") {
+            if(!isEmpty("<?php echo e($listing->street); ?>")  && !isEmpty("<?php echo e($listing->state); ?>")) {
+                console.log('top if');
                 var address = "<?php echo e($listing->street." ".$listing->city); ?>";
                 //console.log(address);
                 geocoder.geocode( { 'address': address}, function(results, status) {
-                if (status == 'OK') {
-                    mapTwo.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                    mapTwo: mapTwo,
-                    position: results[0].geometry.location
+                    if (status == 'OK') {
+                        mapTwo.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                        mapTwo: mapTwo,
+                        position: results[0].geometry.location
+                    });
+                    marker.setMap(mapTwo);
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
                 });
-                marker.setMap(mapTwo);
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
             } else {
-                var latlng = new google.maps.LatLng("<?php echo e($listing->latitude); ?>", "<?php echo e($listing->langitude); ?>");
+                console.log('bottom if');
+                console.log("<?php echo e($listing->latitude); ?>", "<?php echo e($listing->longitude); ?>");
+                var latlng = new google.maps.LatLng("<?php echo e($listing->latitude); ?>", "<?php echo e($listing->longitude); ?>");
                 //console.log(latlng);
                 var mapOptions = {
                     zoom: 15,
                     center: latlng
                 }
                 mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: latlng
+                });
                 marker.setMap(mapTwo);
             }
+        }*/
+
+        function getGoogleMapsImage(addressElements) {
+            var image = document.createElement('img');
+            var joined = addressElements.join(',');
+            var params = new URLSearchParams();
+            params.append('center', joined);
+            params.append('zoom', '15');
+            params.append('size', '500x240');
+            params.append('maptype', 'roadmap');
+            params.append('markers', 'color:red|label:C|' + joined);
+            params.append('key', 'AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM');
+            //params.append('signature','smZ85pItXiH894n1c2ElR0RY-HQ=');
+            var url = 'https://maps.googleapis.com/maps/api/staticmap?' + params.toString();
+            //console.log(url);
+            image.src = url;
+            document.getElementById('map-container').appendChild(image);
+            return url;
         }
+
+        let address = ['<?php echo e($listing->street); ?>', '<?php echo e($listing->city); ?>', '<?php echo e($listing->state); ?>', '<?php echo e($listing->postcode); ?>', '<?php echo e($listing->country); ?>'];
         
+        getGoogleMapsImage(address);
+
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");
             expandImg.src = imgs.src;
@@ -534,13 +583,33 @@
             scrollBottom(scroll_to_bottom);
         }
         function scrollBottom(element) {
-                element.scroll({ top: element.scrollHeight, behavior: "smooth"})
+            element.scroll({ top: element.scrollHeight, behavior: "smooth"})
+        }
+
+        //delete modal
+        var deleteModal = document.getElementById("delete-modal");
+        var deleteButton = document.getElementById("delete-modal-trigger");
+        var deleteSpan = document.getElementsByClassName("close")[0];
+        var cancelBtn = document.getElementById('cancelbtn');
+        deleteButton.onclick = function() {
+            deleteModal.style.display = "grid";
+        }
+        deleteSpan.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        cancelBtn.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
             }
+        }
     </script>
-    <script
+    <!-- <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initMap&libraries=places&v=weekly"
       defer
-    ></script>
+    ></script> -->
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>

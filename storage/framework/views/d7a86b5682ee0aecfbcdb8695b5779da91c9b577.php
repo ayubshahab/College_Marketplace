@@ -153,11 +153,9 @@
                                         </form>
                                     </li>
                                     <li>
-                                        <form method="POST" action="/subleases/<?php echo e($leaseItem->id); ?>">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
-                                            <button><i class="fa fa-trash" ></i></button>
-                                        </form>
+                                        <span id="delete-modal-trigger">
+                                            <i class="fa fa-trash" ></i>
+                                        </span>
                                     </li>
                                 <?php endif; ?>
                             </ul>
@@ -173,12 +171,83 @@
                 </div>
                 <div class="chat-container">
                     
-                    
+                    <?php if($currentUser != null and $leaseItem->user_id == $currentUser->id): ?>
+                        <div class="user-wrapper">
+                            <ul class="users">
+                                <?php if(count($allUsers) >= 1): ?>
+                                    <?php $__currentLoopData = $allUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li class="user" id="<?php echo e($user->id); ?>">
+                                            
+                                            <?php if($user->unread): ?>
+                                                <span class="pending"><?php echo e($user->unread); ?></span>
+                                            <?php endif; ?>
+                                
+                                            
+
+
+                                            <div class="media-left">
+                                                <img src="<?php echo e($user->avatar); ?>" alt="" class="media-object">
+                                            </div>
+
+                                            <div class="media-body">
+                                                <p class="name"><?php echo e($user->first_name); ?> <?php echo e($user->last_name); ?> | ID: <?php echo e($user->id); ?> </p>
+                                                <p class='email'><?php echo e($user ->email); ?> </p>   
+                                            </div>
+                                        </li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
+                                    <li class="no-messages"><span>You have no messages</span></li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
 
                     
-                    
+                    <div id="scroll-to-bottom" class="messages-container active">
+                        <?php if($currentUser != null and $leaseItem->user_id == $currentUser->id): ?>
+                            <a class="message-back">
+                                <i class="fa-solid fa-arrow-left"></i> Back
+                            </a>
+                        <?php else: ?>
+                            <a class="back-placeholder">
+                                Chat with <?php echo e($listingOwner->first_name); ?> <?php echo e($listingOwner->last_name); ?>
+
+                            </a>
+                        <?php endif; ?>
+                       
+                        <ul class="messages" id='messages'>
+                            <?php if(auth()->guest()): ?>
+                                <li class="message clearfix">
+                                    <div class="sent">
+                                        <p>Please log in to begin chat</p>
+                                        <p class='date'>-System</p>
+                                    </div>
+                                </li>
+                            <?php endif; ?>
+                            
+                        </ul>
+                        <div id = "input-text" class=.input-text>
+                            <input type="text" name="message" placeholder="Message Seller" class="submit">
+                        </div>
+                    </div> 
                 </div>
             </div> 
+        </div>
+        <div class="modal" id="delete-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1>Delete Listing</h1>
+                <p>Are you sure you want to delete this listing?</p>
+
+                <div class="clearfix">
+                    <input type="button" class="button1" class="cancelbtn" id="cancelbtn" value="Cancel" />
+                    <form method="POST" action="/subleases/<?php echo e($leaseItem->id); ?>">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('DELETE'); ?>
+                        <input type="submit" class="deletebtn button1" value="Delete"/>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -201,12 +270,16 @@
    
     <script>
         
-        var map = L.map('map-container').setView([51.505, -0.09], 13);
-
+        function isEmpty(input){
+            if(input === '' || input === null || input === undefined || input == null){
+                return true;
+            }return false;
+        }                
         function initMap() {
-
             var mapTwo;
             var geocoder;
+            var listingLat = "<?php echo e($leaseItem->latitude); ?>";
+            var listingLong = "<?php echo e($leaseItem->longitude); ?>";
 
             geocoder = new google.maps.Geocoder();
             var latlng = new google.maps.LatLng(-34.397, 150.644);
@@ -216,30 +289,38 @@
             }
 
             mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                console.log(listingLat, listingLong);
 
-            if("<?php echo e($leaseItem->latitude); ?>" === "" || "<?php echo e($leaseItem->longitude); ?>" === "") {
+            if(!isEmpty("<?php echo e($leaseItem->street); ?>")  && !isEmpty("<?php echo e($leaseItem->state); ?>")) {
+                console.log('top if');
                 var address = "<?php echo e($leaseItem->street." ".$leaseItem->city); ?>";
                 //console.log(address);
                 geocoder.geocode( { 'address': address}, function(results, status) {
-                if (status == 'OK') {
-                    mapTwo.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                    mapTwo: mapTwo,
-                    position: results[0].geometry.location
+                    if (status == 'OK') {
+                        mapTwo.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                        mapTwo: mapTwo,
+                        position: results[0].geometry.location
+                    });
+                    marker.setMap(mapTwo);
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
                 });
-                marker.setMap(mapTwo);
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
             } else {
-                var latlng = new google.maps.LatLng("<?php echo e($leaseItem->latitude); ?>", "<?php echo e($leaseItem->langitude); ?>");
+                console.log('bottom if');
+                console.log("<?php echo e($leaseItem->latitude); ?>", "<?php echo e($leaseItem->longitude); ?>");
+                var latlng = new google.maps.LatLng("<?php echo e($leaseItem->latitude); ?>", "<?php echo e($leaseItem->longitude); ?>");
                 //console.log(latlng);
                 var mapOptions = {
                     zoom: 15,
                     center: latlng
                 }
                 mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: latlng
+                });
                 marker.setMap(mapTwo);
             }
         }
@@ -290,7 +371,7 @@
                             $('#'+receiverSelected).click();
                         }else{
                             console.log(data);
-                            if(data.for_listing == listing_id){
+                            if(data.for_sublease == listing_id){
                                 var pending = parseInt($('#' + data.from).find('.pending').html());
                                 if (pending) {
                                     $('#' + data.from).find('.pending').html(pending + 1);
@@ -327,7 +408,7 @@
                     
                     $.ajax({
                         type: "GET",
-                        url: "/messages?from=" + UserSending + "&to=" + UserReceiving + "&listing_id=" + listing_id, // need to create this route
+                        url: "/messages?from=" + UserSending + "&to=" + UserReceiving + "&sublease_id=" + listing_id, // need to create this route
                         data: "JSON",
                         cache: false,
                         success: function (data) {
@@ -379,7 +460,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/messages?from=" + receiverSelected + "&to=" + listingOwner + "&listing_id=" + listing_id, // need to create this route
+                    url: "/messages?from=" + receiverSelected + "&to=" + listingOwner + "&sublease_id=" + listing_id, // need to create this route
                     data: "JSON",
                     cache: false,
                     success: function (data) {
@@ -428,11 +509,11 @@
                     // if I am the listing owner, then i need a receiver id which should be the person I have selected form the users list
                     if(listingOwner == userLoggedIn){
                         // if it is my ownlisting, use receiver id, instead of listing owner id
-                        datastr = "receiver_id=" + receiverSelected + "&message=" + msg + "&for_listing=" + listing_id;
+                        datastr = "receiver_id=" + receiverSelected + "&message=" + msg + "&for_sublease=" + listing_id;
                             // console.log(datastr);
                     }else{ //else send a message to the listing owner from me thats default
                         // console.log("bottom branch");
-                        datastr = "receiver_id=" + listingOwner + "&message=" + msg + "&for_listing=" + listing_id;
+                        datastr = "receiver_id=" + listingOwner + "&message=" + msg + "&for_sublease=" + listing_id;
                     }
                     console.log(datastr);
                     if(e.keyCode == 13 && msg != '' && listingOwner != ''){
@@ -466,8 +547,28 @@
             scrollBottom(scroll_to_bottom);
         }
         function scrollBottom(element) {
-                element.scroll({ top: element.scrollHeight, behavior: "smooth"})
+            element.scroll({ top: element.scrollHeight, behavior: "smooth"})
+        }
+
+        //delete modal
+        var deleteModal = document.getElementById("delete-modal");
+        var deleteButton = document.getElementById("delete-modal-trigger");
+        var deleteSpan = document.getElementsByClassName("close")[0];
+        var cancelBtn = document.getElementById('cancelbtn');
+        deleteButton.onclick = function() {
+            deleteModal.style.display = "grid";
+        }
+        deleteSpan.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        cancelBtn.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
             }
+        }
     </script>
 
     <script

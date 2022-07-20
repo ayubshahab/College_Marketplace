@@ -162,18 +162,20 @@
                 </div>
                 <div class="chat-container">
                     {{-- only want to go through list of users & the messages from each user if the current listing is mine --}}
-                    {{-- @if($currentUser != null and $listing->user_id == $currentUser->id)
+                    @if($currentUser != null and $leaseItem->user_id == $currentUser->id)
                         <div class="user-wrapper">
                             <ul class="users">
                                 @if(count($allUsers) >= 1)
                                     @foreach($allUsers as $user)
                                         <li class="user" id="{{ $user->id }}">
-                                            will show unread count notification
+                                            {{--will show unread count notification--}}
                                             @if($user->unread)
                                                 <span class="pending">{{ $user->unread }}</span>
                                             @endif
+                                
+                                            {{-- <span class="pending">1</span> --}}
 
-                                            
+
                                             <div class="media-left">
                                                 <img src="{{ $user->avatar }}" alt="" class="media-object">
                                             </div>
@@ -189,11 +191,11 @@
                                 @endif
                             </ul>
                         </div>
-                    @endif --}}
+                    @endif
 
                     {{-- the messages container should be default active, and only inactive the current listing is the user's own --}}
-                    {{-- <div id="scroll-to-bottom" class="messages-container active">
-                        @if($currentUser != null and $listing->user_id == $currentUser->id)
+                    <div id="scroll-to-bottom" class="messages-container active">
+                        @if($currentUser != null and $leaseItem->user_id == $currentUser->id)
                             <a class="message-back">
                                 <i class="fa-solid fa-arrow-left"></i> Back
                             </a>
@@ -217,7 +219,7 @@
                         <div id = "input-text" class=.input-text>
                             <input type="text" name="message" placeholder="Message Seller" class="submit">
                         </div>
-                    </div>  --}}
+                    </div> 
                 </div>
             </div> 
         </div>
@@ -359,7 +361,7 @@
                             $('#'+receiverSelected).click();
                         }else{
                             console.log(data);
-                            if(data.for_listing == listing_id){
+                            if(data.for_sublease == listing_id){
                                 var pending = parseInt($('#' + data.from).find('.pending').html());
                                 if (pending) {
                                     $('#' + data.from).find('.pending').html(pending + 1);
@@ -396,7 +398,7 @@
                     
                     $.ajax({
                         type: "GET",
-                        url: "/messages?from=" + UserSending + "&to=" + UserReceiving + "&listing_id=" + listing_id, // need to create this route
+                        url: "/messages?from=" + UserSending + "&to=" + UserReceiving + "&sublease_id=" + listing_id, // need to create this route
                         data: "JSON",
                         cache: false,
                         success: function (data) {
@@ -448,7 +450,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/messages?from=" + receiverSelected + "&to=" + listingOwner + "&listing_id=" + listing_id, // need to create this route
+                    url: "/messages?from=" + receiverSelected + "&to=" + listingOwner + "&sublease_id=" + listing_id, // need to create this route
                     data: "JSON",
                     cache: false,
                     success: function (data) {
@@ -497,11 +499,11 @@
                     // if I am the listing owner, then i need a receiver id which should be the person I have selected form the users list
                     if(listingOwner == userLoggedIn){
                         // if it is my ownlisting, use receiver id, instead of listing owner id
-                        datastr = "receiver_id=" + receiverSelected + "&message=" + msg + "&for_listing=" + listing_id;
+                        datastr = "receiver_id=" + receiverSelected + "&message=" + msg + "&for_sublease=" + listing_id;
                             // console.log(datastr);
                     }else{ //else send a message to the listing owner from me thats default
                         // console.log("bottom branch");
-                        datastr = "receiver_id=" + listingOwner + "&message=" + msg + "&for_listing=" + listing_id;
+                        datastr = "receiver_id=" + listingOwner + "&message=" + msg + "&for_sublease=" + listing_id;
                     }
                     console.log(datastr);
                     if(e.keyCode == 13 && msg != '' && listingOwner != ''){

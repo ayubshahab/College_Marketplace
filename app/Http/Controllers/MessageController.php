@@ -43,12 +43,14 @@ class MessageController extends Controller
         $message = $request->message;
         $listing_id = $request->for_listing;
         $rental_id = $request->for_rentals;
+        $sublease_id = $request->for_sublease;
 
         $data = new Message();
         $data->from = $from;
         $data->to = $to;
         $data->for_listing= $listing_id;
         $data->for_rentals=$rental_id;
+        $data->for_sublease=$sublease_id;
         $data->message = $message;
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
@@ -67,7 +69,7 @@ class MessageController extends Controller
         
         
 
-        $data = ['from' => $from, 'to' => $to, 'for_listing' =>$listing_id, 'for_rentals' => $rental_id]; // sending from and to user id when pressed enter
+        $data = ['from' => $from, 'to' => $to, 'for_listing' =>$listing_id, 'for_rentals' => $rental_id,'for_sublease' => $sublease_id]; // sending from and to user id when pressed enter
         $pusher->trigger('my-channel', 'my-event', $data);
 
         $response = array(
@@ -75,6 +77,8 @@ class MessageController extends Controller
             'reciever_id' => $request->receiver_id,
             'for_listing' => $request ->for_listing,
             // 'message' => $request -> message
+            'for_rentals' => $request->for_rentals,
+            'for_sublease' => $request->for_sublease,
             "message"=>$data
         );
         return response()->json($response); 
