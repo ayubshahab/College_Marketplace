@@ -163,6 +163,7 @@
                 <div class="map-container" id = "map-container">
                     {{-- <h1>Maps feature</h1> --}}
                 </div>
+                
                 <div class="chat-container">
                     {{-- only want to go through list of users & the messages from each user if the current listing is mine --}}
                     @if($currentUser != null and $listing->user_id == $currentUser->id)
@@ -263,7 +264,8 @@
             if(input === '' || input === null || input === undefined || input == null){
                 return true;
             }return false;
-        }                
+        }  
+                      
         function initMap() {
             var mapTwo;
             var geocoder;
@@ -313,7 +315,30 @@
                 marker.setMap(mapTwo);
             }
         }
+
+        //trying to implement static maps
+        /*function getGoogleMapsImage(addressElements) {
+            var image = document.createElement('img');
+            var joined = addressElements.join(',');
+            var params = new URLSearchParams();
+            params.append('center', joined);
+            params.append('zoom', '15');
+            params.append('size', '500x240');
+            params.append('maptype', 'roadmap');
+            params.append('markers', 'color:red|label:C|' + joined);
+            params.append('key', 'AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM');
+            //params.append('signature','smZ85pItXiH894n1c2ElR0RY-HQ=');
+            var url = 'https://maps.googleapis.com/maps/api/staticmap?' + params.toString();
+            //console.log(url);
+            image.src = url;
+            document.getElementById('map-container').appendChild(image);
+            return url;
+        }
+
+        let address = ['{{$listing->street}}', '{{$listing->city}}', '{{$listing->state}}', '{{$listing->postcode}}', '{{$listing->country}}'];
         
+        getGoogleMapsImage(address);*/
+
         function myFunction(imgs) {
             var expandImg = document.getElementById("expandedImg");
             expandImg.src = imgs.src;
@@ -559,9 +584,9 @@
             }
         }
     </script>
-    <script
+    <!-- <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHQxwBJAiHYROOX3zT6P7AwnBq1WGVmnM&callback=initMap&libraries=places&v=weekly"
       defer
-    ></script>
+    ></script> -->
 </x-layout>
 {{-- @endsection --}}
