@@ -175,7 +175,7 @@ class ListingController extends Controller
             $formFields['image_uploads']=json_encode($data);
         }
         $formFields['category']=implode(", " ,$formFields['category']);
-        // dd($formFields);
+        dd($formFields);
 
         $listing->update($formFields);
         return redirect('/listings/'.$listing->id)->with('message', 'Listing Updated Successfully!');
