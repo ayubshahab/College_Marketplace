@@ -324,6 +324,10 @@
                     center: latlng
                 }
                 mapTwo = new google.maps.Map(document.getElementById('map-container'), mapOptions);
+                var marker = new google.maps.Marker({
+                    mapTwo: mapTwo,
+                    position: latlng
+                });
                 marker.setMap(mapTwo);
             }
         }

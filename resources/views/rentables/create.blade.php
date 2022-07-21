@@ -476,10 +476,21 @@
         });
 
 
-        // source code link: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
-        //script to process img upload and show previews
         const input = document.querySelector('.imgUpload');
         const preview = document.querySelector('.preview');
+
+        $('form').submit(function(e){
+            for(const tempFile of input.files){
+                if(validFileType(tempFile)) {
+                    if (tempFile.size > 5*1024*1024) {
+                        alert("Too large Image. Only images smaller than 5MB can be uploaded. Only images smaller then 5MB will be kept");
+                        e.preventDefault();
+                        break;
+                    }
+                }
+            }      
+            e.currentTarget.submit();     
+        });
 
         // input.style.opacity = 0;
         input.addEventListener('change', updateImageDisplay);
@@ -503,21 +514,34 @@
                 list.className="user-img-list";
                 preview.appendChild(list);
 
+                var userAlerted = false;
                 for(const file of curFiles) {
-                const listItem = document.createElement('li');
-                const para = document.createElement('p');
-                if(validFileType(file)) {
-                    const image = document.createElement('img');
-                    image.src = URL.createObjectURL(file);
+                    const listItem = document.createElement('li');
+                    const para = document.createElement('p');
+                    if(validFileType(file)) {
+                        const image = document.createElement('img');
+                        image.src = URL.createObjectURL(file);
 
-                    listItem.appendChild(image);
-                    listItem.appendChild(para);
-                } else {
-                    para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
-                    listItem.appendChild(para);
-                }
+                        listItem.appendChild(image);
 
-                list.appendChild(listItem);
+                        if (file.size > 5*1024*1024 ) {
+                            if(!userAlerted){
+                                alert("Too large Image. Only images smaller than 5MB can be uploaded. Only images smaller then 5MB will be kept");
+                                userAlerted=true;
+                            }
+                            para.innerHTML = returnFileSize(file.size) + '<i class="fa fa-times" aria-hidden="true"></i>';
+                            para.classList.add("file-details", "not-approved");
+                        }else{ //the approved images with a check mark
+                            para.innerHTML = returnFileSize(file.size) + '<i class="fa fa-check" aria-hidden="true"></i>';
+                            para.classList.add("file-details", "approved");
+                        }
+                        listItem.appendChild(para);
+                    } else {
+                        para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
+                        listItem.appendChild(para);
+                    }
+
+                    list.appendChild(listItem);
                 }
             }
         }

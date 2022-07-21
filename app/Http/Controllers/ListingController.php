@@ -99,7 +99,7 @@ class ListingController extends Controller
             'category'=>'required',
             'tags'=>'required',
             'description'=>'required',
-            'image_uploads'=>'required',
+            'image_uploads'=>'required|max:5128',
             'street'=>'required_without:latitude',
             'city'=>'required_without:latitude',
             'state'=>'required_without:latitude',
@@ -111,19 +111,22 @@ class ListingController extends Controller
         ]);
         //  dd($formFields);
         $formFields['user_id']=auth()->id();
-        if($request->hasFile('image_uploads'))
-        {
-            foreach ($request->file('image_uploads') as $file) {
+        //since the images are required anyways, we know there will always be atleast one image
+        //we have built in the check for size on the javascript side
+        foreach ($request->file('image_uploads') as $file) {
+            // if the size is smaller than 5mb then upload to aws s3 bucket
+            if($file->getSize() <= 5*1024*1024){
                 $path = $file->store('listings','s3');
                 \Storage::disk('s3')->setVisibility($file, 'public');
                 //$fullURL = \Storage::disk('s3')->url($name); 
                 $data[] = $path; 
             }
-            $formFields['image_uploads']=json_encode($data);
         }
+
+        $formFields['image_uploads']=json_encode($data);
         $formFields['category']=implode(", " ,$formFields['category']);
 
-        dd($formFields);
+        // dd($formFields);
         $newListing=Listing::create($formFields);
         return redirect('/listings/'.$newListing->id)->with('message', 'Listing Created Successfully!');
 
@@ -163,16 +166,18 @@ class ListingController extends Controller
         ]);
 
         $formFields['user_id']=auth()->id();
-        
-        if($request->hasFile('image_uploads'))
-        {
+        if($request->file('image_uploads') != null){
             foreach ($request->file('image_uploads') as $file) {
-                $path = $file->store('listings','s3');
-                \Storage::disk('s3')->setVisibility($file, 'public');
-                //$fullURL = \Storage::disk('s3')->url($name); 
-                $data[] = $path; 
+                // if the size is smaller than 5mb then upload to aws s3 bucket
+                if($file->getSize() <= 5*1024*1024){
+                    $path = $file->store('listings','s3');
+                    \Storage::disk('s3')->setVisibility($file, 'public');
+                    //$fullURL = \Storage::disk('s3')->url($name); 
+                    $data[] = $path; 
+                }
             }
-            $formFields['image_uploads']=json_encode($data);
+
+            $formFields['image_uploads']=json_encode($data);   
         }
         $formFields['category']=implode(", " ,$formFields['category']);
         // dd($formFields);
