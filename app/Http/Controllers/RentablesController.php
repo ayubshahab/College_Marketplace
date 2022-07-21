@@ -37,16 +37,13 @@ class RentablesController extends Controller
             'apartment_floor'=>'nullable'
         ]);
         $formFields['user_id']=auth()->id();
-        if($request->hasFile('image_uploads'))
-        {
-            foreach ($request->file('image_uploads') as $file) {
-                $path = $file->store('rentables','s3');
-                \Storage::disk('s3')->setVisibility($file, 'public');
-                //$fullURL = \Storage::disk('s3')->url($name); 
-                $data[] = $path; 
-            }
-            $formFields['image_uploads']=json_encode($data);
+        foreach ($request->file('image_uploads') as $file) {
+            $path = $file->store('rentables','s3');
+            \Storage::disk('s3')->setVisibility($file, 'public');
+            //$fullURL = \Storage::disk('s3')->url($name); 
+            $data[] = $path; 
         }
+        $formFields['image_uploads']=json_encode($data);
         $formFields['category']=implode(", " ,$formFields['category']);
 
         // dd($formFields);
@@ -164,8 +161,7 @@ class RentablesController extends Controller
 
         $formFields['user_id']=auth()->id();
         
-        if($request->hasFile('image_uploads'))
-        {
+        if($request->file('image_uploads') != null){
             foreach ($request->file('image_uploads') as $file) {
                 $path = $file->store('rentables','s3');
                 \Storage::disk('s3')->setVisibility($file, 'public');
@@ -174,6 +170,7 @@ class RentablesController extends Controller
             }
             $formFields['image_uploads']=json_encode($data);
         }
+        
         $formFields['category']=implode(", " ,$formFields['category']);
         // dd($rentable);
         $rentable->update($formFields);

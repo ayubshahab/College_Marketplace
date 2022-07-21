@@ -236,7 +236,7 @@ ul.ks-cboxtags li input[type="checkbox"] {
 
 .user-img-list li {
 	width: 80px;
-	height: 80px;
+	height: fit-content;
 	overflow: hidden;
   	float: left;
   	position: relative;
@@ -246,9 +246,26 @@ ul.ks-cboxtags li input[type="checkbox"] {
 
 .user-img-list li img{
 	width: 100%;
-	height: 100%;
+	height: 80px;
 	object-fit: contain; /* or object-fit: contain; */
 }
+
+.file-details{
+	color:black !important;
+}
+
+.file-details i{
+	margin-left: 5px;
+}
+
+.approved{
+	color:green !important;
+}
+
+.not-approved{
+	color:red !important;
+}
+
 /* removing styling from submit button */
 .submit-create-listing {
 	background: none;

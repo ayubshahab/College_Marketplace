@@ -37,15 +37,12 @@ class SubleaseController extends Controller
             'apartment_floor'=>'nullable'
         ]);
         $formFields['user_id']=auth()->id();
-        if($request->hasFile('image_uploads'))
-        {
-            foreach ($request->file('image_uploads') as $file) {
-                $path = $file->store('subleases','s3');
-                \Storage::disk('s3')->setVisibility($file, 'public');
-                $data[] = $path; 
-            }
-            $formFields['image_uploads']=json_encode($data);
+        foreach ($request->file('image_uploads') as $file) {
+            $path = $file->store('subleases','s3');
+            \Storage::disk('s3')->setVisibility($file, 'public');
+            $data[] = $path; 
         }
+        $formFields['image_uploads']=json_encode($data);
         $formFields['utilities']=implode(", " ,$formFields['utilities']);
         // dd($formFields);
         $newSublease=Sublease::create($formFields);
@@ -169,9 +166,7 @@ class SubleaseController extends Controller
         ]);
 
         $formFields['user_id']=auth()->id();
-        
-        if($request->hasFile('image_uploads'))
-        {
+        if($request->file('image_uploads') != null){
             foreach ($request->file('image_uploads') as $file) {
                 $path = $file->store('subleases','s3');
                 \Storage::disk('s3')->setVisibility($file, 'public');

@@ -9,7 +9,7 @@
 <?php $component->withAttributes([]); ?>
     <link rel="stylesheet" types = "text/css" href="/css/createListing.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <div class="listings-parent-container" style="padding-bottom: 50px; padding-top: 50px;">
+    <div class="listings-parent-container crud" style="padding-bottom: 50px; padding-top: 50px;">
         <div class ="container">
            <div class="createListingSection">
                 <div class="back-button">
@@ -178,7 +178,18 @@ unset($__errorArgs, $__bag); ?>
                             <p class="create-listing-header">Attach Images</p>
                             <input class="imgUpload" type="file" id="image_uploads" name="image_uploads[]" accept=".jpg, .jpeg, .png" multiple >
                             <div class="preview">
-                                <h6>Please select up to 5</h6>
+                                
+                                <ul class = "user-img-list">
+                                    <?php if(is_array(json_decode($sublease->image_uploads))): ?>
+                                        <?php $__currentLoopData = json_decode($sublease->image_uploads); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <li>
+                                                 <img src=<?php echo e($sublease->image_uploads ? Storage::disk('s3')->url($link) : asset('/images/rotunda.jpg')); ?> alt = "User Uploads">
+                                            </li>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                        <h6>No files uploaded</h6>
+                                    <?php endif; ?>
+                                </ul>
                             </div>
                             <?php $__errorArgs = ['image_uploads'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -624,11 +635,21 @@ unset($__errorArgs, $__bag); ?>
 
         });
 
-
-        // source code link: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
-        //script to process img upload and show previews
-        const input = document.querySelector('.imgUpload');
+const input = document.querySelector('.imgUpload');
         const preview = document.querySelector('.preview');
+
+        $('form').submit(function(e){
+            for(const tempFile of input.files){
+                if(validFileType(tempFile)) {
+                    if (tempFile.size > 5*1024*1024) {
+                        alert("Too large Image. Only images smaller than 5MB can be uploaded. Only images smaller then 5MB will be kept");
+                        e.preventDefault();
+                        break;
+                    }
+                }
+            }      
+            e.currentTarget.submit();     
+        });
 
         // input.style.opacity = 0;
         input.addEventListener('change', updateImageDisplay);
@@ -652,21 +673,34 @@ unset($__errorArgs, $__bag); ?>
                 list.className="user-img-list";
                 preview.appendChild(list);
 
+                var userAlerted = false;
                 for(const file of curFiles) {
-                const listItem = document.createElement('li');
-                const para = document.createElement('p');
-                if(validFileType(file)) {
-                    const image = document.createElement('img');
-                    image.src = URL.createObjectURL(file);
+                    const listItem = document.createElement('li');
+                    const para = document.createElement('p');
+                    if(validFileType(file)) {
+                        const image = document.createElement('img');
+                        image.src = URL.createObjectURL(file);
 
-                    listItem.appendChild(image);
-                    listItem.appendChild(para);
-                } else {
-                    para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
-                    listItem.appendChild(para);
-                }
+                        listItem.appendChild(image);
 
-                list.appendChild(listItem);
+                        if (file.size > 5*1024*1024 ) {
+                            if(!userAlerted){
+                                alert("Too large Image. Only images smaller than 5MB can be uploaded. Only images smaller then 5MB will be kept");
+                                userAlerted=true;
+                            }
+                            para.innerHTML = returnFileSize(file.size) + '<i class="fa fa-times" aria-hidden="true"></i>';
+                            para.classList.add("file-details", "not-approved");
+                        }else{ //the approved images with a check mark
+                            para.innerHTML = returnFileSize(file.size) + '<i class="fa fa-check" aria-hidden="true"></i>';
+                            para.classList.add("file-details", "approved");
+                        }
+                        listItem.appendChild(para);
+                    } else {
+                        para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
+                        listItem.appendChild(para);
+                    }
+
+                    list.appendChild(listItem);
                 }
             }
         }
