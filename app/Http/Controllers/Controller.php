@@ -24,6 +24,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
+    public function features(){
+        return view('main.features');
+    }
+    
      //show the index page
     public function index(){
         
