@@ -24,8 +24,8 @@
           <li class = "footer-links">
             <a href="">Home</a>
           </li>
-          <li class = "footer-links"><a href="/services">Services</a></li>
-          <li class = "footer-links"><a href="/about">About US</a></li>
+          {{-- <li class = "footer-links"><a href="/services">Services</a></li> --}}
+          {{-- <li class = "footer-links"><a href="/about">About US</a></li> --}}
           <li class = "footer-links"><a href="/features">Features</a></li>
           @guest
             <li class = "footer-links"><a href="/login">Login</a></li>
