@@ -139,10 +139,10 @@
                     </div>
                 </div>
                 <div class="myPosts-main">
-                    @include('partials._cardGallary', ['listings' => $myListings, 'heading'=>'My Listings', 'displayTags' => false])
+                    @include('partials._cardGallary', ['listings' => $myListings, 'heading'=>'My Listings', 'displayTags' => false, 'displayMoreButton' => false])
                 </div>
                 <div class="favorites-main">
-                    @include('partials._cardGallary', ['listings' => $likedList, 'heading'=>'Liked Items', 'displayTags' => false])
+                    @include('partials._cardGallary', ['listings' => $likedList, 'heading'=>'Liked Items', 'displayTags' => false, 'displayMoreButton' => false])
                 </div>
                 <div class="watchList-main">
                     <div class="watchlist-header">

@@ -7,6 +7,9 @@
     <div class="subcontainer">
         <div class="controller">
             <h2>{{$heading}}</h2>
+            @if($displayMoreButton)
+                <a href="/shop/all?type=all" class="button1" style="font-size:14px;">All Items ></a>
+            @endif
         </div>
     
         {{-- go through the listings and generate cards for each then show in a list of cards  --}}

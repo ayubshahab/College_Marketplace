@@ -26,13 +26,23 @@ class Controller extends BaseController
     
      //show the index page
     public function index(){
-        $latest = Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16);
-        if(count($latest) == 0){
-            $latest = Listing::latest()->take(16)->get();
-        }
+        
+
+        //Option 1: return results that were added in the last 24 hours for only sale items
+        // $latest = Listing::latest()->where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->simplePaginate(16);
+        // if(count($latest) == 0){
+        //     $latest = Listing::latest()->take(16)->get();
+        // }
+
+        //Option 2: retun results from all three types that are the latest
+        $listingResults = Listing::latest()->where('status', '!=', 'Sold' )->limit(16)->get();
+        $rentableResults = Rentable::latest()->where('status', 'like', 'Available' )->limit(16)->get();
+        $subleaseResults = Sublease::latest()->where('status', 'like', 'Available')->limit(16)->get();
+        $totalResults = collect($listingResults)->merge($rentableResults)->merge($subleaseResults)->sortByDesc('created_at')->slice(0,16);
+        // dd($totalResults);
 
         return view('main.index', [
-            'listings'=> $latest,
+            'listings'=> $totalResults,
             'listingsNear' => Listing::latest()->where('status', '!=', 'Sold' )->take(10)->get(),
             'rentables' => Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get(),
             'subleases'=>Sublease::latest()->where('status', 'like', 'Available')->take(10)->get()
@@ -88,7 +98,7 @@ class Controller extends BaseController
                 ]); 
             }elseif((request('type') ?? false) && request('type') == 'lease'){
                 $totalResults = null;
-                if(!empty($request->except('_token', 'type', 'page'))){
+                if(!empty($request->except('_token', 'type', 'page', 'category'))){
                     $subleaseResults = $this->getSubleaseQuery($request);
                     $totalResults = collect($subleaseResults)->sortByDesc('id') -> paginate(16);
                 }else{
@@ -105,7 +115,7 @@ class Controller extends BaseController
                     $listingResults = $this->getListingsQuery($request);
                     $rentableResults = $this->getRentableQuery($request);
                     $subleaseResults = $this->getSubleaseQuery($request);
-                    $totalResults = collect($listingResults)->merge($rentableResults)->sortByDesc('id') -> paginate(16);
+                    $totalResults = collect($listingResults)->merge($rentableResults)->merge($subleaseResults)->sortByDesc('id') -> paginate(16);
                 }else{
                     $totalResults = collect(Listing::latest()->get())->merge(Rentable::latest()->get())->merge(Sublease::latest()->get())->sortByDesc('id')->paginate(16);
                 }
@@ -119,135 +129,171 @@ class Controller extends BaseController
     }
 
     public function getListingsQuery(Request $map){
+        $map = $map->except('_token', 'type', 'page','utilities');
         // dd($map);
-        // "type" => "all"
-    //   "condition" => "new,slightly used"
-    //   "negotiable" => "fixed"
-    //   "minprice" => "23"
-        $map = $map->except('_token', 'type', 'page');
-        $string = "Select * from listings as l where ";
-        foreach($map as $key => $values){
-            // dd($key);
-            // dd($values);
-            if($key == "search"){
-                $arrayValues = explode(" ", $values);
-                $string = $string . "(" ;
-                foreach($arrayValues as $value){
-                    $string = $string . " (" ;
-                    $string = $string . "l.item_name LIKE '%" . $value . "%' OR ";
-                    $string = $string . "l.tags LIKE '%" . $value . "%' OR ";
-                    $string = $string . "l.description LIKE '%" . $value . "%' OR ";
+        if(!empty($map)){
+            $string = "Select * from listings as l where ";
+            foreach($map as $key => $values){
+                // dd($key);
+                // dd($values);
+                if($key == "search"){
+                    $arrayValues = explode(" ", $values);
+                    $string = $string . "(" ;
+                    foreach($arrayValues as $value){
+                        $string = $string . " (" ;
+                        $string = $string . "l.item_name LIKE '%" . $value . "%' OR ";
+                        $string = $string . "l.tags LIKE '%" . $value . "%' OR ";
+                        $string = $string . "l.description LIKE '%" . $value . "%' OR ";
+                        $string = substr($string, 0, -4);
+                        $string = $string . ")";
+                        $string = $string . " AND ";
+                    }
                     $string = substr($string, 0, -4);
                     $string = $string . ")";
-                    $string = $string . " AND ";
-                }
-                $string = substr($string, 0, -4);
-                $string = $string . ")";
-                // dd('top branch');
-            }elseif($key == 'tags'){
-                $string = $string . " (" ;
-                $string = $string . "l.tags LIKE '%" . $values . "%'";
-                $string = $string . ")";
-            }elseif($key == 'category'){
-                //can have multiple categories selected
-                $categories = explode(",", $values);
-                $string = $string . "(" ;
-                foreach($categories as $category){
-                    $string = $string . "l.category LIKE '%" . $category . "%' OR ";
-                }
-                $string = substr($string, 0, -4);
-                $string = $string . ")";
-                // $string = $string . " (" ;
-                // $string = $string . "l.category LIKE '%" . $values . "%'";
-                // $string = $string . ")";
-                // dd('third branch');
+                    // dd('top branch');
+                }elseif($key == 'tags'){
+                    $string = $string . " (" ;
+                    $string = $string . "l.tags LIKE '%" . $values . "%'";
+                    $string = $string . ")";
+                }elseif($key == 'category'){
+                    //can have multiple categories selected
+                    $categories = explode(",", $values);
+                    $string = $string . "(" ;
+                    foreach($categories as $category){
+                        $string = $string . "l.category LIKE '%" . $category . "%' OR ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
 
-            }elseif($key=='minprice'){
-                $string = $string . "(" ;
-                $string = $string . "l.price >= " . $values;
-                $string = $string . ")" ;
-            }elseif($key=="maxprice"){
-                $string = $string . "(" ;
-                $string = $string . "l.price <= " . $values;
-                $string = $string . ")" ;
-            }else{
-                $arrayValues = explode(",", $values);
-                // dd($arrayValues);
-                $string = $string . "(" ;
-                foreach($arrayValues as $value ){
-                    $string = $string . "l." . $key . " = '" . $value . "' OR ";
+                }elseif($key=='minprice'){
+                    $string = $string . "(" ;
+                    $string = $string . "l.price >= " . $values;
+                    $string = $string . ")" ;
+                }elseif($key=="maxprice"){
+                    $string = $string . "(" ;
+                    $string = $string . "l.price <= " . $values;
+                    $string = $string . ")" ;
+                }else{ //else bit takes care of condition & price
+                    $arrayValues = explode(",", $values);
+                    // dd($arrayValues);
+                    $string = $string . "(" ;
+                    foreach($arrayValues as $value ){
+                        $string = $string . "l." . $key . " = '" . $value . "' OR ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
                 }
-                $string = substr($string, 0, -4);
-                $string = $string . ")";
+                $string = $string . " AND ";
             }
-            $string = $string . " AND ";
+            $string = substr($string, 0, -5);
+            
+            $userQuery =DB::select($string);
+            return Listing::hydrate($userQuery);
         }
-        $string = substr($string, 0, -5);
-        // dd($string);
-        $userQuery =DB::select($string);
-        return Listing::hydrate($userQuery);
     }
 
     public function getRentableQuery(Request $map){
-        $map = $map->except('_token', 'type', 'page');
-        $string = "Select * from rentables as r where ";
-        foreach($map as $key => $values){
-           if($key == "search"){
-                $arrayValues = explode(" ", $values);
-                $string = $string . "(" ;
-                foreach($arrayValues as $value){
-                    $string = $string . " (" ;
-                    $string = $string . "r.rental_title LIKE '%" . $value . "%' OR ";
-                    $string = $string . "r.tags LIKE '%" . $value . "%' OR ";
-                    $string = $string . "r.description LIKE '%" . $value . "%' OR ";
+        $map = $map->except('_token', 'type', 'page','utilities');
+        if(!empty($map)){
+            $string = "Select * from rentables as r where ";
+            foreach($map as $key => $values){
+            if($key == "search"){
+                    $arrayValues = explode(" ", $values);
+                    $string = $string . "(" ;
+                    foreach($arrayValues as $value){
+                        $string = $string . " (" ;
+                        $string = $string . "r.rental_title LIKE '%" . $value . "%' OR ";
+                        $string = $string . "r.tags LIKE '%" . $value . "%' OR ";
+                        $string = $string . "r.description LIKE '%" . $value . "%' OR ";
+                        $string = substr($string, 0, -4);
+                        $string = $string . ")";
+                        $string = $string . " AND ";
+                    }
                     $string = substr($string, 0, -4);
                     $string = $string . ")";
-                    $string = $string . " AND ";
+                }elseif($key == 'tags'){
+                    $string = $string . " (" ;
+                    $string = $string . "r.tags LIKE '%" . $values . "%'";
+                    $string = $string . ")";
+                }elseif($key == 'category'){
+                    $categories = explode(",", $values);
+                    $string = $string . "(" ;
+                    foreach($categories as $category){
+                        $string = $string . "r.category LIKE '%" . $category . "%' OR ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                }elseif($key=='minprice'){
+                    $string = $string . "(" ;
+                    $string = $string . "r.rental_charging >= " . $values;
+                    $string = $string . ")" ;
+                }elseif($key=="maxprice"){
+                    $string = $string . "(" ;
+                    $string = $string . "r.rental_charging <= " . $values;
+                    $string = $string . ")" ;
+                }else{ //else bit takes care of condition & price
+                    $arrayValues = explode(",", $values);
+                    $string = $string . "(" ;
+                    foreach($arrayValues as $value ){
+                        $string = $string . "r." . $key . " = '" . $value . "' OR ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
                 }
-                $string = substr($string, 0, -4);
-                $string = $string . ")";
-            }elseif($key == 'tags'){
-                $string = $string . " (" ;
-                $string = $string . "r.tags LIKE '%" . $values . "%'";
-                $string = $string . ")";
-            }elseif($key == 'category'){
-                $categories = explode(",", $values);
-                $string = $string . "(" ;
-                foreach($categories as $category){
-                    $string = $string . "r.category LIKE '%" . $category . "%' OR ";
-                }
-                $string = substr($string, 0, -4);
-                $string = $string . ")";
-                // $string = $string . " (" ;
-                // $string = $string . "r.category LIKE '%" . $values . "%'";
-                // $string = $string . ")";
-            }elseif($key=='minprice'){
-                $string = $string . "(" ;
-                $string = $string . "r.rental_charging >= " . $values;
-                $string = $string . ")" ;
-            }elseif($key=="maxprice"){
-                $string = $string . "(" ;
-                $string = $string . "r.rental_charging <= " . $values;
-                $string = $string . ")" ;
-            }else{
-                $arrayValues = explode(",", $values);
-                $string = $string . "(" ;
-                foreach($arrayValues as $value ){
-                    $string = $string . "r." . $key . " = '" . $value . "' OR ";
-                }
-                $string = substr($string, 0, -4);
-                $string = $string . ")";
+                $string = $string . " AND ";
             }
-            $string = $string . " AND ";
+            $string = substr($string, 0, -5);
+            // dd($string);
+            $userQuery =DB::select($string);
+            return Rentable::hydrate($userQuery);
         }
-        $string = substr($string, 0, -5);
-        // dd($string);
-        $userQuery =DB::select($string);
-        return Rentable::hydrate($userQuery);
     }
     
     public function getSubleaseQuery(Request $map){
-        return;
+        $map = $map->except('_token', 'type', 'page', 'category', 'tags');
+        //done search, condition, price, utilities
+        if(!empty($map)){
+            $string = "Select * from subleases as s where ";
+            foreach($map as $key => $values){
+                if($key == "search"){
+                    $arrayValues = explode(" ", $values);
+                    $string = $string . "(" ;
+                    foreach($arrayValues as $value){
+                        $string = $string . " (" ;
+                        $string = $string . "s.sublease_title LIKE '%" . $value . "%' OR ";
+                        $string = $string . "s.location LIKE '%" . $value . "%' OR ";
+                        $string = $string . "s.description LIKE '%" . $value . "%' OR ";
+                        $string = substr($string, 0, -4);
+                        $string = $string . ")";
+                        $string = $string . " AND ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                }elseif($key=='minprice'){
+                    $string = $string . "(" ;
+                    $string = $string . "s.rent >= " . $values;
+                    $string = $string . ")" ;
+                }elseif($key=="maxprice"){
+                    $string = $string . "(" ;
+                    $string = $string . "s.rent <= " . $values;
+                    $string = $string . ")" ;
+                }else{ //else bit takes care of condition & price & utilities
+                    $arrayValues = explode(",", $values);
+                    // dd($arrayValues);
+                    $string = $string . "(" ;
+                    foreach($arrayValues as $value ){
+                        $string = $string . "s." . $key . " = '" . $value . "' OR ";
+                    }
+                    $string = substr($string, 0, -4);
+                    $string = $string . ")";
+                }
+                $string = $string . " AND ";
+            }
+            $string = substr($string, 0, -5);
+            // dd($string);
+            $userQuery =DB::select($string);
+            return Sublease::hydrate($userQuery);
+        }
     }
 
     public function enrollEmail(Request $request){

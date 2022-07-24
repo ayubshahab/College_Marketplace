@@ -181,7 +181,7 @@
         </div>
         {{-- need to create an event listener for the above filters where the results is a list of listings that are paginated and then passed into the card gallery --}}
         <div class = "listings-parent-container" style="min-height: 100vh;">
-            @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings), 'displayTags' => true])
+            @include('partials._cardGallary',['listings'=>$listings, 'heading' => 'Results Showing: '. count($listings), 'displayTags' => true, 'displayMoreButton' => false])
         </div>
     </div>
     <script>
