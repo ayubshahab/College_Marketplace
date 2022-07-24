@@ -22,7 +22,7 @@
         
         {{-- main card gallery for items posted within the last 24hrs --}}
         <div class = "listings-parent-container">
-            @include('partials._cardGallary', ['listings' => $listings, 'heading'=>'Items Recently Added', 'displayTags' => true])
+            @include('partials._cardGallary', ['listings' => $listings, 'heading'=>'Items Recently Added', 'displayTags' => true, 'displayMoreButton' => true])
         </div>
 
         {{-- carousel for subleases --}}

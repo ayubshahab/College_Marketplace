@@ -90,7 +90,37 @@ class SubleaseController extends Controller
     }
 
     public function show(Sublease $sublease){
-        $subleaseQuery = Sublease::latest()->where('status', 'like', 'Available' )->take(10)->get();
+
+        // option 1: when there are alot of items then we can be specific
+            // $subleaseQuery = DB::table('subleases');
+            // $utilities = explode(", ", $sublease->utilities); //there will always be atleast one category
+            // $condition = explode(", ", $sublease->condition); //there will always be atleast one tag
+
+            // $string = "Select * from subleases as s where s.id != " . $sublease->id . " AND " . "s.status NOT LIKE 'Leased'" . " AND ";
+            // $string = $string . "( (";
+            // foreach($utilities as $utility){
+            //     $string = $string . "s.utilities LIKE '%" . $utility . "%' OR ";
+            // }
+            // $string = substr($string, 0, -4);
+            // $string = $string . ") OR (";
+            // foreach($condition as $cond){
+            //     $string = $string . "s.condition LIKE '%" . $cond . "%' OR ";
+            // }
+            // $string = substr($string, 0, -4);
+            // $string = $string . ") ) limit 10";
+
+            // $userQuery =DB::select($string);
+            // $subleaseQuery = Sublease::hydrate($userQuery);
+
+        //option 2: when the data set size is relatively small, return random items from the database
+                $subleaseQuery = Sublease::inRandomOrder()
+                            ->where('id', '!=', $sublease->id)
+                            ->where( function ( $query )
+                            {
+                                $query->where( 'status', 'NOT LIKE', 'Leased' );
+                            })->limit(10)->get();
+
+        // $subleaseQuery = Sublease::latest()->where('status', 'like', 'Available' )->take(10)->get();
         $userQuery = null;
         if(Auth::user()){
             $userQuery = DB::select(

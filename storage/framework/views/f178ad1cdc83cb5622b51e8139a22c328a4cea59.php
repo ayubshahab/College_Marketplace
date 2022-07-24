@@ -189,10 +189,10 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                 </div>
                 <div class="myPosts-main">
-                    <?php echo $__env->make('partials._cardGallary', ['listings' => $myListings, 'heading'=>'My Listings', 'displayTags' => false], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                    <?php echo $__env->make('partials._cardGallary', ['listings' => $myListings, 'heading'=>'My Listings', 'displayTags' => false, 'displayMoreButton' => false], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 </div>
                 <div class="favorites-main">
-                    <?php echo $__env->make('partials._cardGallary', ['listings' => $likedList, 'heading'=>'Liked Items', 'displayTags' => false], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                    <?php echo $__env->make('partials._cardGallary', ['listings' => $likedList, 'heading'=>'Liked Items', 'displayTags' => false, 'displayMoreButton' => false], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 </div>
                 <div class="watchList-main">
                     <div class="watchlist-header">

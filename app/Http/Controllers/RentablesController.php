@@ -52,7 +52,35 @@ class RentablesController extends Controller
     }
 
     public function show(Rentable $rentable){
-        $rentableQuery = Rentable::latest()->where('status', 'like', 'Available' )->take(10)->get();
+
+        // option 1: when there are alot of items then we can be specific
+            // $rentableQuery = DB::table('rentables');
+            // $categories = explode(", ", $rentable->category); //there will always be atleast one category
+            // $tags = explode(", ", $rentable->tags); //there will always be atleast one tag
+
+            // $string = "Select * from rentables as r where r.id != " . $rentable->id . " AND " . "r.status NOT LIKE 'Rented'" . " AND ";
+            // $string = $string . "( (";
+            // foreach($categories as $category){
+            //     $string = $string . "r.category LIKE '%" . $category . "%' OR ";
+            // }
+            // $string = substr($string, 0, -4);
+            // $string = $string . ") OR (";
+            // foreach($tags as $tag){
+            //     $string = $string . "r.tags LIKE '%" . $tag . "%' OR ";
+            // }
+            // $string = substr($string, 0, -4);
+            // $string = $string . ") ) limit 10";
+
+            // $userQuery =DB::select($string);
+            // $rentableQuery = Rentable::hydrate($userQuery);
+
+        //option 2: when the data set size is relatively small, return random items from the database
+                $rentableQuery = Rentable::inRandomOrder()
+                            ->where('id', '!=', $rentable->id)
+                            ->where( function ( $query )
+                            {
+                                $query->where( 'status', 'NOT LIKE', 'Rented' );
+                            })->limit(10)->get();
 
         $userQuery = null;
         if(Auth::user()){

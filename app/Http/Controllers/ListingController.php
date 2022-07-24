@@ -22,22 +22,37 @@ class ListingController extends Controller
     public function show(Listing $listing){
         // get the listings table
         // the listings array will hold listings that are similar to the current listing based on categories, if none then get 10 of the latest else add on to the existing and add remaining from the latest, so if there is 6 similar, then add 4 from latest that are unique
-        $listingQuery = DB::table('listings');
-        $categories = explode(", ", $listing->category);
-        // match any of the categories
-        foreach($categories as $category){
-            $listingQuery->orWhere('category', 'like', '%'.$category.'%');
-        }
-        // match any of the tags
-        $tags = explode(", ", $listing->tags);
-        foreach($tags as $tag){
-            $listingQuery->orWhere('tags', 'like', '%'.$tag.'%');
-        }
-        //excluding the item itself
-        $listingQuery->orWhere('id', "!=", $listing->id);
 
-        //get the results of the search
-        $listingQuery=$listingQuery->limit(10)->get();
+        // getting the related items for the bottom carousel
+
+        // option 1: when there are alot of items then we can be specific
+            // $listingQuery = DB::table('listings');
+            // $categories = explode(", ", $listing->category); //there will always be atleast one category
+            // $tags = explode(", ", $listing->tags); //there will always be atleast one tag
+
+            // $string = "Select * from listings as l where l.id != " . $listing->id . " AND " . "l.status NOT LIKE 'SOLD'" . " AND ";
+            // $string = $string . "( (";
+            // foreach($categories as $category){
+            //     $string = $string . "l.category LIKE '%" . $category . "%' OR ";
+            // }
+            // $string = substr($string, 0, -4);
+            // $string = $string . ") OR (";
+            // foreach($tags as $tag){
+            //     $string = $string . "l.tags LIKE '%" . $tag . "%' OR ";
+            // }
+            // $string = substr($string, 0, -4);
+            // $string = $string . ") ) limit 10";
+
+            // $userQuery =DB::select($string);
+            // $listingQuery = Listing::hydrate($userQuery);
+        
+        //option 2: when the data set size is relatively small, return random items from the database
+                $listingQuery = Listing::inRandomOrder()
+                            ->where('id', '!=', $listing->id)
+                            ->where( function ( $query )
+                            {
+                                $query->where( 'status', 'NOT LIKE', 'SOLD' );
+                            })->limit(10)->get();
 
 
 
