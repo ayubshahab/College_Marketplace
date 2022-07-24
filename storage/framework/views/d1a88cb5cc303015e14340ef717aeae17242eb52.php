@@ -10,7 +10,8 @@
     if (array_key_exists($__key, $__defined_vars)) unset($$__key);
 } ?>
 <?php unset($__defined_vars); ?>
-<li class="cards_item" data-aos="zoom-in" data-aos-once="true">
+
+<li class="cards_item" data-aos="zoom-in">
     <div class="card-type">
         <?php if($listing instanceof \App\Models\Listing): ?>
             <div class="card-type-inner for-sale">
