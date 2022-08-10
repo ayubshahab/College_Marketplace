@@ -1,0 +1,49 @@
+### INSTRUCTIONS FOR NEW DEVELOPERS ###
+
+1. Download and Install XAMP (Default Settings for installation works)
+
+1.5 I HIGHLY reccommend to uninstall and reinstall XAMPP even if you already
+have XAMPP on your local machine since this has been an issue before
+
+2 Open XAMPP and run Apache and MySQL
+
+3 Add college_marketplace database within XAMPP PHPMYADMIN
+
+4 Clone repo into C:/xampp/htdocs
+
+5 Add college marketplace folder that was cloned to VSCode workspace
+
+6. run within the C:/xampp/htdocs/College Marketplace Terminal the following command(s):
+
+cp .env.example .env
+composer update --no-scripts
+composer dump-autoload
+
+7. COPY THIS INTO .ENV FILE AND REPLACE SECTION STARTING WITH DB_CONNECTION WITH THE FOLLOWING TEXT:
+DB_CONNECTION=mysql
+RDS_HOSTNAME=127.0.0.1
+RDS_PORT=3306
+RDS_DB_NAME=college_marketplace
+RDS_USERNAME=root
+RDS_PASSWORD=
+
+
+8. Run the following commands:
+php artisan route:cache
+>> php artisan route:clear
+>> php artisan config:cache
+>> php artisan config:clear
+>> php artisan optimize
+
+9. run within the C:/xampp/htdocs/College Marketplace Terminal the following command(s):
+
+php artisan migrate
+php artisan db:seed
+
+10. run within the C:/xampp/htdocs/College Marketplace Terminal the following command(s):Add
+
+php artisan serve
+
+11. CTRL + LEFT CLICK THE LINK THAT SAYS http://127.0.0.1:8000 within the terminal to launch college marketplace
+
+12. Reach out to Davi or Ayub for any help with these issues. please make sure to have gone through this thoroughly before reaching out to us :)
